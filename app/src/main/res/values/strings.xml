@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Ecarezone Patient</string>
+
+    <!--login-->
+    <string name="login_username">Username</string>
+    <string name="login_password">Password</string>
+    <string name="login_button_text">LOGIN</string>
+    <string name="login_forgot_password">Forgot your password?</string>
+    <string name="login_for_new_user">For new user</string>
+    <string name="login_create_account">CREATE ACCOUNT</string>
+
+    <!--registration-->
+    <string name="registration_title">Create your eCareZone Account</string>
+    <string name="registration_username">@string/login_username</string>
+    <string name="registration_password">@string/login_password</string>
+    <string name="registration_create_account">@string/login_create_account</string>
+    <string name="registration_agreement">"You agree the terms and privacy police"</string>
+
+    <!--country name list-->
+    <string-array name="country_array">
+        <item>Denmark</item>
+        <item>Finland</item>
+        <item>Norway</item>
+        <item>Sweden</item>
+    </string-array>
+</resources>
