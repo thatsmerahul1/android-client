@@ -28,10 +28,10 @@ public class RegistrationActivity extends EcareZoneBaseActivity {
         if(fragmentLayoutResId < 0) return;
 
         if(fragmentLayoutResId == R.layout.frag_login) {
-            changeFragment(R.id.screen_container, new LoginFragment(),
+            changeFragment(R.id.screen_container, LoginFragment.newInstance(),
                     LoginFragment.class.getSimpleName(), args);
         } else if (fragmentLayoutResId == R.layout.frag_registration) {
-            changeFragment(R.id.screen_container, new RegistrationFragment(),
+            changeFragment(R.id.screen_container, RegistrationFragment.newInstance(),
                     RegistrationFragment.class.getSimpleName(), args);
         }
     }

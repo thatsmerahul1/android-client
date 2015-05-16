@@ -18,6 +18,7 @@
 
     <!--country name list-->
     <string-array name="country_array">
+        <item>China</item>
         <item>Denmark</item>
         <item>Finland</item>
         <item>Norway</item>

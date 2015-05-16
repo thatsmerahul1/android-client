@@ -11,11 +11,13 @@
         />
 
     <EditText
+        android:id="@+id/edit_text_login_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/login_username"/>
 
     <EditText
+        android:id="@+id/edit_text_login_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
@@ -37,7 +39,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="@android:color/background_dark" />
 
     <TextView

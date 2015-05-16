@@ -47,7 +47,7 @@ public class SplashScreenFragment extends EcareZoneBaseFragment {
                     activity.finish();
                 }
             }
-        }, 2000L);
+        }, 1500L);
 
     }
 }
