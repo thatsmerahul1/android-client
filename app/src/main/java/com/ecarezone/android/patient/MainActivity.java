@@ -29,6 +29,7 @@ public class MainActivity extends EcareZoneBaseActivity {
             mDrawerLayout = (DrawerLayout) findViewById(R.id.side_drawer_layout);
             mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name);
             mDrawerLayout.setDrawerListener(mDrawerToggle);
+            mDrawerLayout.setFitsSystemWindows(true);
             mDrawerToggle.syncState();
         }
 

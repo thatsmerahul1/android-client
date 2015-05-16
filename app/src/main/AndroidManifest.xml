@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ecarezone.android.patient" >
+    package="com.ecarezone.android.patient"
+    android:installLocation="preferExternal">
 
+    <!--user permission-->
     <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:name="com.ecarezone.android.patient.EcareZoneApplication"
@@ -13,7 +16,8 @@
 
         <activity
             android:name="com.ecarezone.android.patient.SplashScreenActivty"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,12 +27,14 @@
 
         <activity
             android:name="com.ecarezone.android.patient.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:launchMode="singleTask">
         </activity>
 
         <activity
             android:name="com.ecarezone.android.patient.RegistrationActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:launchMode="singleTask">
         </activity>
     </application>
 
