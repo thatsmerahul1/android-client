@@ -1,5 +1,7 @@
 package com.ecarezone.android.patient.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -14,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.utils.EcareZoneLog;
 
@@ -104,12 +107,13 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         final int viewId = v.getId();
         if(viewId == R.id.button_register) {
             //TODO register
-            /*
+
             final Activity activity = getActivity();
             if(activity != null) {
                 activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));
+                activity.finish();
             }
-            */
+
         }
     }
 

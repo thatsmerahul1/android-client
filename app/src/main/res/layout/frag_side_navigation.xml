@@ -3,42 +3,48 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@android:color/white">
+    android:background="@drawable/side_menu_bkg_original">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="16dp"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/sym_action_chat"/>
+            android:src="@drawable/menu_icon_profile"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:paddingLeft="16dp"
+            android:textSize="26sp"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center"
             android:text="#Profile"/>
     </LinearLayout>
 
-
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/background_dark" />
+        android:layout_height="1dp"
+        android:background="@android:color/white" />
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:textSize="20sp"
+        android:padding="16dp"
+        android:textColor="@android:color/white"
         android:text="#something"/>
 
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/background_dark" />
+        android:layout_height="1dp"
+        android:background="@android:color/white" />
 
 </LinearLayout>

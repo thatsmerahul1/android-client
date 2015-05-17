@@ -24,7 +24,8 @@ public class SplashScreenActivty extends EcareZoneBaseActivity {
     @Override
     public void onNavigationChanged(int fragmentLayoutResId, Bundle args) {
         if(fragmentLayoutResId == R.layout.frag_splashscreen) {
-            changeFragment(R.id.screen_container, new SplashScreenFragment(), "", args);
+            changeFragment(R.id.screen_container, SplashScreenFragment.newInstance(),
+                                    SplashScreenFragment.class.getSimpleName(), args);
         }
     }
 

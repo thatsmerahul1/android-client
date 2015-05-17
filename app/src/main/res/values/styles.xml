@@ -10,8 +10,13 @@
 
     <style name="ToolBarStyle" parent="">
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-        <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="theme">@style/ThemeOverlay.ECareZone.ActionBar</item>
     </style>
+
+    <style name="ThemeOverlay.ECareZone.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">@android:color/black</item>
+    </style>
+
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
@@ -24,7 +29,7 @@
         <item name="android:paddingBottom">12dp</item>
         <item name="android:paddingTop">12dp</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@drawable/btn_text_color_selector</item>
     </style>
 
     <style name="EcareZoneBlueButton" parent="Button">

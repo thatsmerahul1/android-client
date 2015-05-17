@@ -1,12 +1,15 @@
 package com.ecarezone.android.patient;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.ecarezone.android.patient.fragment.PatientFragment;
 
@@ -27,21 +30,47 @@ public class MainActivity extends EcareZoneBaseActivity {
 
         if(mDrawerLayout == null) {
             mDrawerLayout = (DrawerLayout) findViewById(R.id.side_drawer_layout);
-            mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name);
+            mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
+                public void onDrawerClosed(View view) {
+                    super.onDrawerClosed(view);
+                    invalidateOptionsMenu();
+                    syncState();
+                }
+
+                public void onDrawerOpened(View drawerView) {
+                    super.onDrawerOpened(drawerView);
+                    invalidateOptionsMenu();
+                    syncState();
+                }
+            };
             mDrawerLayout.setDrawerListener(mDrawerToggle);
             mDrawerLayout.setFitsSystemWindows(true);
             mDrawerToggle.syncState();
+            mDrawerLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    mDrawerToggle.syncState();
+                }
+            });
         }
 
         mToolBar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
-            mToolBar.setNavigationIcon(android.R.drawable.sym_action_chat);
+            mToolBar.setNavigationIcon(R.drawable.ic_action_menu);
         }
         mActionBar = getSupportActionBar();
-        mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
         onNavigationChanged(R.layout.frag_patient_main, null);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if(mDrawerToggle != null) {
+            mDrawerToggle.syncState();
+        }
     }
 
 
@@ -53,15 +82,21 @@ public class MainActivity extends EcareZoneBaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify act_splash parent activity in AndroidManifest.xml.
-        final int itemId = item.getItemId();
-        if(itemId == android.R.id.home) {
-
+        if ((mDrawerToggle != null) && (mDrawerToggle.onOptionsItemSelected(item))) {
+            return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mDrawerLayout != null) {
+            if (mDrawerLayout.isDrawerOpen(Gravity.START | Gravity.LEFT)) {
+                mDrawerLayout.closeDrawers();
+                return;
+            }
+        }
+         super.onBackPressed();
     }
 
     @Override
@@ -76,6 +111,14 @@ public class MainActivity extends EcareZoneBaseActivity {
         if(fragmentLayoutResId == R.layout.frag_patient_main) {
             changeFragment(R.id.screen_container, new PatientFragment(),
                     PatientFragment.class.getSimpleName(), args);
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(mDrawerToggle != null) {
+            mDrawerToggle.onConfigurationChanged(newConfig);
         }
     }
 

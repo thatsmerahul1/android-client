@@ -1,4 +1,4 @@
-package com.ecarezone.android.patient.com.ecarezone.android.patient.service;
+package com.ecarezone.android.patient.service;
 
 import android.content.Context;
 import android.content.res.Resources;

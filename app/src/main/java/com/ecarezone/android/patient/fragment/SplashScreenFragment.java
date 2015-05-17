@@ -17,6 +17,10 @@ import com.ecarezone.android.patient.RegistrationActivity;
  */
 public class SplashScreenFragment extends EcareZoneBaseFragment {
 
+    public static SplashScreenFragment newInstance() {
+        return  new SplashScreenFragment();
+    }
+
     @Override
     protected String getCallerName() {
         return SplashScreenFragment.class.getSimpleName();
