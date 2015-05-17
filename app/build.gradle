@@ -8,7 +8,7 @@ android {
         applicationId "com.ecarezone.android.patient"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 100001
+        versionCode 100002
         versionName "1.0.0"
     }
     buildTypes {
@@ -20,6 +20,7 @@ android {
 }
 
 dependencies {
+    compile files('libs/httpclientandroidlib-1.2.1.jar')
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.1.1'
 }
