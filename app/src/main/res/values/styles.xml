@@ -30,4 +30,8 @@
     <style name="EcareZoneBlueButton" parent="Button">
         <item name="android:background">@drawable/btn_blue_color_selector</item>
     </style>
+
+    <style name="EcareZoneGreenButton" parent="Button">
+        <item name="android:background">@drawable/btn_green_color_selector</item>
+    </style>
 </resources>
