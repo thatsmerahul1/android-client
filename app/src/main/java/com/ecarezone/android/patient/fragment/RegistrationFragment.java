@@ -1,7 +1,5 @@
 package com.ecarezone.android.patient.fragment;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -11,17 +9,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.R;
+import com.ecarezone.android.patient.utils.EcareZoneLog;
 
 
 /**
  * Created by CHAO WEI on 5/1/2015.
  */
-public class RegistrationFragment extends EcareZoneBaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class RegistrationFragment extends EcareZoneBaseFragment implements View.OnClickListener,
+                                                                           AdapterView.OnItemSelectedListener,
+                                                                           CompoundButton.OnCheckedChangeListener {
 
     public static RegistrationFragment newInstance() {
         return  new RegistrationFragment();
@@ -32,6 +34,7 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
     private View mButtonRegister = null;
     private EditText mEditTextUsername = null;
     private EditText mEditTextPassword = null;
+    private CheckBox mCheckBoxTerms = null;
 
     @Override
     protected String getCallerName() {
@@ -51,11 +54,12 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                boolean enable = false;
-                enable = ((!TextUtils.isEmpty(s))
-                        && (!TextUtils.isEmpty(mEditTextPassword.getEditableText().toString())));
-                if(mButtonRegister != null) {
-                    mButtonRegister.setEnabled(enable);
+                try {
+                    checkRegistrationButtonStatus(String.valueOf(s),
+                            mEditTextPassword.getEditableText().toString(),
+                            mCheckBoxTerms.isChecked());
+                } catch (Exception e) {
+                    EcareZoneLog.e(getCallerName(), e);
                 }
             }
             @Override
@@ -69,12 +73,13 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                boolean enable = false;
-                enable = ((!TextUtils.isEmpty(s))
-                        && (!TextUtils.isEmpty(mEditTextUsername.getEditableText().toString())));
-                if(mButtonRegister != null) {
-                    mButtonRegister.setEnabled(enable);
+                try {
+                    checkRegistrationButtonStatus(mEditTextUsername.getEditableText().toString(),
+                                                 String.valueOf(s), mCheckBoxTerms.isChecked());
+                } catch (Exception e) {
+                    EcareZoneLog.e(getCallerName(), e);
                 }
+
             }
             @Override
             public void afterTextChanged(Editable s) {
@@ -87,6 +92,8 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         mSpinner.setAdapter(mSpinnerAdapter);
         mSpinner.setOnItemSelectedListener(this);
         mSpinner.setPrompt("Country");
+        mCheckBoxTerms = (CheckBox)view.findViewById(R.id.checkbox_registration_terms);
+        mCheckBoxTerms.setOnCheckedChangeListener(this);
         return view;
     }
 
@@ -114,5 +121,31 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(buttonView == null) return;;
+        final int viewId = buttonView.getId();
+
+        if(viewId == R.id.checkbox_registration_terms) {
+            try {
+                final String username = mEditTextUsername.getEditableText().toString();
+                final String password = mEditTextPassword.getEditableText().toString();
+                checkRegistrationButtonStatus(username, password, isChecked);
+            } catch (Exception e) {
+                EcareZoneLog.e(getCallerName(), e);
+            }
+        }
+    }
+
+    private void checkRegistrationButtonStatus(final String username, final String password, final boolean isChecked) {
+        boolean enable = false;
+        enable = ((!TextUtils.isEmpty(username))
+                && (!TextUtils.isEmpty(password))
+                && isChecked);
+        if(mButtonRegister != null) {
+            mButtonRegister.setEnabled(enable);
+        }
     }
 }
