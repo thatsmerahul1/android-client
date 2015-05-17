@@ -35,7 +35,7 @@
         android:id="@+id/country_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/ecarezone_blue"
+        android:background="@color/ecarezone_blue_light"
         android:popupBackground="@android:color/black"/>
 
     <Button
@@ -43,6 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/registration_create_account"
+        style="@style/EcareZoneBlueButton"
         />
 
     <CheckBox

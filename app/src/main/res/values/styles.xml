@@ -18,4 +18,16 @@
         <item name="color">@android:color/white</item>
     </style>
 
+
+    <!--custom component-->
+    <style name="Button" parent="android:Widget.Button">
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="EcareZoneBlueButton" parent="Button">
+        <item name="android:background">@drawable/btn_blue_color_selector</item>
+    </style>
 </resources>
