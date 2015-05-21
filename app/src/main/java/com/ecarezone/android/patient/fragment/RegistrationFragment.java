@@ -20,6 +20,9 @@ import com.ecarezone.android.patient.R;
 public class RegistrationFragment extends EcareZoneBaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private Spinner mSpinner = null;
+//    Add by Lai
+    private Spinner mSpinner_language = null;
+    //    Add by Lai
 
     @Override
     protected String getCallerName() {
@@ -30,6 +33,7 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_registration, container, false);
         view.findViewById(R.id.button_register).setOnClickListener(this);
+
         mSpinner = (Spinner) view.findViewById(R.id.country_spinner);
         ArrayAdapter<CharSequence> mSpinnerAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
                                 R.array.country_array, android.R.layout.simple_spinner_item);
@@ -37,8 +41,21 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         mSpinner.setAdapter(mSpinnerAdapter);
         mSpinner.setOnItemSelectedListener(this);
         mSpinner.setPrompt("Prompt");
+
+//        Add by Lai
+        mSpinner_language = (Spinner) view.findViewById(R.id.language_spinner);
+        ArrayAdapter<CharSequence> mSpinnerAdapter_language = ArrayAdapter.createFromResource(getApplicationContext(),
+                R.array.language_array, android.R.layout.simple_spinner_item);
+//        ArrayAdapter<CharSequence> mSpinnerAdapter_language = ArrayAdapter.createFromResource(this,R.array.language_array,android.R.layout.simple_spinner_dropdown_item);
+//        mSpinnerAdapter_language.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner_language.setAdapter(mSpinnerAdapter_language);
+        mSpinner_language.setOnItemSelectedListener(this);
+        mSpinner_language.setPrompt("Prompt");
+//        Add by Lai
+
         return view;
     }
+
 
     @Override
     public void onClick(View v) {

@@ -23,4 +23,14 @@
         <item>Norway</item>
         <item>Sweden</item>
     </string-array>
+
+    <!--Modify by Chenjia Lai. Add language select option.-->
+    <string-array name="language_array">
+        <item>English</item>
+        <item>Finnish</item>
+        <item>Norwegian</item>
+        <item>Swedish</item>
+    </string-array>
+    <!--Modify by Chenjia Lai. Add language select option.-->
+
 </resources>
