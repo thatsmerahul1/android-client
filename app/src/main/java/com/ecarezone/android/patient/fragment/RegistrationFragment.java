@@ -90,8 +90,7 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         });
         mSpinner = (Spinner) view.findViewById(R.id.country_spinner);
         mSpinnerAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
-                                R.array.country_array, android.R.layout.simple_spinner_item);
-        mSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                R.array.country_array, R.layout.country_spinner_item);
         mSpinner.setAdapter(mSpinnerAdapter);
         mSpinner.setOnItemSelectedListener(this);
         mSpinner.setPrompt("Country");
@@ -99,6 +98,7 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         mCheckBoxTerms.setOnCheckedChangeListener(this);
         return view;
     }
+
 
     @Override
     public void onClick(View v) {

@@ -2,9 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:padding="16dp"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
 
     <ImageView
+        android:layout_marginTop="24dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/login_logo"
@@ -14,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_marginTop="24dp"
         android:text="@string/registration_title"
         />
 
@@ -21,6 +24,7 @@
         android:id="@+id/edit_text_registration_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:hint="@string/registration_username"/>
 
 
@@ -28,6 +32,7 @@
         android:id="@+id/edit_text_registration_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:inputType="textPassword"
         android:hint="@string/login_password"/>
 
@@ -35,13 +40,19 @@
         android:id="@+id/country_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/ecarezone_blue_light"
-        android:popupBackground="@android:color/black"/>
+        android:layout_marginTop="24dp"
+        android:minHeight="50dp"
+        android:background="@android:color/background_light"
+        android:popupBackground="@android:color/background_light"/>
+
 
     <Button
         android:id="@+id/button_register"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minWidth="220dp"
+        android:layout_marginTop="24dp"
+        android:layout_gravity="center"
         android:text="@string/registration_create_account"
         style="@style/EcareZoneBlueButton"
         />
@@ -50,6 +61,7 @@
         android:id="@+id/checkbox_registration_terms"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:layout_gravity="center"
         android:text="@string/registration_agreement"/>
 
