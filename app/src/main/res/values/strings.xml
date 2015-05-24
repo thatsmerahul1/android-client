@@ -14,7 +14,25 @@
     <string name="registration_username">@string/login_username</string>
     <string name="registration_password">@string/login_password</string>
     <string name="registration_create_account">@string/login_create_account</string>
-    <string name="registration_agreement">"You agree the terms and privacy police"</string>
+    <string name="registration_agreement">You agree the terms and privacy police</string>
+
+    <!-- side menu  -->
+    <string name="main_profile_title">Profile</string>
+    <string name="main_side_menu_home">Home</string>
+    <string name="main_side_menu_news">News feed</string>
+    <string name="main_side_menu_health">Health status</string>
+    <string name="main_side_menu_doctors">Doctors</string>
+    <string name="main_side_menu_medication">Medication</string>
+    <string name="main_side_menu_health_plan">Health plan</string>
+    <string name="main_side_menu_settings">Settings</string>
+    <string name="main_side_menu_logout">Logout</string>
+
+    <!-- Intro -->
+    <string name="intro_title">Welcome to eCareZone</string>
+    <string name="intro_message">Your future heathcare are in good hands now.</string>
+    <string name="intro_personal_profile">Please take few minutes to file your personal information, it will make us easy to tailor your personal health care.</string>
+    <string name="intro_button_not_now">NOT NOW</string>
+    <string name="intro_button_ok">@android:string/ok</string>
 
     <!--country name list-->
     <string-array name="country_array">

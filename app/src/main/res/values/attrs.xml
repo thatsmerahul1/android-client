@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- navigation item -->
+    <declare-styleable name="NavigationItem">
+        <attr name="niIndicator" format="reference" />
+        <attr name="niLabel" format="reference" />
+        <attr name="niTitle" format="reference" />
+        <attr name="niIcon" format="reference" />
+        <attr name="niIconImage" format="reference" />
+    </declare-styleable>
+
+
+</resources>

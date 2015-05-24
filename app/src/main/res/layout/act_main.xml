@@ -6,7 +6,6 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,27 +21,39 @@
         <include layout="@layout/fragment_container" />
     </LinearLayout>
 
-
     <LinearLayout
         android:id="@+id/side_navigation_container"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start" >
+        android:layout_gravity="start"
+        android:orientation="horizontal">
 
-        <FrameLayout
-            android:layout_width="320dp"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:focusable="true"
-            android:paddingRight="3dp"
-            tools:ignore="RtlHardcoded,RtlSymmetry" >
 
-            <fragment
-                android:id="@+id/fragment_bottom"
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                class="com.ecarezone.android.patient.fragment.SideNavigationFragment" />
-        </FrameLayout>
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingRight="3dp"
+                tools:ignore="RtlHardcoded,RtlSymmetry" >
+
+                <fragment
+                    android:id="@+id/fragment_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    class="com.ecarezone.android.patient.fragment.SideNavigationFragment" />
+            </FrameLayout>
+        </ScrollView>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8"/>
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

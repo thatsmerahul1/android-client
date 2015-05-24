@@ -9,6 +9,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textSize="30sp"
-        android:text="@string/main_side_menu_home"/>
+        android:text="@string/main_side_menu_doctors"/>
 
 </LinearLayout>

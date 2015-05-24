@@ -11,7 +11,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.ecarezone.android.patient.fragment.DoctorListFragment;
+import com.ecarezone.android.patient.fragment.IntroFragment;
+import com.ecarezone.android.patient.fragment.NewsListFragment;
 import com.ecarezone.android.patient.fragment.PatientFragment;
+import com.ecarezone.android.patient.fragment.SettingsFragment;
+import com.ecarezone.android.patient.fragment.UserProfileFragment;
 
 /**
  * Created by CHAO WEI on 5/3/2015.
@@ -62,7 +67,7 @@ public class MainActivity extends EcareZoneBaseActivity {
         mActionBar = getSupportActionBar();
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
-        onNavigationChanged(R.layout.frag_patient_main, null);
+        onNavigationChanged(R.layout.frag_intro, null);
     }
 
     @Override
@@ -72,7 +77,6 @@ public class MainActivity extends EcareZoneBaseActivity {
             mDrawerToggle.syncState();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -111,6 +115,25 @@ public class MainActivity extends EcareZoneBaseActivity {
         if(fragmentLayoutResId == R.layout.frag_patient_main) {
             changeFragment(R.id.screen_container, new PatientFragment(),
                     PatientFragment.class.getSimpleName(), args);
+        } else if(fragmentLayoutResId == R.layout.frag_intro) {
+            changeFragment(R.id.screen_container, new IntroFragment(),
+                    IntroFragment.class.getSimpleName(), args);
+        } else if(fragmentLayoutResId == R.layout.frag_news_list) {
+            changeFragment(R.id.screen_container, new NewsListFragment(),
+                    NewsListFragment.class.getSimpleName(), args);
+        } else if(fragmentLayoutResId == R.layout.frag_doctors) {
+            changeFragment(R.id.screen_container, new DoctorListFragment(),
+                    DoctorListFragment.class.getSimpleName(), args);
+        } else if(fragmentLayoutResId == R.layout.frag_settings) {
+            changeFragment(R.id.screen_container, new SettingsFragment(),
+                    SettingsFragment.class.getSimpleName(), args);
+        } else if(fragmentLayoutResId == R.layout.frag_user_profile) {
+            changeFragment(R.id.screen_container, new UserProfileFragment(),
+                    UserProfileFragment.class.getSimpleName(), args);
+        }
+
+        if(mDrawerLayout != null) {
+            mDrawerLayout.closeDrawers();
         }
     }
 
