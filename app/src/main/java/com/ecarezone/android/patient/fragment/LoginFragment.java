@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ecarezone.android.patient.R;
+import com.ecarezone.android.patient.utils.EcareZoneLog;
 
 import org.w3c.dom.Text;
 
@@ -42,11 +43,11 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                boolean enable = false;
-                enable = ((!TextUtils.isEmpty(s))
-                            && (!TextUtils.isEmpty(mEditTextPassword.getEditableText().toString())));
-                if(mButtonLogin != null) {
-                    mButtonLogin.setEnabled(enable);
+                try {
+                    checkLoginButtonStatus(String.valueOf(s),
+                            mEditTextPassword.getEditableText().toString());
+                } catch (Exception e) {
+                    EcareZoneLog.e(getCallerName(), e);
                 }
             }
             @Override
@@ -60,11 +61,11 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                boolean enable = false;
-                enable = ((!TextUtils.isEmpty(s))
-                        && (!TextUtils.isEmpty(mEditTextUsername.getEditableText().toString())));
-                if(mButtonLogin != null) {
-                    mButtonLogin.setEnabled(enable);
+                try {
+                    checkLoginButtonStatus(String.valueOf(s),
+                            mEditTextUsername.getEditableText().toString());
+                } catch (Exception e) {
+                    EcareZoneLog.e(getCallerName(), e);
                 }
             }
             @Override
@@ -85,10 +86,13 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
         final int viewId = v.getId();
         if(viewId == R.id.button_login) {
             final String username = mEditTextUsername.getEditableText().toString();
+            final String password = mEditTextUsername.getEditableText().toString();
             // TODO
             if(TextUtils.isEmpty(username)
                     || (!android.util.Patterns.EMAIL_ADDRESS.matcher(username.trim()).matches())) {
-                Toast.makeText(getApplicationContext(),"Invalid username!", Toast.LENGTH_LONG).show();
+                Toast.makeText(v.getContext(), "Invalid username!", Toast.LENGTH_LONG).show();
+            } else if(TextUtils.isEmpty(username) || (password.length() < 8)) {
+                Toast.makeText(v.getContext(), "Invalid password!", Toast.LENGTH_LONG).show();
             } else {
                 doLogin();
             }
@@ -100,6 +104,15 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
 
     private void doLogin() {
         // TODO
+    }
+
+    private void checkLoginButtonStatus(final String username, final String password) {
+        boolean enable = false;
+        enable = ((!TextUtils.isEmpty(username))
+                && (!TextUtils.isEmpty(password)));
+        if(mButtonLogin != null) {
+            mButtonLogin.setEnabled(enable);
+        }
     }
 
 }

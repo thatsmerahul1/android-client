@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.R;
@@ -38,6 +39,7 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
     private EditText mEditTextUsername = null;
     private EditText mEditTextPassword = null;
     private CheckBox mCheckBoxTerms = null;
+    private String mSelectedCountry = null;
 
     @Override
     protected String getCallerName() {
@@ -82,7 +84,6 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                 } catch (Exception e) {
                     EcareZoneLog.e(getCallerName(), e);
                 }
-
             }
             @Override
             public void afterTextChanged(Editable s) {
@@ -106,25 +107,26 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
 
         final int viewId = v.getId();
         if(viewId == R.id.button_register) {
-            //TODO register
-
-            final Activity activity = getActivity();
-            if(activity != null) {
-                activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));
-                activity.finish();
+            final String username = mEditTextUsername.getEditableText().toString();
+            final String password = mEditTextUsername.getEditableText().toString();
+            if(TextUtils.isEmpty(username)
+                    || (!android.util.Patterns.EMAIL_ADDRESS.matcher(username.trim()).matches())) {
+                Toast.makeText(v.getContext(), "Invalid username!", Toast.LENGTH_LONG).show();
+            } else if(TextUtils.isEmpty(username) || (password.length() < 8)) {
+                Toast.makeText(v.getContext(), "Invalid password!", Toast.LENGTH_LONG).show();
+            } else {
+                doRegistration();
             }
-
         }
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+        mSelectedCountry = String.valueOf(mSpinner.getSelectedItem());
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     @Override
@@ -150,6 +152,15 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                 && isChecked);
         if(mButtonRegister != null) {
             mButtonRegister.setEnabled(enable);
+        }
+    }
+
+    private void doRegistration() {
+        //TODO register
+        final Activity activity = getActivity();
+        if(activity != null) {
+            activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));
+            activity.finish();
         }
     }
 }
