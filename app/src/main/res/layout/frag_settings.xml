@@ -1,13 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/layout_settings"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="16dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_email"
+            android:textColor="@color/ecarezone_green_light"
+            />
+
+        <EditText
+            android:id="@+id/edit_text_settings_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            />
+
+        <TextView
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_password"
+            android:textColor="@color/ecarezone_green_light"
+            />
+
+        <EditText
+            android:id="@+id/edit_text_settings_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_country"
+            android:textColor="@color/ecarezone_green_light"
+            />
+
+        <include layout="@layout/template_country_spinner" />
+
+    </LinearLayout>
+
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textSize="30sp"
-        android:text="@string/main_side_menu_settings"/>
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:paddingBottom="16dp"
+        android:textSize="24sp"
+        android:textColor="@color/ecarezone_blue_dark"
+        android:gravity="center"
+        android:text="@string/settings_about_app"
+        />
 
-</LinearLayout>
+</RelativeLayout>
+
+

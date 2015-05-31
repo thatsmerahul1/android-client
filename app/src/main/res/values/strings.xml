@@ -48,6 +48,12 @@
     <string name="profile_kid">My daughter profile</string>
     <string name="profile_father">My father profile</string>
 
+    <!-- Settings -->
+    <string name="settings_email">Email:</string>
+    <string name="settings_password">Password:</string>
+    <string name="settings_country">Country:</string>
+    <string name="settings_about_app">About eCareZone</string>
+
     <!--country name list-->
     <string-array name="country_array">
         <item>China</item>

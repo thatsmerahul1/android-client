@@ -36,14 +36,9 @@
         android:inputType="textPassword"
         android:hint="@string/login_password"/>
 
-    <Spinner
-        android:id="@+id/country_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <include
         android:layout_marginTop="24dp"
-        android:minHeight="50dp"
-        android:background="@android:color/background_light"
-        android:popupBackground="@android:color/background_light"/>
+        layout="@layout/template_country_spinner" />
 
 
     <Button

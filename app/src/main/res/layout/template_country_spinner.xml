@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Spinner xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/country_spinner"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="50dp"
+    android:background="@android:color/background_light"
+    android:popupBackground="@android:color/background_light"/>
