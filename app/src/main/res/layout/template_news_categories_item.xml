@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/news_menu_white_border">
+
+    <ImageView
+        android:id="@+id/image_view_news_category_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/new_health_women"
+        android:scaleType="fitXY"
+        android:layout_centerInParent="true"
+        />
+
+    <TextView
+        android:id="@+id/text_view_news_category_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/news_categories_family"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:background="@color/ecarezone_news_categories_text_view_background_white"
+        />
+
+</RelativeLayout>

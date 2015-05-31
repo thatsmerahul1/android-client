@@ -28,27 +28,21 @@
         android:layout_gravity="start"
         android:orientation="horizontal">
 
-
-        <ScrollView
+        <FrameLayout
             android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
             android:layout_weight="1"
-            android:layout_height="match_parent">
+            android:paddingRight="3dp"
+            tools:ignore="RtlHardcoded,RtlSymmetry" >
 
-            <FrameLayout
+            <fragment
+                android:id="@+id/fragment_bottom"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingRight="3dp"
-                tools:ignore="RtlHardcoded,RtlSymmetry" >
-
-                <fragment
-                    android:id="@+id/fragment_bottom"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    class="com.ecarezone.android.patient.fragment.SideNavigationFragment" />
-            </FrameLayout>
-        </ScrollView>
+                class="com.ecarezone.android.patient.fragment.SideNavigationFragment" />
+        </FrameLayout>
 
         <View
             android:layout_width="0dp"

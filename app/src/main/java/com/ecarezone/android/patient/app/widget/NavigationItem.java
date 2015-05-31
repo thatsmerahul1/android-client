@@ -93,7 +93,7 @@ public class NavigationItem extends RelativeLayout implements View.OnClickListen
         mLabel = (TextView) findViewById(mLabelResId);
         mImageView = (ImageView) findViewById(mIconResId);
         mImageView.setImageResource(mIconImageResId);
-
+        mImageView.setVisibility(INVISIBLE);
         mLabel.setText(mLabelTextResId);
         // use the label to identify the item
         setTag(mLabel.getText());

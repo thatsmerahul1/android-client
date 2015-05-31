@@ -60,7 +60,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
             if(getString(R.string.main_side_menu_home).equals(tag)) {
                 layoutResId = R.layout.frag_patient_main;
             } else if(getString(R.string.main_side_menu_news).equals(tag)) {
-                layoutResId = R.layout.frag_news_list;
+                layoutResId = R.layout.frag_news_categories;
             } else if(getString(R.string.main_side_menu_doctors).equals(tag)){
                 layoutResId = R.layout.frag_doctors;
             } else if(getString(R.string.main_side_menu_health).equals(tag)) {

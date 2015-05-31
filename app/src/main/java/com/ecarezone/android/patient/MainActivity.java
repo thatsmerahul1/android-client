@@ -12,8 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.ecarezone.android.patient.fragment.DoctorListFragment;
-import com.ecarezone.android.patient.fragment.IntroFragment;
-import com.ecarezone.android.patient.fragment.NewsListFragment;
+import com.ecarezone.android.patient.fragment.WelcomeFragment;
+import com.ecarezone.android.patient.fragment.NewsCategoriesFragment;
 import com.ecarezone.android.patient.fragment.PatientFragment;
 import com.ecarezone.android.patient.fragment.SettingsFragment;
 import com.ecarezone.android.patient.fragment.UserProfileFragment;
@@ -67,7 +67,7 @@ public class MainActivity extends EcareZoneBaseActivity {
         mActionBar = getSupportActionBar();
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
-        onNavigationChanged(R.layout.frag_intro, null);
+        onNavigationChanged(R.layout.frag_welcome, null);
     }
 
     @Override
@@ -115,12 +115,12 @@ public class MainActivity extends EcareZoneBaseActivity {
         if(fragmentLayoutResId == R.layout.frag_patient_main) {
             changeFragment(R.id.screen_container, new PatientFragment(),
                     PatientFragment.class.getSimpleName(), args);
-        } else if(fragmentLayoutResId == R.layout.frag_intro) {
-            changeFragment(R.id.screen_container, new IntroFragment(),
-                    IntroFragment.class.getSimpleName(), args);
-        } else if(fragmentLayoutResId == R.layout.frag_news_list) {
-            changeFragment(R.id.screen_container, new NewsListFragment(),
-                    NewsListFragment.class.getSimpleName(), args);
+        } else if(fragmentLayoutResId == R.layout.frag_welcome) {
+            changeFragment(R.id.screen_container, new WelcomeFragment(),
+                    WelcomeFragment.class.getSimpleName(), args);
+        } else if(fragmentLayoutResId == R.layout.frag_news_categories) {
+            changeFragment(R.id.screen_container, new NewsCategoriesFragment(),
+                    NewsCategoriesFragment.class.getSimpleName(), args);
         } else if(fragmentLayoutResId == R.layout.frag_doctors) {
             changeFragment(R.id.screen_container, new DoctorListFragment(),
                     DoctorListFragment.class.getSimpleName(), args);
