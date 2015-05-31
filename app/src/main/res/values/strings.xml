@@ -48,6 +48,15 @@
     <string name="profile_kid">My daughter profile</string>
     <string name="profile_father">My father profile</string>
 
+    <!-- Profile details -->
+    <string name="profile_details_name">Name</string>
+    <string name="profile_details_gender">Gender</string>
+    <string name="profile_details_address">Address</string>
+    <string name="profile_details_birth">Date of Birth</string>
+    <string name="profile_details_ethnicity">Ethnicity</string>
+    <string name="profile_details_height">Height</string>
+    <string name="profile_details_weight">Weight</string>
+
     <!-- Settings -->
     <string name="settings_email">Email:</string>
     <string name="settings_password">Password:</string>
