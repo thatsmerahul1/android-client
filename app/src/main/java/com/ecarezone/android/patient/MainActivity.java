@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.ecarezone.android.patient.fragment.DoctorListFragment;
+import com.ecarezone.android.patient.fragment.FirstTimeUserProfileFragment;
 import com.ecarezone.android.patient.fragment.WelcomeFragment;
 import com.ecarezone.android.patient.fragment.NewsCategoriesFragment;
 import com.ecarezone.android.patient.fragment.PatientFragment;
@@ -78,6 +79,16 @@ public class MainActivity extends EcareZoneBaseActivity {
         }
     }
 
+    public void toggleDrawer(boolean open) {
+        if(mDrawerLayout != null) {
+            if(open) {
+                mDrawerLayout.openDrawer(Gravity.START | Gravity.LEFT);
+            } else {
+                mDrawerLayout.closeDrawers();
+            }
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -130,6 +141,9 @@ public class MainActivity extends EcareZoneBaseActivity {
         } else if(fragmentLayoutResId == R.layout.frag_user_profile) {
             changeFragment(R.id.screen_container, new UserProfileFragment(),
                     UserProfileFragment.class.getSimpleName(), args);
+        } else if(fragmentLayoutResId == R.layout.frag_first_time_profile) {
+            changeFragment(R.id.screen_container, new FirstTimeUserProfileFragment(),
+                    FirstTimeUserProfileFragment.class.getSimpleName(), args);
         }
 
         if(mDrawerLayout != null) {

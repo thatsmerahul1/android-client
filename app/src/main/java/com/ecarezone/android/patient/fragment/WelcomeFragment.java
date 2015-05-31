@@ -1,10 +1,12 @@
 package com.ecarezone.android.patient.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.R;
 
 /**
@@ -33,8 +35,13 @@ public class WelcomeFragment extends EcareZoneBaseFragment implements View.OnCli
         final int viewId = v.getId();
         if(viewId == R.id.button_welcome_not_now) {
             // open side menu
+            Activity act = getActivity();
+            if((act != null) && (act instanceof MainActivity)) {
+                ((MainActivity) act).toggleDrawer(true);
+            }
         } else if(viewId == R.id.button_welcome_ok) {
-            // open profile list
+            // open profile
+            invokeNavigationChanged(R.layout.frag_first_time_profile, null);
         }
     }
 }

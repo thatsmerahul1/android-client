@@ -11,19 +11,18 @@ import com.ecarezone.android.patient.ProfileDetailsActivity;
 import com.ecarezone.android.patient.R;
 
 /**
- * Created by CHAO WEI on 5/1/2015.
+ * Created by CHAO WEI on 5/31/2015.
  */
-public class UserProfileFragment extends EcareZoneBaseFragment implements View.OnClickListener {
-
+public class FirstTimeUserProfileFragment extends EcareZoneBaseFragment implements View.OnClickListener {
     @Override
     protected String getCallerName() {
-        return UserProfileFragment.class.getSimpleName();
+        return FirstTimeUserProfileFragment.class.getSimpleName();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.frag_user_profile, container, false);
-        view.findViewById(R.id.layout_profile_mine).setOnClickListener(this);
+        final View view = inflater.inflate(R.layout.frag_first_time_profile, container, false);
+        view.findViewById(R.id.layout_profile_add_mine).setOnClickListener(this);
         return view;
     }
 
@@ -32,7 +31,7 @@ public class UserProfileFragment extends EcareZoneBaseFragment implements View.O
         if(v == null) return;
 
         final int viewId = v.getId();
-        if(viewId == R.id.layout_profile_mine) {
+        if(viewId == R.id.layout_profile_add_mine) {
             final Activity activity = getActivity();
             // open new activity
             if(activity != null) {

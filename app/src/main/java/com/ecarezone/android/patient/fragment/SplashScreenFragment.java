@@ -47,7 +47,8 @@ public class SplashScreenFragment extends EcareZoneBaseFragment {
             @Override
             public void run() {
                 if(activity != null) {
-                    activity.startActivity(new Intent(activity.getApplicationContext(), RegistrationActivity.class));
+                    activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));
+                    //activity.startActivity(new Intent(activity.getApplicationContext(), RegistrationActivity.class));
                     activity.finish();
                 }
             }
