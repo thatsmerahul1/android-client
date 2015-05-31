@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,7 +76,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
             } else if(getString(R.string.main_side_menu_news).equals(tag)) {
                 layoutResId = R.layout.frag_news_categories;
             } else if(getString(R.string.main_side_menu_doctors).equals(tag)){
-                layoutResId = R.layout.frag_doctors;
+                layoutResId = R.layout.frag_doctor_list;
             } else if(getString(R.string.main_side_menu_health).equals(tag)) {
                 // TODO
             } else if(getString(R.string.main_side_menu_medication).equals(tag)) {

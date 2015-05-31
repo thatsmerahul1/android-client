@@ -132,7 +132,7 @@ public class MainActivity extends EcareZoneBaseActivity {
         } else if(fragmentLayoutResId == R.layout.frag_news_categories) {
             changeFragment(R.id.screen_container, new NewsCategoriesFragment(),
                     getString(R.string.main_side_menu_news), args);
-        } else if(fragmentLayoutResId == R.layout.frag_doctors) {
+        } else if(fragmentLayoutResId == R.layout.frag_doctor_list) {
             changeFragment(R.id.screen_container, new DoctorListFragment(),
                     getString(R.string.main_side_menu_doctors), args);
         } else if(fragmentLayoutResId == R.layout.frag_settings) {

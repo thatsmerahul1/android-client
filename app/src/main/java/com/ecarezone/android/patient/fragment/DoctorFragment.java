@@ -7,38 +7,36 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ecarezone.android.patient.DoctorActivity;
-import com.ecarezone.android.patient.ProfileDetailsActivity;
+import com.ecarezone.android.patient.ChatActivity;
 import com.ecarezone.android.patient.R;
 
 /**
- * Created by CHAO WEI on 5/25/2015.
+ * Created by CHAO WEI on 6/1/2015.
  */
-public class DoctorListFragment extends EcareZoneBaseFragment implements View.OnClickListener {
-
+public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClickListener {
     @Override
     protected String getCallerName() {
-        return DoctorListFragment.class.getSimpleName();
+        return DoctorFragment.class.getSimpleName();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.frag_doctor_list, container, false);
-        view.findViewById(R.id.layout_doctor_smith).setOnClickListener(this);
+        final View view = inflater.inflate(R.layout.frag_doctor, container, false);
+        view.findViewById(R.id.image_view_chat).setOnClickListener(this);
         return view;
     }
-
 
     @Override
     public void onClick(View v) {
         if(v == null) return;
 
         final int viewId = v.getId();
-        if(viewId == R.id.layout_doctor_smith) {
+        if(viewId == R.id.image_view_chat) {
             final Activity activity = getActivity();
             // open new activity
             if(activity != null) {
-                activity.startActivity(new Intent(activity.getApplicationContext(), DoctorActivity.class));
+                activity.startActivity(new Intent(activity.getApplicationContext(), ChatActivity.class));
             }
         }
     }
