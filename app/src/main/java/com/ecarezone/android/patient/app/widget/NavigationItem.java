@@ -108,6 +108,9 @@ public class NavigationItem extends RelativeLayout implements View.OnClickListen
      */
     public void highlightItem(boolean highlight) {
         mCheckBox.setChecked(highlight);
+        if(isEnabled()) {
+            mLabel.setTextColor(getContext().getResources().getColor((highlight ? android.R.color.white : R.color.ecarezone_green_dark)));
+        }
     }
 
 
@@ -118,7 +121,7 @@ public class NavigationItem extends RelativeLayout implements View.OnClickListen
     @Override
     public void setEnabled(boolean enabled) {
         if(!enabled) {
-            mLabel.setTextColor(getContext().getResources().getColor(R.color.ecarezone_gray));
+            mLabel.setTextColor(getContext().getResources().getColor(android.R.color.darker_gray));
         }
         super.setEnabled(enabled);
     }

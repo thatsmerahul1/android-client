@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="16dp"
                     android:textSize="24sp"
-                    android:textColor="@color/ecarezone_green_light"
+                    android:textColor="@android:color/white"
                     android:layout_gravity="center"
                     android:text="@string/main_profile_title"/>
             </LinearLayout>

@@ -38,4 +38,14 @@ public abstract class AbstractBaseFragment extends Fragment {
         return  getActivity().getApplicationContext();
     }
 
+    /**
+     * a shortcut for getSupportFragmentManager()#findFragmentById(resId)
+     *
+     * @param resId
+     * @return Fragment
+     */
+    protected Fragment getFragmentById(final int resId) {
+        return (Fragment)getFragmentManager().findFragmentById(resId);
+    }
+
 }

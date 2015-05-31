@@ -114,19 +114,19 @@ public class MainActivity extends EcareZoneBaseActivity {
 
         if(fragmentLayoutResId == R.layout.frag_patient_main) {
             changeFragment(R.id.screen_container, new PatientFragment(),
-                    PatientFragment.class.getSimpleName(), args);
+                    getString(R.string.main_side_menu_home), args);
         } else if(fragmentLayoutResId == R.layout.frag_welcome) {
             changeFragment(R.id.screen_container, new WelcomeFragment(),
                     WelcomeFragment.class.getSimpleName(), args);
         } else if(fragmentLayoutResId == R.layout.frag_news_categories) {
             changeFragment(R.id.screen_container, new NewsCategoriesFragment(),
-                    NewsCategoriesFragment.class.getSimpleName(), args);
+                    getString(R.string.main_side_menu_news), args);
         } else if(fragmentLayoutResId == R.layout.frag_doctors) {
             changeFragment(R.id.screen_container, new DoctorListFragment(),
-                    DoctorListFragment.class.getSimpleName(), args);
+                    getString(R.string.main_side_menu_doctors), args);
         } else if(fragmentLayoutResId == R.layout.frag_settings) {
             changeFragment(R.id.screen_container, new SettingsFragment(),
-                    SettingsFragment.class.getSimpleName(), args);
+                    getString(R.string.main_side_menu_settings), args);
         } else if(fragmentLayoutResId == R.layout.frag_user_profile) {
             changeFragment(R.id.screen_container, new UserProfileFragment(),
                     UserProfileFragment.class.getSimpleName(), args);
