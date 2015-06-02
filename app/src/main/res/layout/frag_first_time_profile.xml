@@ -12,7 +12,7 @@
         android:orientation="horizontal"
         android:padding="8dp"
         android:layout_margin="8dp"
-        android:background="@drawable/profile_list_green_bkg">
+        android:background="@drawable/green_rectangle_layout_selector">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="@string/profile_add_your_profile"
-            android:textColor="@android:color/white"
+            android:textColor="@drawable/text_green_color_selector"
             android:textSize="20sp"
             android:layout_gravity="center"
             />

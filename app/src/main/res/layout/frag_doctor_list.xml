@@ -18,7 +18,7 @@
                 android:orientation="horizontal"
                 android:padding="8dp"
                 android:layout_margin="8dp"
-                android:background="@drawable/doctor_list_bkg">
+                android:background="@drawable/blue_rectangle_layout_selector">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -29,15 +29,59 @@
                     android:scaleType="fitCenter"
                     />
 
-                <TextView
+
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:text="@string/profile_mine"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
+                    android:layout_height="match_parent"
+                    android:padding="16dp"
+                    android:gravity="center"
                     android:layout_gravity="center"
-                    />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/doctor_name1"
+                        android:textColor="@drawable/text_blue_color_selector"
+                        android:textSize="20sp"
+                        android:layout_gravity="center"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/doctor_type1"
+                        android:textColor="@drawable/text_blue_color_selector"
+                        android:textSize="18sp"
+                        android:layout_gravity="center"
+                        />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:background="@drawable/circle_green"
+                            />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/doctor_available"
+                            android:textColor="@drawable/text_black_color_selector"
+                            android:textSize="16sp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_gravity="center"
+                            />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -48,7 +92,7 @@
                 android:orientation="horizontal"
                 android:padding="8dp"
                 android:layout_margin="8dp"
-                android:background="@drawable/doctor_list_bkg">
+                android:background="@drawable/blue_rectangle_layout_selector">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -59,15 +103,59 @@
                     android:scaleType="fitCenter"
                     />
 
-                <TextView
+
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:text="@string/profile_mine"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
+                    android:layout_height="match_parent"
+                    android:padding="16dp"
+                    android:gravity="center"
                     android:layout_gravity="center"
-                    />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/doctor_name2"
+                        android:textColor="@drawable/text_blue_color_selector"
+                        android:textSize="20sp"
+                        android:layout_gravity="center"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/doctor_type2"
+                        android:textColor="@drawable/text_blue_color_selector"
+                        android:textSize="18sp"
+                        android:layout_gravity="center"
+                        />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:background="@drawable/circle_red"
+                            />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/doctor_busy"
+                            android:textColor="@drawable/text_black_color_selector"
+                            android:textSize="16sp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_gravity="center"
+                            />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -78,7 +166,7 @@
                 android:orientation="horizontal"
                 android:padding="8dp"
                 android:layout_margin="8dp"
-                android:background="@drawable/doctor_list_bkg">
+                android:background="@drawable/blue_rectangle_layout_selector">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -89,15 +177,59 @@
                     android:scaleType="fitCenter"
                     />
 
-                <TextView
+
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:text="@string/profile_mine"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
+                    android:layout_height="match_parent"
+                    android:padding="16dp"
+                    android:gravity="center"
                     android:layout_gravity="center"
-                    />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/doctor_name3"
+                        android:textColor="@drawable/text_blue_color_selector"
+                        android:textSize="20sp"
+                        android:layout_gravity="center"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/doctor_type2"
+                        android:textColor="@drawable/text_blue_color_selector"
+                        android:textSize="18sp"
+                        android:layout_gravity="center"
+                        />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:background="@drawable/circle_red"
+                            />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/doctor_busy"
+                            android:textColor="@drawable/text_black_color_selector"
+                            android:textSize="16sp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_gravity="center"
+                            />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 

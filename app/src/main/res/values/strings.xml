@@ -72,4 +72,14 @@
         <item>Sweden</item>
     </string-array>
 
+    <!-- doctor -->
+    <string name="doctor_name1">Dr. John Smith</string>
+    <string name="doctor_name2">Dr. Steven Harris</string>
+    <string name="doctor_name3">Dr. Song Yi</string>
+    <string name="doctor_type1">Cardiologist</string>
+    <string name="doctor_type2">General practitioner</string>
+
+    <string name="doctor_available">Available</string>
+    <string name="doctor_busy">Busy</string>
+
 </resources>
