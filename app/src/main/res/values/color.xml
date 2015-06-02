@@ -5,5 +5,6 @@
     <color name="ecarezone_green_dark">#68AA43</color>
     <color name="ecarezone_green_light">#AECE78</color>
     <color name="ecarezone_gray">#D1D3D4</color>
+    <color name="ecarezone_light_gray">#EDECEC</color>
     <color name="ecarezone_news_categories_text_view_background_white">#5FFFFFFF</color>
 </resources>

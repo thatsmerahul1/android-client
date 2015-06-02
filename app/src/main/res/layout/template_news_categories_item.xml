@@ -24,6 +24,8 @@
         android:textColor="@android:color/black"
         android:gravity="center"
         android:textSize="18sp"
+        android:minHeight="46dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/ecarezone_news_categories_text_view_background_white"
         />
 

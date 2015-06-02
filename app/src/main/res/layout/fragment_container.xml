@@ -10,7 +10,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
+        android:background="@color/ecarezone_light_gray"
         android:clickable="true"
         android:focusable="false" />
 
