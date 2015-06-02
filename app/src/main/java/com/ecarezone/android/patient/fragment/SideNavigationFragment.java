@@ -1,5 +1,7 @@
 package com.ecarezone.android.patient.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ecarezone.android.patient.R;
+import com.ecarezone.android.patient.RegistrationActivity;
 import com.ecarezone.android.patient.app.widget.NavigationItem;
 
 /**
@@ -81,8 +84,13 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
                 // TODO
             } else if(getString(R.string.main_side_menu_medication).equals(tag)) {
                 // TODO
-            } else if(getString(R.string.main_side_menu_medication).equals(tag)) {
-                // TODO
+            } else if(getString(R.string.main_side_menu_logout).equals(tag)) {
+                final Activity activity = getActivity();
+                if(activity != null) {
+                    activity.startActivity(new Intent(activity.getApplicationContext(), RegistrationActivity.class));
+                    activity.finish();
+                    return;
+                }
             }  else if(getString(R.string.main_side_menu_settings).equals(tag)) {
                 layoutResId = R.layout.frag_settings;
             } else if (getString(R.string.main_side_menu_logout).equals(tag)) {
@@ -103,7 +111,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
         //mMedication.highlightItem(false);
         //mPlan.highlightItem(false);
         mSettings.highlightItem(false);
-        //mLogout.highlightItem(false);
+        mLogout.highlightItem(false);
         navigationItem.highlightItem(true);
     }
 
