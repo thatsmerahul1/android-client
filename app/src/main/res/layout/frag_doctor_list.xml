@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
      android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ScrollView android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -10,6 +11,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="24dp"
+                android:text="@string/doctor_recommended_doctors"
+                android:textColor="@color/ecarezone_green_dark"
+                android:gravity="center"
+                android:textSize="22dp"
+                />
 
             <LinearLayout
                 android:id="@+id/layout_doctor_smith"
