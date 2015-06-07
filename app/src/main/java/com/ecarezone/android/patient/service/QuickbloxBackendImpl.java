@@ -8,11 +8,15 @@ import android.util.Log;
 import com.ecarezone.android.patient.R;
 import com.quickblox.auth.QBAuth;
 import com.quickblox.auth.model.QBSession;
+import com.quickblox.core.QBEntityCallback;
 import com.quickblox.core.QBEntityCallbackImpl;
 import com.quickblox.core.QBSettings;
+import com.quickblox.core.request.QBPagedRequestBuilder;
 import com.quickblox.users.QBUsers;
 import com.quickblox.users.model.QBUser;
+import com.quickblox.users.model.QBUserPaged;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -103,20 +107,45 @@ class QuickbloxBackendImpl {
             public void onSuccess(QBUser user, Bundle args) {
                 // success
                 Log.d(getCallerName(), "login user " + user.toString());
+
             }
 
             @Override
             public void onError(List<String> errors) {
                 // error
-                for(String e : errors) {
+                for (String e : errors) {
                     Log.d(getCallerName(), "login error " + e);
                 }
             }
         });
     }
 
+    void getAllUsers() {
+        QBPagedRequestBuilder requestBuilder = new QBPagedRequestBuilder();
+        QBUsers.getUsers(requestBuilder, new QBEntityCallback<ArrayList<QBUser>>() {
 
-    public void logout() {
+            @Override
+            public void onSuccess(ArrayList<QBUser> qbUsers, Bundle bundle) {
+                for(QBUser u : qbUsers) {
+                    Log.d(getCallerName(), "user " + u.toString());
+                }
+            }
+
+            @Override
+            public void onSuccess() {
+            }
+
+            @Override
+            public void onError(List<String> list) {
+                for(String s : list) {
+                    Log.d(getCallerName(), "list item " + s);
+                }
+            }
+        });
+    }
+
+
+    void logout() {
         QBUsers.signOut(new QBEntityCallbackImpl<QBUser>() {
             @Override
             public void onSuccess(QBUser user, Bundle args) {
@@ -133,4 +162,9 @@ class QuickbloxBackendImpl {
             }
         });
     }
+
+
+
+
+
 }

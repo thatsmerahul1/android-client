@@ -55,8 +55,8 @@ public class WebService {
         return  null;
     }
 
-    public JSONObject login() {
-
+    public JSONObject login(String username, String password) {
+        mQuickbloxBackendImpl.login(username, password);
         return null;
     }
 
