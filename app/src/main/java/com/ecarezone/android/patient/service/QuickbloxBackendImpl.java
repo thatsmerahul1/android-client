@@ -14,7 +14,6 @@ import com.quickblox.core.QBSettings;
 import com.quickblox.core.request.QBPagedRequestBuilder;
 import com.quickblox.users.QBUsers;
 import com.quickblox.users.model.QBUser;
-import com.quickblox.users.model.QBUserPaged;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +125,7 @@ class QuickbloxBackendImpl {
 
             @Override
             public void onSuccess(ArrayList<QBUser> qbUsers, Bundle bundle) {
-                for(QBUser u : qbUsers) {
+                for (QBUser u : qbUsers) {
                     Log.d(getCallerName(), "user " + u.toString());
                 }
             }
@@ -137,13 +136,32 @@ class QuickbloxBackendImpl {
 
             @Override
             public void onError(List<String> list) {
-                for(String s : list) {
+                for (String s : list) {
                     Log.d(getCallerName(), "list item " + s);
                 }
             }
         });
     }
 
+
+    void updateUser(QBUser user) {
+        QBUsers.updateUser(user, new QBEntityCallback<QBUser>() {
+            @Override
+            public void onSuccess(QBUser qbUser, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onError(List<String> list) {
+
+            }
+        });
+    }
 
     void logout() {
         QBUsers.signOut(new QBEntityCallbackImpl<QBUser>() {
