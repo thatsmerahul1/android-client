@@ -30,11 +30,25 @@ public class ProfileDetailsActivity extends EcareZoneBaseActivity {
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
             mToolBar.setNavigationIcon(R.drawable.ic_action_menu);
+            mToolBar.setOnMenuItemClickListener(
+                    new Toolbar.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            // Handle menu item click event
+                            return true;
+                        }
+                    });
         }
         mActionBar = getSupportActionBar();
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
         addSupportOnBackStackChangedListener(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_check, menu);
+        return true;
     }
 
     @Override

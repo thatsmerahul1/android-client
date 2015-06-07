@@ -65,6 +65,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
         mLogout =  (NavigationItem) view.findViewById(R.id.navigation_logout);
         mLogout.setOnNavigationItemClickListener(this);
         mHome.highlightItem(true);
+        highlightNavigationItem(null);
         return view;
     }
 
@@ -112,7 +113,9 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
         //mPlan.highlightItem(false);
         mSettings.highlightItem(false);
         mLogout.highlightItem(false);
-        navigationItem.highlightItem(true);
+        if(navigationItem != null) {
+            navigationItem.highlightItem(true);
+        }
     }
 
     @Override

@@ -28,6 +28,7 @@ public class MainActivity extends EcareZoneBaseActivity {
     private ActionBarDrawerToggle mDrawerToggle = null;
     private Toolbar mToolBar = null;
     private ActionBar mActionBar = null;
+    private MenuItem mMenuItemSearch = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +92,12 @@ public class MainActivity extends EcareZoneBaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
+        /*
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+        if(menu.size() > 0) {
+            mMenuItemSearch = menu.getItem(0);
+        }
+        */
         return true;
     }
 
@@ -122,6 +128,7 @@ public class MainActivity extends EcareZoneBaseActivity {
     @Override
     public void onNavigationChanged(int fragmentLayoutResId, Bundle args) {
         if(fragmentLayoutResId < 0) return;
+
 
         if(fragmentLayoutResId == R.layout.frag_patient_main) {
             changeFragment(R.id.screen_container, new PatientFragment(),

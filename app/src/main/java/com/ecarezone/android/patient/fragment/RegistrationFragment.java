@@ -94,7 +94,6 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                                 R.array.country_array, R.layout.country_spinner_item);
         mSpinner.setAdapter(mSpinnerAdapter);
         mSpinner.setOnItemSelectedListener(this);
-        mSpinner.setPrompt("Country");
         mCheckBoxTerms = (CheckBox)view.findViewById(R.id.checkbox_registration_terms);
         mCheckBoxTerms.setOnCheckedChangeListener(this);
         return view;

@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/settings_email"
-            android:textColor="@color/ecarezone_green_light"
+            android:textColor="@color/ecarezone_green_dark"
             />
 
         <EditText
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/settings_password"
-            android:textColor="@color/ecarezone_green_light"
+            android:textColor="@color/ecarezone_green_dark"
             />
 
         <EditText
@@ -46,8 +46,8 @@
             android:layout_marginTop="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/settings_country"
-            android:textColor="@color/ecarezone_green_light"
+            android:text="@string/registration_country"
+            android:textColor="@color/ecarezone_green_dark"
             />
 
         <include layout="@layout/template_country_spinner" />

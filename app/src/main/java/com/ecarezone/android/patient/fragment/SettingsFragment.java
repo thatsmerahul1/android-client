@@ -31,7 +31,6 @@ public class SettingsFragment extends EcareZoneBaseFragment implements AdapterVi
                 R.array.country_array, R.layout.country_spinner_item);
         mSpinner.setAdapter(mSpinnerAdapter);
         mSpinner.setOnItemSelectedListener(this);
-        mSpinner.setPrompt("Country");
         return view;
     }
 

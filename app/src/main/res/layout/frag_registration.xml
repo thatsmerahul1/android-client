@@ -36,8 +36,16 @@
         android:inputType="textPassword"
         android:hint="@string/login_password"/>
 
+
+    <TextView
+        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/settings_country"
+        android:textColor="@color/ecarezone_green_dark"
+        />
+
     <include
-        android:layout_marginTop="24dp"
         layout="@layout/template_country_spinner" />
 
 

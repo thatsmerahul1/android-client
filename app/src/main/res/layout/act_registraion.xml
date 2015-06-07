@@ -4,6 +4,6 @@
     android:layout_height="match_parent"
     tools:context=".RegistrationActivity" >
 
-    <include layout="@layout/fragment_container" />
+    <include layout="@layout/fragment_container_light" />
 
 </merge>

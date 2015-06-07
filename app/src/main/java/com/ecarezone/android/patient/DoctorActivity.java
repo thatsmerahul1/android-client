@@ -3,6 +3,7 @@ package com.ecarezone.android.patient;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ecarezone.android.patient.fragment.DoctorFragment;
@@ -29,6 +30,14 @@ public class DoctorActivity extends EcareZoneBaseActivity  {
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
             mToolBar.setNavigationIcon(R.drawable.ic_action_menu);
+            mToolBar.setOnMenuItemClickListener(
+                    new Toolbar.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            // Handle menu item click event
+                            return true;
+                        }
+                    });
         }
         mActionBar = getSupportActionBar();
         mActionBar.setHomeButtonEnabled(true);
@@ -45,6 +54,11 @@ public class DoctorActivity extends EcareZoneBaseActivity  {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_info, menu);
+        return true;
+    }
 
     @Override
     public void onBackStackChanged() {

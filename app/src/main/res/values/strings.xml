@@ -13,6 +13,7 @@
     <string name="registration_title">Create your eCareZone Account</string>
     <string name="registration_username">@string/login_username</string>
     <string name="registration_password">@string/login_password</string>
+    <string name="registration_country">Country:</string>
     <string name="registration_create_account">@string/login_create_account</string>
     <string name="registration_agreement">You agree the terms and privacy police</string>
 
@@ -60,8 +61,9 @@
     <!-- Settings -->
     <string name="settings_email">Email:</string>
     <string name="settings_password">Password:</string>
-    <string name="settings_country">Country:</string>
+    <string name="settings_country">@string/registration_country</string>
     <string name="settings_about_app">About eCareZone</string>
+    <string name="settings_action_check">Check</string>
 
     <!--country name list-->
     <string-array name="country_array">
@@ -81,10 +83,16 @@
     <string name="doctor_type2">General practitioner</string>
     <string name="doctor_available">Available</string>
     <string name="doctor_busy">Busy</string>
+    <string name="doctor_search">Search</string>
 
     <!-- Home -->
     <string name="home_last_news_feed">The latest news feed</string>
     <string name="home_new_messages">News messages\nFrom: %s</string>
     <string name="home_user_message">Hi,\n\nWe have new doctor recommended for your case!</string>
     <string name="home_see_profile">See profile</string>
+
+    <!-- Doctor details -->
+    <string name="doctor_details_chat">Chat</string>
+    <string name="doctor_details_video">Video call</string>
+    <string name="doctor_details_voice">Voice</string>
 </resources>
