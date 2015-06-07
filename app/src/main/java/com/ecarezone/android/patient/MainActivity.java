@@ -2,6 +2,7 @@ package com.ecarezone.android.patient;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,6 +19,7 @@ import com.ecarezone.android.patient.fragment.NewsCategoriesFragment;
 import com.ecarezone.android.patient.fragment.PatientFragment;
 import com.ecarezone.android.patient.fragment.SettingsFragment;
 import com.ecarezone.android.patient.fragment.UserProfileFragment;
+import com.ecarezone.android.patient.service.WebService;
 
 /**
  * Created by CHAO WEI on 5/3/2015.

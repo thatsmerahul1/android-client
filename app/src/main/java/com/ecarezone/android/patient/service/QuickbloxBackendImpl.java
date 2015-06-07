@@ -1,20 +1,136 @@
 package com.ecarezone.android.patient.service;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.os.Bundle;
+import android.util.Log;
+
+import com.ecarezone.android.patient.R;
+import com.quickblox.auth.QBAuth;
+import com.quickblox.auth.model.QBSession;
+import com.quickblox.core.QBEntityCallbackImpl;
+import com.quickblox.core.QBSettings;
+import com.quickblox.users.QBUsers;
+import com.quickblox.users.model.QBUser;
+
+import java.util.List;
+
 /**
  * Created by CHAO WEI on 5/17/2015.
  */
 class QuickbloxBackendImpl {
 
+
+    final String getCallerName() {
+        return QuickbloxBackendImpl.class.getSimpleName();
+    }
+
     /**
-     * Account id: 29191
-     * Account key: EzHXyii11UERqP7zWiBp
-     * API endpoint: https://api.quickblox.com
-     * Chat endpoint: chat.quickblox.com
-     * TURN-server: turnserver.quickblox.com
-     * S3 bucket: qbprod
+     * Quickblox credentials
+     * username: chao.wei@ecarezone.com
+     * passworrd: front123
      *
+     * Account id: 23331
+     * Account key: dPFd-gPBDxJ288v
+     * Authorization secret: c-LBfS-B5tW-ujn
      */
 
+    private static QuickbloxBackendImpl sQuickbloxBackendImpl = null;
+
+    private QuickbloxBackendImpl(Context context) {
+        mContext = context;
+        if(mQBSettings == null) {
+            Resources res = mContext.getResources();
+            mQBSettings = QBSettings.getInstance().fastConfigInit(res.getString(R.string.qb_app_id),
+                    res.getString(R.string.qb_app_auth_key),
+                    res.getString(R.string.qb_app_auth_secret));
+        }
+    }
+
+    public static synchronized QuickbloxBackendImpl getInstance(Context context) {
+        if(sQuickbloxBackendImpl == null) {
+            sQuickbloxBackendImpl = new QuickbloxBackendImpl(context);
+        }
+        return sQuickbloxBackendImpl;
+    }
+
+    private Context mContext = null;
+    private QBSettings mQBSettings = null;
+
+    void createSession() {
+        QBAuth.createSession(new QBEntityCallbackImpl<QBSession>() {
+            @Override
+            public void onSuccess(QBSession session, Bundle params) {
+                // success
+                Log.d(getCallerName(), "createSession " + session.toString());
+            }
+
+            @Override
+            public void onError(List<String> errors) {
+                // errors
+                for(String e : errors) {
+                    Log.d(getCallerName(), "createSession error " + e);
+                }
+            }
+        });
+    }
+
+    void register(String username, String password) {
+        // Register new user
+        final QBUser user = new QBUser(username, password);
+        QBUsers.signUp(user, new QBEntityCallbackImpl<QBUser>() {
+            @Override
+            public void onSuccess(QBUser user, Bundle args) {
+                // success
+                Log.d(getCallerName(), "register user " + user.toString());
+            }
+
+            @Override
+            public void onError(List<String> errors) {
+                // error
+                for (String e : errors) {
+                    Log.d(getCallerName(), "register error " + e);
+                }
+            }
+        });
+    }
+
+    void login(String username, String password) {
+        final QBUser user = new QBUser(username, password);
+        // Login
+        QBUsers.signIn(user, new QBEntityCallbackImpl<QBUser>() {
+            @Override
+            public void onSuccess(QBUser user, Bundle args) {
+                // success
+                Log.d(getCallerName(), "login user " + user.toString());
+            }
+
+            @Override
+            public void onError(List<String> errors) {
+                // error
+                for(String e : errors) {
+                    Log.d(getCallerName(), "login error " + e);
+                }
+            }
+        });
+    }
 
 
+    public void logout() {
+        QBUsers.signOut(new QBEntityCallbackImpl<QBUser>() {
+            @Override
+            public void onSuccess(QBUser user, Bundle args) {
+                // success
+                Log.d(getCallerName(), "logout user " + user.toString());
+            }
+
+            @Override
+            public void onError(List<String> errors) {
+                // error
+                for(String e : errors) {
+                    Log.d(getCallerName(), "logout error " + e);
+                }
+            }
+        });
+    }
 }

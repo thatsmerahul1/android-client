@@ -1,5 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <!-- Quickblox backend -->
+    <string name="qb_app_id">23331</string>
+    <string name="qb_app_auth_key">dPFd-gPBDxJ288v</string>
+    <string name="qb_app_auth_secret">c-LBfS-B5tW-ujn</string>
 
 </resources>

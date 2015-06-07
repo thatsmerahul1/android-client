@@ -23,6 +23,7 @@ public class WebService {
     private static WebService sInstance;
     private Context mContext = null;
     private Resources mResources = null;
+    private final QuickbloxBackendImpl mQuickbloxBackendImpl;
 
     /**
      * Get the {@link WebService} instance.
@@ -42,11 +43,15 @@ public class WebService {
     private WebService(Context context) {
         mContext = context;
         mResources = context.getResources();
+        mQuickbloxBackendImpl = QuickbloxBackendImpl.getInstance(mContext);
     }
 
+    public void createQuickbloxSession() {
+        mQuickbloxBackendImpl.createSession();
+    }
 
-    public JSONObject register() {
-
+    public JSONObject register(String username, String password) {
+        mQuickbloxBackendImpl.register(username, password);
         return  null;
     }
 
