@@ -3,29 +3,29 @@ package com.ecarezone.android.patient;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
-import com.ecarezone.android.patient.fragment.DoctorFragment;
+import com.ecarezone.android.patient.fragment.ChatFragment;
+import com.ecarezone.android.patient.fragment.SearchFragment;
 
 /**
- * Created by CHAO WEI on 6/1/2015.
+ * Created by CHAO WEI on 6/19/2015.
  */
-public class DoctorActivity extends EcareZoneBaseActivity  {
+public class SearchActivity extends EcareZoneBaseActivity {
 
     private ActionBar mActionBar = null;
     private Toolbar mToolBar = null;
 
     @Override
     protected String getCallerName() {
-        return DoctorActivity.class.getSimpleName();
+        return SearchActivity.class.getSimpleName();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_doctor);
-        onNavigationChanged(R.layout.frag_doctor, null);
+        onNavigationChanged(R.layout.frag_search_user_list, null);
         mToolBar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
@@ -55,18 +55,12 @@ public class DoctorActivity extends EcareZoneBaseActivity  {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_info, menu);
-        return true;
-    }
-
-    @Override
     public void onNavigationChanged(int fragmentLayoutResId, Bundle args) {
         if(fragmentLayoutResId < 0) return;
 
-        if(fragmentLayoutResId == R.layout.frag_doctor) {
-            changeFragment(R.id.screen_container, new DoctorFragment(),
-                    DoctorFragment.class.getSimpleName(), args);
+        if(fragmentLayoutResId == R.layout.frag_search_user_list) {
+            changeFragment(R.id.screen_container, new SearchFragment(),
+                    SearchFragment.class.getSimpleName(), args);
         }
     }
 }

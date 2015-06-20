@@ -30,15 +30,6 @@ public class SplashScreenActivty extends EcareZoneBaseActivity {
     }
 
     @Override
-    public void onBackStackChanged() {
-        final int entryCount = getFragmentBackStackEntryCount();
-        if(entryCount == 0) {
-            finish();
-        }
-    }
-
-
-    @Override
     protected String getCallerName() {
         return SplashScreenActivty.class.getSimpleName();
     }

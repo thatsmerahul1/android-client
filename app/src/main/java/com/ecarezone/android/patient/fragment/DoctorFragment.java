@@ -1,14 +1,13 @@
 package com.ecarezone.android.patient.fragment;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ecarezone.android.patient.ChatActivity;
 import com.ecarezone.android.patient.R;
+
 
 /**
  * Created by CHAO WEI on 6/1/2015.
@@ -20,17 +19,17 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     }
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.frag_doctor, container, false);
-        view.findViewById(R.id.image_view_chat).setOnClickListener(this);
         return view;
     }
 
     @Override
     public void onClick(View v) {
         if(v == null) return;
-
+/*
         final int viewId = v.getId();
         if(viewId == R.id.image_view_chat) {
             final Activity activity = getActivity();
@@ -39,5 +38,6 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                 activity.startActivity(new Intent(activity.getApplicationContext(), ChatActivity.class));
             }
         }
+        */
     }
 }

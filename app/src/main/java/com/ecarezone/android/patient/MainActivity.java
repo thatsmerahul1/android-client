@@ -2,13 +2,13 @@ package com.ecarezone.android.patient;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
+
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.Menu;
+
 import android.view.MenuItem;
 import android.view.View;
 
@@ -19,7 +19,6 @@ import com.ecarezone.android.patient.fragment.NewsCategoriesFragment;
 import com.ecarezone.android.patient.fragment.PatientFragment;
 import com.ecarezone.android.patient.fragment.SettingsFragment;
 import com.ecarezone.android.patient.fragment.UserProfileFragment;
-import com.ecarezone.android.patient.service.WebService;
 
 /**
  * Created by CHAO WEI on 5/3/2015.
@@ -30,7 +29,6 @@ public class MainActivity extends EcareZoneBaseActivity {
     private ActionBarDrawerToggle mDrawerToggle = null;
     private Toolbar mToolBar = null;
     private ActionBar mActionBar = null;
-    private MenuItem mMenuItemSearch = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,17 +88,6 @@ public class MainActivity extends EcareZoneBaseActivity {
                 mDrawerLayout.closeDrawers();
             }
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        /*
-        getMenuInflater().inflate(R.menu.menu_search, menu);
-        if(menu.size() > 0) {
-            mMenuItemSearch = menu.getItem(0);
-        }
-        */
-        return true;
     }
 
     @Override
@@ -165,14 +152,6 @@ public class MainActivity extends EcareZoneBaseActivity {
         super.onConfigurationChanged(newConfig);
         if(mDrawerToggle != null) {
             mDrawerToggle.onConfigurationChanged(newConfig);
-        }
-    }
-
-    @Override
-    public void onBackStackChanged() {
-        final int entryCount = getFragmentBackStackEntryCount();
-        if(entryCount == 0) {
-            finish();
         }
     }
 

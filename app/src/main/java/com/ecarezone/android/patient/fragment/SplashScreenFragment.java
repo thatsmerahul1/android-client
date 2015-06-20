@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.RegistrationActivity;
+import com.ecarezone.android.patient.service.WebService;
 
 /**
  * Created by CHAO WEI on 5/1/2015.
@@ -38,6 +39,8 @@ public class SplashScreenFragment extends EcareZoneBaseFragment {
         super.onActivityCreated(savedInstanceState);
 
         performSplashTask();
+        // TODO
+        WebService.getInstance(getApplicationContext()).createQuickbloxSession();
     }
 
 

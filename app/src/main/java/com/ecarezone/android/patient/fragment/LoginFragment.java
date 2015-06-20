@@ -1,19 +1,29 @@
 package com.ecarezone.android.patient.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.R;
+import com.ecarezone.android.patient.service.WebService;
 import com.ecarezone.android.patient.utils.EcareZoneLog;
+import com.quickblox.core.QBEntityCallback;
+import com.quickblox.core.QBEntityCallbackImpl;
+import com.quickblox.users.model.QBUser;
 
 import org.w3c.dom.Text;
+
+import java.util.List;
 
 /**
  * Created by CHAO WEI on 5/1/2015.
@@ -87,14 +97,12 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
         if(viewId == R.id.button_login) {
             final String username = mEditTextUsername.getEditableText().toString();
             final String password = mEditTextUsername.getEditableText().toString();
-            // TODO
             if(TextUtils.isEmpty(username)
-                    || (!android.util.Patterns.EMAIL_ADDRESS.matcher(username.trim()).matches())) {
-                Toast.makeText(v.getContext(), "Invalid username!", Toast.LENGTH_LONG).show();
-            } else if(TextUtils.isEmpty(username) || (password.length() < 8)) {
-                Toast.makeText(v.getContext(), "Invalid password!", Toast.LENGTH_LONG).show();
+                    || (!android.util.Patterns.EMAIL_ADDRESS.matcher(username.trim()).matches())
+                    || (TextUtils.isEmpty(username) || (password.trim().length() < 8))) {
+                Toast.makeText(v.getContext(), R.string.error_user_login, Toast.LENGTH_LONG).show();
             } else {
-                doLogin();
+                doLogin(username, password);
             }
         } else if(viewId == R.id.button_create_account) {
             // change to account creation
@@ -102,8 +110,22 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
         }
     }
 
-    private void doLogin() {
-        // TODO
+    private void doLogin(final String username, final String pwd) {
+        final Activity activity = getActivity();
+        WebService.getInstance(getApplicationContext()).login(username, pwd, new WebService.OnQuickbloxAuthenticationListener() {
+            @Override
+            public void onSuccess() {
+                if(activity != null) {
+                    activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));
+                    activity.finish();
+                }
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
     }
 
     private void checkLoginButtonStatus(final String username, final String password) {

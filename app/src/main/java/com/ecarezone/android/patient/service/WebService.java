@@ -2,8 +2,16 @@ package com.ecarezone.android.patient.service;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
+
+import com.quickblox.chat.model.QBDialog;
+import com.quickblox.core.QBEntityCallback;
+import com.quickblox.core.QBEntityCallbackImpl;
+import com.quickblox.users.model.QBUser;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 
 /**
@@ -11,7 +19,7 @@ import org.json.JSONObject;
  */
 public class WebService {
 
-    public String getCallerName() {
+    final String getCallerName() {
         return  WebService.class.getSimpleName();
     }
 
@@ -33,7 +41,7 @@ public class WebService {
      *
      * @return {@link WebService} instance.
      */
-    public static WebService getInstance(Context context) {
+    public static synchronized WebService getInstance(Context context) {
         if (sInstance == null) {
             sInstance = new WebService(context);
         }
@@ -46,23 +54,56 @@ public class WebService {
         mQuickbloxBackendImpl = QuickbloxBackendImpl.getInstance(mContext);
     }
 
+    public void configQuickblox() {
+        mQuickbloxBackendImpl.config();
+    }
+
     public void createQuickbloxSession() {
         mQuickbloxBackendImpl.createSession();
     }
 
-    public JSONObject register(String username, String password) {
-        mQuickbloxBackendImpl.register(username, password);
+    public JSONObject register(String username, String password, OnQuickbloxAuthenticationListener callback) {
+        mQuickbloxBackendImpl.register(username, password, callback);
         return  null;
     }
 
-    public JSONObject login(String username, String password) {
-        mQuickbloxBackendImpl.login(username, password);
+    public JSONObject login(String username, String password, OnQuickbloxAuthenticationListener callback) {
+        mQuickbloxBackendImpl.login(username, password, callback);
         return null;
     }
 
-    public JSONObject lgout() {
-
+    public JSONObject logut() {
+        mQuickbloxBackendImpl.logout();
         return  null;
+    }
+
+    public void getAllOtherUsers(OnQuickbloxFetchUsersListener callback) {
+        mQuickbloxBackendImpl.getAllOtherUsers(callback);
+    }
+
+    public void getUserChats(OnQuickbloxFetchChatsListener callback) {
+        mQuickbloxBackendImpl.getUserChats(callback);
+    }
+
+    public QBUser getCurrentLoginUser() {
+        return mQuickbloxBackendImpl.getCurrentUser();
+    }
+
+
+
+    public static interface OnQuickbloxAuthenticationListener {
+        void onSuccess();
+        void onError();
+    }
+
+    public static interface OnQuickbloxFetchUsersListener {
+        void onSuccess(ArrayList<QBUser> qbUsers);
+        void onError();
+    }
+
+    public static interface OnQuickbloxFetchChatsListener {
+        void onSuccess(ArrayList<QBDialog> dialogs);
+        void onError();
     }
 
 }

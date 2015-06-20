@@ -62,14 +62,6 @@ public class ProfileDetailsActivity extends EcareZoneBaseActivity {
     }
 
     @Override
-    public void onBackStackChanged() {
-        final int entryCount = getFragmentBackStackEntryCount();
-        if(entryCount == 0) {
-            finish();
-        }
-    }
-
-    @Override
     public void onNavigationChanged(int fragmentLayoutResId, Bundle args) {
         if(fragmentLayoutResId < 0) return;
 

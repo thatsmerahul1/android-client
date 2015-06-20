@@ -25,7 +25,8 @@ public class ChatActivity extends EcareZoneBaseActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_chat);
-        onNavigationChanged(R.layout.frag_chat, null);
+        Bundle data = getIntent().getExtras();
+        onNavigationChanged(R.layout.frag_chat, ((data == null) ? null : data));
         mToolBar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
@@ -46,14 +47,6 @@ public class ChatActivity extends EcareZoneBaseActivity  {
         return super.onOptionsItemSelected(item);
     }
 
-
-    @Override
-    public void onBackStackChanged() {
-        final int entryCount = getFragmentBackStackEntryCount();
-        if(entryCount == 0) {
-            finish();
-        }
-    }
 
     @Override
     public void onNavigationChanged(int fragmentLayoutResId, Bundle args) {

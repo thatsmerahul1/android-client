@@ -8,8 +8,8 @@ android {
         applicationId "com.ecarezone.android.patient"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 100008
-        versionName "1.0.0"
+        versionCode 100010
+        versionName "1.0.1"
     }
     buildTypes {
         release {

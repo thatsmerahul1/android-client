@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,12 @@ import android.widget.Toast;
 
 import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.R;
+import com.ecarezone.android.patient.service.WebService;
 import com.ecarezone.android.patient.utils.EcareZoneLog;
+import com.quickblox.core.QBEntityCallbackImpl;
+import com.quickblox.users.model.QBUser;
+
+import java.util.List;
 
 
 /**
@@ -109,12 +115,11 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
             final String username = mEditTextUsername.getEditableText().toString();
             final String password = mEditTextUsername.getEditableText().toString();
             if(TextUtils.isEmpty(username)
-                    || (!android.util.Patterns.EMAIL_ADDRESS.matcher(username.trim()).matches())) {
-                Toast.makeText(v.getContext(), "Invalid username!", Toast.LENGTH_LONG).show();
-            } else if(TextUtils.isEmpty(username) || (password.length() < 8)) {
-                Toast.makeText(v.getContext(), "Invalid password!", Toast.LENGTH_LONG).show();
+                    || (!android.util.Patterns.EMAIL_ADDRESS.matcher(username.trim()).matches())
+                    || (TextUtils.isEmpty(password) || (password.trim().length() < 8))) {
+                Toast.makeText(v.getContext(), R.string.error_user_registration, Toast.LENGTH_LONG).show();
             } else {
-                doRegistration();
+                doRegistration(username, password);
             }
         }
     }
@@ -154,12 +159,21 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         }
     }
 
-    private void doRegistration() {
-        //TODO register
+    private void doRegistration(final String username, final String pwd) {
         final Activity activity = getActivity();
-        if(activity != null) {
-            activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));
-            activity.finish();
-        }
+        WebService.getInstance(getApplicationContext()).register(username, pwd, new WebService.OnQuickbloxAuthenticationListener() {
+            @Override
+            public void onSuccess() {
+                if(activity != null) {
+                    activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));
+                    activity.finish();
+                }
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
     }
 }

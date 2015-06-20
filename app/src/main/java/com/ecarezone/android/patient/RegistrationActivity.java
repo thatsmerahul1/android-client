@@ -36,11 +36,4 @@ public class RegistrationActivity extends EcareZoneBaseActivity {
         }
     }
 
-    @Override
-    public void onBackStackChanged() {
-        final int entryCount = getFragmentBackStackEntryCount();
-        if(entryCount == 0) {
-            finish();
-        }
-    }
 }

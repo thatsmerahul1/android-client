@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.RegistrationActivity;
 import com.ecarezone.android.patient.app.widget.NavigationItem;
+import com.ecarezone.android.patient.service.WebService;
 
 /**
  * Created by CHAO WEI on 5/3/2015.
@@ -86,6 +87,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
             } else if(getString(R.string.main_side_menu_medication).equals(tag)) {
                 // TODO
             } else if(getString(R.string.main_side_menu_logout).equals(tag)) {
+                WebService.getInstance(getApplicationContext()).logut();
                 final Activity activity = getActivity();
                 if(activity != null) {
                     activity.startActivity(new Intent(activity.getApplicationContext(), RegistrationActivity.class));
@@ -94,8 +96,6 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
                 }
             }  else if(getString(R.string.main_side_menu_settings).equals(tag)) {
                 layoutResId = R.layout.frag_settings;
-            } else if (getString(R.string.main_side_menu_logout).equals(tag)) {
-                // TODO
             }
 
             if(layoutResId > 0) {

@@ -95,4 +95,9 @@
     <string name="doctor_details_chat">Chat</string>
     <string name="doctor_details_video">Video call</string>
     <string name="doctor_details_voice">Voice</string>
+
+    <!-- Error -->
+    <string name="error_user_login">Invalid username or password!</string>
+    <string name="error_user_registration">@string/error_user_login</string>
+
 </resources>
