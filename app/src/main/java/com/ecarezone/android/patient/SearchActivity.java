@@ -5,7 +5,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.ecarezone.android.patient.fragment.ChatFragment;
 import com.ecarezone.android.patient.fragment.SearchFragment;
 
 /**

@@ -10,7 +10,7 @@
     <string name="login_create_account">CREATE ACCOUNT</string>
 
     <!--registration-->
-    <string name="registration_title">Create your eCareZone Account</string>
+    <string name="registration_title">Create your eCareZone account</string>
     <string name="registration_username">@string/login_username</string>
     <string name="registration_password">@string/login_password</string>
     <string name="registration_country">Country:</string>
@@ -75,6 +75,7 @@
     </string-array>
 
     <!-- doctor -->
+    <string name="doctor_my_doctors">My doctors</string>
     <string name="doctor_recommended_doctors">Recommended doctors</string>
     <string name="doctor_name1">Dr. John Smith</string>
     <string name="doctor_name2">Dr. Steven Harris</string>

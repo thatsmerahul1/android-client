@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "com.ecarezone.android.patient"
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 16
         versionCode 100010
         versionName "1.0.1"
     }
@@ -21,12 +21,10 @@ android {
 
 dependencies {
     compile files('libs/httpclientandroidlib-1.2.1.jar')
-    compile files('libs/quickblox-android-sdk-chat-2.2.3.jar')
-    compile files('libs/quickblox-android-sdk-core-2.2.3.jar')
-    compile files('libs/quickblox-android-sdk-messages-2.2.3.jar')
-    compile files('libs/quickblox-android-sdk-videochat-2.2.3.jar')
-    compile files('libs/quickblox-android-sdk-videochat-webrtc-2.2.3.jar')
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.google.android.gms:play-services:4.2.+'
     compile 'com.android.support:appcompat-v7:22.1.1'
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'commons-codec:commons-codec:1.10'
 }
+

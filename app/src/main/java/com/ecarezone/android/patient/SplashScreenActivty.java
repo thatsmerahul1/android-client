@@ -6,9 +6,7 @@ import android.view.Window;
 
 import com.ecarezone.android.patient.fragment.SplashScreenFragment;
 
-/**
- * Created by CHAO WEI on 5/1/2015.
- */
+
 public class SplashScreenActivty extends EcareZoneBaseActivity {
 
 

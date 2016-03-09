@@ -2,6 +2,7 @@ package com.ecarezone.android.patient.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;;
@@ -13,7 +14,6 @@ import android.view.ViewGroup;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.RegistrationActivity;
 import com.ecarezone.android.patient.app.widget.NavigationItem;
-import com.ecarezone.android.patient.service.WebService;
 
 /**
  * Created by CHAO WEI on 5/3/2015.
@@ -87,9 +87,15 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
             } else if(getString(R.string.main_side_menu_medication).equals(tag)) {
                 // TODO
             } else if(getString(R.string.main_side_menu_logout).equals(tag)) {
-                WebService.getInstance(getApplicationContext()).logut();
+
                 final Activity activity = getActivity();
                 if(activity != null) {
+                    // set is_login as false
+                    SharedPreferences perPreferences = activity.getSharedPreferences("eCareZone", Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = perPreferences.edit();
+                    editor.putBoolean("is_login", false);
+                    editor.commit();
+
                     activity.startActivity(new Intent(activity.getApplicationContext(), RegistrationActivity.class));
                     activity.finish();
                     return;

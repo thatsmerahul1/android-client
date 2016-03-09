@@ -2,6 +2,7 @@ package com.ecarezone.android.patient.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -11,11 +12,8 @@ import android.view.ViewGroup;
 import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.RegistrationActivity;
-import com.ecarezone.android.patient.service.WebService;
 
-/**
- * Created by CHAO WEI on 5/1/2015.
- */
+
 public class SplashScreenFragment extends EcareZoneBaseFragment {
 
     public static SplashScreenFragment newInstance() {
@@ -39,8 +37,7 @@ public class SplashScreenFragment extends EcareZoneBaseFragment {
         super.onActivityCreated(savedInstanceState);
 
         performSplashTask();
-        // TODO
-        WebService.getInstance(getApplicationContext()).createQuickbloxSession();
+
     }
 
 
@@ -50,9 +47,22 @@ public class SplashScreenFragment extends EcareZoneBaseFragment {
             @Override
             public void run() {
                 if(activity != null) {
-                    //activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));
-                    activity.startActivity(new Intent(activity.getApplicationContext(), RegistrationActivity.class));
+                    // we use SharedPreferences to show a indicator for checking
+                    // if the user has logged in
+                    SharedPreferences perPreferences = activity.getSharedPreferences("eCareZone", Activity.MODE_PRIVATE);
+                    boolean is_login = perPreferences.getBoolean("is_login", false);
+
+                    if (is_login) { // the current user is still in login status
+
+                        Intent intent = new Intent(activity.getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                    } else {
+                        //activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));
+                        activity.startActivity(new Intent(activity.getApplicationContext(), RegistrationActivity.class));
+                    }
+
                     activity.finish();
+
                 }
             }
         }, 1500L);

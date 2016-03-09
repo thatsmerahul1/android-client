@@ -2,9 +2,7 @@ package com.ecarezone.android.patient.utils;
 
 import java.util.Date;
 
-/**
- * Created by CHAO WEI on 6/20/2015.
- */
+
 public class TimeUtils {
     public final static long ONE_SECOND = 1000;
     public final static long SECONDS = 60;

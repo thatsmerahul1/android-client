@@ -18,10 +18,6 @@ import com.ecarezone.android.patient.DoctorActivity;
 import com.ecarezone.android.patient.ProfileDetailsActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.SearchActivity;
-import com.ecarezone.android.patient.service.WebService;
-import com.quickblox.chat.model.QBDialog;
-import com.quickblox.core.QBEntityCallback;
-import com.quickblox.users.model.QBUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +28,6 @@ import java.util.List;
 public class DoctorListFragment extends EcareZoneBaseFragment {
 
     private ListView mChatList = null;
-    private ArrayList<QBDialog> mChatDialogList = null;
 
     @Override
     protected String getCallerName() {
@@ -46,7 +41,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
             setHasOptionsMenu(true);
         } catch (Exception e) {
         }
-        mChatDialogList = new ArrayList<QBDialog>();
+
     }
 
     @Override
@@ -72,28 +67,28 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.frag_doctor_list, container, false);
-        mChatList = (ListView) view.findViewById(R.id.list_view_chat_dialogs);
+        final View view = inflater.inflate(R.layout.frag_doctor_list_2, container, false);
+        //mChatList = (ListView) view.findViewById(R.id.list_view_chat_dialogs);
         // fetch chats
-        WebService.getInstance(getApplicationContext()).getUserChats(new WebService.OnQuickbloxFetchChatsListener() {
-            @Override
-            public void onSuccess(ArrayList<QBDialog> dialogs) {
-                if(dialogs != null) {
-                    mChatDialogList.addAll(dialogs);
-                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            updateList();
-                        }
-                    }, 50L);
-                }
-            }
-
-            @Override
-            public void onError() {
-
-            }
-        });
+//        WebService.getInstance(getApplicationContext()).getUserChats(new WebService.OnQuickbloxFetchChatsListener() {
+//            @Override
+//            public void onSuccess(ArrayList<QBDialog> dialogs) {
+//                if(dialogs != null) {
+//                    mChatDialogList.addAll(dialogs);
+//                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            updateList();
+//                        }
+//                    }, 50L);
+//                }
+//            }
+//
+//            @Override
+//            public void onError() {
+//
+//            }
+//        });
         return view;
     }
 

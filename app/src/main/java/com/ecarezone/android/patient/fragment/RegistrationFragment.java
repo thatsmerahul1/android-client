@@ -2,30 +2,38 @@ package com.ecarezone.android.patient.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.R;
-import com.ecarezone.android.patient.service.WebService;
+import com.ecarezone.android.patient.config.LoginInfo;
+import com.ecarezone.android.patient.service.EcareZoneWebService;
+import com.ecarezone.android.patient.config.Constants;
+import com.ecarezone.android.patient.service.EcareZoneApi;
+import com.ecarezone.android.patient.model.rest.SignupRequest;
+import com.ecarezone.android.patient.model.rest.SignupResponse;
 import com.ecarezone.android.patient.utils.EcareZoneLog;
-import com.quickblox.core.QBEntityCallbackImpl;
-import com.quickblox.users.model.QBUser;
+import com.ecarezone.android.patient.utils.PasswordUtil;
 
-import java.util.List;
+import retrofit.RestAdapter;
+
 
 
 /**
@@ -95,6 +103,24 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
             public void afterTextChanged(Editable s) {
             }
         });
+
+        // add editor action listener for password EditText to accept input from soft keyboard
+        // Then the user need not to click login button
+        mEditTextPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE
+                        || actionId == EditorInfo.IME_ACTION_GO
+                        || actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_SEND) {
+
+                    onClick(mButtonRegister);
+                    return true;
+                }
+                return false;
+            }
+        });
+
         mSpinner = (Spinner) view.findViewById(R.id.country_spinner);
         mSpinnerAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
                                 R.array.country_array, R.layout.country_spinner_item);
@@ -113,13 +139,13 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         final int viewId = v.getId();
         if(viewId == R.id.button_register) {
             final String username = mEditTextUsername.getEditableText().toString();
-            final String password = mEditTextUsername.getEditableText().toString();
+            final String password = mEditTextPassword.getEditableText().toString();
             if(TextUtils.isEmpty(username)
                     || (!android.util.Patterns.EMAIL_ADDRESS.matcher(username.trim()).matches())
                     || (TextUtils.isEmpty(password) || (password.trim().length() < 8))) {
                 Toast.makeText(v.getContext(), R.string.error_user_registration, Toast.LENGTH_LONG).show();
             } else {
-                doRegistration(username, password);
+                doRegistration(username,password,"SE");
             }
         }
     }
@@ -159,21 +185,44 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         }
     }
 
-    private void doRegistration(final String username, final String pwd) {
+    private void doRegistration2(final String username, final String pwd) {
         final Activity activity = getActivity();
-        WebService.getInstance(getApplicationContext()).register(username, pwd, new WebService.OnQuickbloxAuthenticationListener() {
-            @Override
-            public void onSuccess() {
+
+    }
+
+    private void doRegistration(String username, String password, String country) {
+        //TODO register
+
+        DoRegistration registration = new DoRegistration();
+        registration.execute(username,password,country);
+    }
+
+    private class DoRegistration extends AsyncTask<String, Void, SignupResponse> {
+
+        @Override
+        protected SignupResponse doInBackground(String... params) {
+            String username = params[0];
+            String password = params[1];
+            String hashedPassword = PasswordUtil.getHashedPassword(password);
+            String country = params[2];
+
+            SignupResponse response = EcareZoneWebService.api.signup(new SignupRequest(username, hashedPassword, 1, country, "en", "N/A", "N/A", Constants.API_KEY, Constants.deviceUnique));
+            LoginInfo.userName = username;
+            LoginInfo.hashedPassword = hashedPassword;
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(SignupResponse response) {
+            if(response.status.code == 201){
+                final Activity activity = getActivity();
                 if(activity != null) {
                     activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));
                     activity.finish();
                 }
+            }else{
+                Toast.makeText(getApplicationContext(), "Failed to signup: "+response.status.message, Toast.LENGTH_LONG).show();
             }
-
-            @Override
-            public void onError() {
-
-            }
-        });
+        }
     }
 }

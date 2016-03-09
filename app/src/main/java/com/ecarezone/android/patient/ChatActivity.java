@@ -5,7 +5,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.ecarezone.android.patient.fragment.ChatFragment;
 import com.ecarezone.android.patient.fragment.DoctorFragment;
 
 /**
@@ -52,9 +51,9 @@ public class ChatActivity extends EcareZoneBaseActivity  {
     public void onNavigationChanged(int fragmentLayoutResId, Bundle args) {
         if(fragmentLayoutResId < 0) return;
 
-        if(fragmentLayoutResId == R.layout.frag_chat) {
+        /*if(fragmentLayoutResId == R.layout.frag_chat) {
             changeFragment(R.id.screen_container, new ChatFragment(),
                     ChatFragment.class.getSimpleName(), args);
-        }
+        }*/
     }
 }
