@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/doctor_available"
-                android:textColor="@drawable/text_gray_color_selector"
+                android:textColor="@color/text_gray_color_selector"
                 android:textSize="20sp"
                 android:layout_marginLeft="4dp"
                 android:layout_gravity="center"
@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/doctor_name1"
-                android:textColor="@drawable/text_blue_color_selector"
+                android:textColor="@color/text_blue_color_selector"
                 android:textSize="20sp"
                 android:gravity="center"
                 />
@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/doctor_type1"
-                android:textColor="@drawable/text_blue_color_selector"
+                android:textColor="@color/text_blue_color_selector"
                 android:textSize="18sp"
                 android:gravity="center"
                 />

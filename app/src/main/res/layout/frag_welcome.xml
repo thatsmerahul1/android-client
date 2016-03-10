@@ -3,92 +3,90 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_alignParentTop="true"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:textColor="@color/ecarezone_blue_dark"
-            android:text="@string/welcome_title"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:text="@string/welcome_message"/>
-
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
             android:orientation="vertical"
-            android:background="@drawable/welcome_dialog">
-
+            android:padding="16dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:paddingTop="16dp"
+                android:textStyle="bold"
+                android:layout_margin="8dp"
                 android:gravity="center"
-                android:textSize="20sp"
-                android:text="@string/welcome_personal_profile"
-                android:textColor="@color/ecarezone_blue_light"
-                />
+                android:text="@string/welcome_title"
+                android:textColor="@color/ecarezone_blue_dark"
+                android:textSize="@dimen/text_size_very_big" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:gravity="center"
+                android:text="@string/welcome_message"
+                android:textSize="@dimen/text_size_small" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:paddingBottom="16dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="4dp"
+                android:background="@drawable/welcome_dialog"
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/button_welcome_not_now"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/welcome_button_not_now"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    style="@style/EcareZoneGreenButton"
-                    />
+                    android:layout_margin="4dp"
+                    android:gravity="center"
+                    android:paddingTop="16dp"
+                    android:text="@string/welcome_personal_profile"
+                    android:textColor="@color/ecarezone_blue_light"
+                    android:textSize="@dimen/text_size_normal" />
 
-                <Button
-                    android:id="@+id/button_welcome_ok"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/welcome_button_ok"
                     android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    style="@style/EcareZoneGreenButton"
-                    />
+                    android:orientation="horizontal"
+                    android:paddingBottom="16dp">
+
+                    <Button
+                        android:id="@+id/button_welcome_not_now"
+                        style="@style/EcareZoneGreenButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/welcome_button_not_now" />
+
+                    <Button
+                        android:id="@+id/button_welcome_ok"
+                        style="@style/EcareZoneGreenButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/welcome_button_ok" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
-
+    </ScrollView>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:src="@drawable/welcome_nurse"
-        />
+        android:layout_alignParentRight="true"
+        android:src="@drawable/welcome_nurse" />
 
 </RelativeLayout>
 

@@ -16,26 +16,25 @@ public abstract class AbstractBaseFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try{
+        try {
             mListener = (AbstractBaseActivity.OnNavigationChangedListener) activity;
-        }catch(Exception e){
+        } catch (Exception e) {
         }
     }
 
     /**
-     *
      * @return caller Class name
      */
     protected abstract String getCallerName();
 
-    protected void invokeNavigationChanged(int layoutResId, Bundle bundle){
-        if(mListener != null){
+    protected void invokeNavigationChanged(int layoutResId, Bundle bundle) {
+        if (mListener != null) {
             mListener.onNavigationChanged(layoutResId, bundle);
         }
     }
 
-    protected Context getApplicationContext(){
-        return  getActivity().getApplicationContext();
+    protected Context getApplicationContext() {
+        return getActivity().getApplicationContext();
     }
 
     /**
@@ -45,7 +44,7 @@ public abstract class AbstractBaseFragment extends Fragment {
      * @return Fragment
      */
     protected Fragment getFragmentById(final int resId) {
-        return (Fragment)getFragmentManager().findFragmentById(resId);
+        return (Fragment) getFragmentManager().findFragmentById(resId);
     }
 
 }

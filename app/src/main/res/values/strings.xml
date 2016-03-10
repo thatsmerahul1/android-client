@@ -25,15 +25,16 @@
     <string name="main_side_menu_doctors">Doctors</string>
     <string name="main_side_menu_medication">Medication</string>
     <string name="main_side_menu_health_plan">Health plan</string>
-    <string name="main_side_menu_settings">Settings</string>
+    <string name="main_side_menu_settings">Account Settings</string>
     <string name="main_side_menu_logout">Logout</string>
 
     <!-- Welcome -->
     <string name="welcome_title">Welcome to eCareZone</string>
-    <string name="welcome_message">Your future health care are in good hands now.</string>
-    <string name="welcome_personal_profile">Please take few minutes to file your personal information, it will make us easy to tailor your personal health care.</string>
+    <string name="welcome_message">Your future health care are in \n good hands now.</string>
+    <string name="welcome_personal_profile">Please take few minutes to \n file your personal information, it \n will make us easy to tailor your \n personal health care.</string>
     <string name="welcome_button_not_now">NOT NOW</string>
     <string name="welcome_button_ok">@android:string/ok</string>
+    <string name="welcome_button_cancel">@android:string/cancel</string>
 
     <!-- News -->
     <string name="news_categories_fitness">Fitness&amp;Exercise</string>
@@ -42,12 +43,14 @@
     <string name="news_categories_eating">Healthy Eating</string>
     <string name="news_categories_family">Parenting&amp;Family</string>
     <string name="news_categories_other">Other</string>
+    <string name="news_actionbar_title">News</string>
 
     <!-- Profile -->
     <string name="profile_add_your_profile">Add your profile</string>
     <string name="profile_mine">My profile</string>
     <string name="profile_kid">My daughter profile</string>
     <string name="profile_father">My father profile</string>
+    <string name="profile_actionbar_title">Profile</string>
 
     <!-- Profile details -->
     <string name="profile_details_name">Name</string>
@@ -57,11 +60,27 @@
     <string name="profile_details_ethnicity">Ethnicity</string>
     <string name="profile_details_height">Height</string>
     <string name="profile_details_weight">Weight</string>
+    <string name="profile_details_profile_name">Profile Name</string>
+    <string name="profile_details_hint">-</string>
+    <string name="profile_details_delete_profile">Delete Profile</string>
+    <string name="profile_add_people_you_care">Add people you care</string>
+
+    <string name="imageutil_camera_not_found">Camera application not found</string>
+
+    <!-- Progress dialog -->
+    <string name="progress_dialog_loading">Loading</string>
+    <string name="progress_dialog_delete">Deleting</string>
+    <string name="progress_dialog_save">Saving</string>
+    <string name="progress_dialog_search">Searching</string>
+    <string name="progress_dialog_create_account">Creating account</string>
+    <string name="progress_dialog_logout">Logging out</string>
+    <string name="progress_dialog_requesting">Requesting</string>
 
     <!-- Settings -->
     <string name="settings_email">Email:</string>
     <string name="settings_password">Password:</string>
-    <string name="settings_country">@string/registration_country</string>
+    <string name="settings_country">Choose Your Country</string>
+    <string name="settings_language">Choose Your Language</string>
     <string name="settings_about_app">About eCareZone</string>
     <string name="settings_action_check">Check</string>
 
@@ -74,6 +93,34 @@
         <item>Sweden</item>
     </string-array>
 
+    <string-array name="country_code_array">
+        <item>CN</item>
+        <item>DK</item>
+        <item>FI</item>
+        <item>NO</item>
+        <item>SE</item>
+    </string-array>
+
+    <!--Languages name list-->
+    <string-array name="language_array">
+        <item>English</item>
+        <item>Chinese</item>
+        <item>Swedish</item>
+        <item>Norway</item>
+        <item>Finland</item>
+    </string-array>
+
+    <string-array name="language_local_array">
+        <item>en</item>
+        <item>zh</item>
+        <item>sv</item>
+        <item>nn</item>
+        <item>fi</item>
+    </string-array>
+
+    <string name="language_english">English</string>
+    <string name="language_local_english">en</string>
+
     <!-- doctor -->
     <string name="doctor_my_doctors">My doctors</string>
     <string name="doctor_recommended_doctors">Recommended doctors</string>
@@ -85,6 +132,15 @@
     <string name="doctor_available">Available</string>
     <string name="doctor_busy">Busy</string>
     <string name="doctor_search">Search</string>
+    <string name="doctor_search_hint_text">Search doctors</string>
+    <string name="doctor_add_my_care_team">ADD TO MY CARE-TEAM</string>
+    <string name="doctor_bio">Doctor bio</string>
+    <string name="doctor_mycare_team">My Care-team</string>
+    <string name="doctor_add_request_success">your request has been sent to\nDr. %1$s</string>
+
+    <!-- Appointment -->
+    <string name="doctor_appointment">Make an appointment</string>
+    <string name="doctor_appointment_header">Appointment</string>
 
     <!-- Home -->
     <string name="home_last_news_feed">The latest news feed</string>
@@ -96,9 +152,40 @@
     <string name="doctor_details_chat">Chat</string>
     <string name="doctor_details_video">Video call</string>
     <string name="doctor_details_voice">Voice</string>
+    <string name="doctor_details_chat_history">CHAT HISTORY</string>
+
+    <!-- Video chat details -->
+    <string name="video_chat_stop_btn_text">END CALL</string>
+    <string name="video_incoming_call_answer_btn_text">ANSWER</string>
+    <string name="video_incoming_call_decline_btn_text">DECLINE</string>
+    <string name="video_incoming_call_title_text">Incoming call</string>
+
 
     <!-- Error -->
-    <string name="error_user_login">Invalid username or password!</string>
+    <string name="error_user_login">Invalid username or passwor</string>
     <string name="error_user_registration">@string/error_user_login</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="welcome_button_send">send</string>
+
+    <!-- dialog options for Gender in profile page -->
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <!-- dialog options for picking the photo in profile page -->
+    <string-array name="photo_options">
+        <item>Select from gallery</item>
+        <item>Capture from camera</item>
+    </string-array>
+
+    <string name="reset_password_email_hint">Enter Your Email</string>
+    <string name="reset_password">Reset password</string>
+    <string name="reset_password_notification">Your new password will be sent \nto by email</string>
+    <string name="reset_password_error">Youe email account is incorrect. Please try \n in if you are register user</string>
+    <string name="title_activity_forget_password">ForgetPasswordActivity</string>
+
+    <string name="gallery_chooser_select_picture">Select photo</string>
 
 </resources>

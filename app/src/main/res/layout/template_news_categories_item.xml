@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="4dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="4dp">
 
     <ImageView
         android:id="@+id/image_view_news_category_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/new_health_women"
-        android:scaleType="fitXY"
-        android:padding="8dp"
         android:layout_centerInParent="true"
+
         android:background="@drawable/news_menu_white_border"
-        />
+        android:padding="8dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/new_health_women" />
 
     <TextView
         android:id="@+id/text_view_news_category_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="2dp"
+        android:gravity="center"
+        android:minHeight="46dp"
         android:text="@string/news_categories_family"
         android:textColor="@android:color/black"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:minHeight="46dp"
-        android:layout_marginBottom="8dp"
         android:background="@color/ecarezone_news_categories_text_view_background_white"
-        />
+        android:textSize="18sp"
+        android:paddingBottom="8dp"/>
+
+
 
 </RelativeLayout>

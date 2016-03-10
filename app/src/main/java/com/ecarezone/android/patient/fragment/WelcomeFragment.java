@@ -2,18 +2,19 @@ package com.ecarezone.android.patient.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.R;
+import com.ecarezone.android.patient.config.LoginInfo;
 
 /**
  * Created by CHAO WEI on 5/1/2015.
  */
 public class WelcomeFragment extends EcareZoneBaseFragment implements View.OnClickListener {
-
 
     @Override
     protected String getCallerName() {
@@ -30,16 +31,16 @@ public class WelcomeFragment extends EcareZoneBaseFragment implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        if(v == null) return;
+        if (v == null) return;
 
         final int viewId = v.getId();
-        if(viewId == R.id.button_welcome_not_now) {
+        if (viewId == R.id.button_welcome_not_now) {
             // open side menu
             Activity act = getActivity();
-            if((act != null) && (act instanceof MainActivity)) {
+            if ((act != null) && (act instanceof MainActivity)) {
                 ((MainActivity) act).toggleDrawer(true);
             }
-        } else if(viewId == R.id.button_welcome_ok) {
+        } else if (viewId == R.id.button_welcome_ok) {
             // open profile
             invokeNavigationChanged(R.layout.frag_first_time_profile, null);
         }

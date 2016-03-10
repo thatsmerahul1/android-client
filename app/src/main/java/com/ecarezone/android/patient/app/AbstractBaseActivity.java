@@ -1,18 +1,18 @@
 package com.ecarezone.android.patient.app;
 
 
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by CHAO WEI on 5/1/2015.
  */
 
-public abstract class AbstractBaseActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
+public abstract class AbstractBaseActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener, ServiceConnection {
 
 
     protected FragmentTransaction getSupportFragmentTransaction() {
@@ -34,7 +34,6 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
     }
 
     /**
-     *
      * @return caller Class name
      */
     protected abstract String getCallerName();
@@ -57,18 +56,18 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
      * Change the fragment for the current activity.
      *
      * @param containerResId is the resource id of the screen container
-     * @param fragment is an instance of act_splash subclass of android.support.v4.app.Fragment
-     * @param tag is act_splash string title that indicates the fragment
-     * @param args is act_splash container for passing objects
-     * @param addToStack is indicating adding the fragment to back stack, if needed
+     * @param fragment       is an instance of act_splash subclass of android.support.v4.app.Fragment
+     * @param tag            is act_splash string title that indicates the fragment
+     * @param args           is act_splash container for passing objects
+     * @param addToStack     is indicating adding the fragment to back stack, if needed
      */
     protected <T extends Fragment> void changeFragment(final int containerResId, T fragment, String tag, Bundle args, boolean addToStack) {
         FragmentTransaction transaction = getSupportFragmentTransaction();
-        if(args != null){
+        if (args != null) {
             fragment.setArguments(args);
         }
         transaction.replace(containerResId, fragment, tag);
-        if(addToStack){
+        if (addToStack) {
             // add to this transaction into BackStack
             transaction.addToBackStack(tag);
         }
@@ -83,7 +82,6 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
 
     /**
      * Interface for navigation change
-     *
      */
     public static interface OnNavigationChangedListener {
         /**

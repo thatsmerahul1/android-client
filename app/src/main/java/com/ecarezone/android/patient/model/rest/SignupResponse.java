@@ -5,4 +5,5 @@ package com.ecarezone.android.patient.model.rest;
  */
 public class SignupResponse {
     public Status status;
+    public Data data;
 }

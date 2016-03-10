@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="16dp"
+    android:padding="14dp"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
 
     <ImageView
+        android:id="@+id/imageview_registration"
         android:layout_marginTop="24dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,6 +14,7 @@
         />
 
     <TextView
+        android:id="@+id/textview_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -39,18 +41,27 @@
         android:hint="@string/login_password"/>
 
 
-    <TextView
+    <EditText
+        android:id="@+id/country_spinner"
         android:layout_marginTop="16dp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/settings_country"
-        android:textColor="@color/ecarezone_green_dark"
+        style="@style/spinnerCustomStyle"
+        android:hint="@string/settings_country"
+        android:focusable="false"
+
         />
 
-    <include
-        layout="@layout/template_country_spinner" />
+    <EditText
+        android:id="@+id/spinner_language"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/settings_language"
+        style="@style/spinnerCustomStyle"
+        android:focusable="false"
 
-
+        />
     <Button
         android:id="@+id/button_register"
         android:layout_width="wrap_content"
@@ -69,5 +80,16 @@
         android:layout_marginTop="16dp"
         android:layout_gravity="center"
         android:text="@string/registration_agreement"/>
+    <TextView
+        android:id="@+id/textview_registration_about"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:visibility="gone"
+        android:textColor="@color/ecarezone_blue_dark"
+        android:text="@string/settings_about_app"/>
+
 
 </LinearLayout>

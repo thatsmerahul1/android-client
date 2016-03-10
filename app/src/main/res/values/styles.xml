@@ -39,4 +39,65 @@
     <style name="EcareZoneGreenButton" parent="Button">
         <item name="android:background">@drawable/btn_green_color_selector</item>
     </style>
+
+    <style name="ButtonBorder" parent="android:Widget.Button">
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@drawable/btn_border_text_color_selector</item>
+    </style>
+
+    <style name="EcareZoneGreenBorderButton" parent="ButtonBorder">
+        <item name="android:background">@drawable/btn_green_border_selector</item>
+    </style>
+
+    <!-- Profile details form page related styles    -->
+    <style name="ProfileFormTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textColor">@color/ecarezone_green_dark</item>
+    </style>
+
+    <style name="ProfileFormEditTextStyle" parent="android:Widget.EditText">
+        <item name="android:gravity">end</item>
+        <item name="android:hint">@string/profile_details_hint</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="ProfileFormLineViewStyle" parent="android:Widget.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@android:color/darker_gray</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+
+    </style>
+
+
+    <style name="EcareZoneDialogTextview" parent="">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginRight">@dimen/dialog_button_margin</item>
+        <item name="android:layout_marginLeft">@dimen/dialog_button_margin</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
+        <item name="android:background">@drawable/circle_blue</item>
+        <item name="android:padding">15dp</item>
+    </style>
+
+    <style name="TransparentCompat" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+    </style>
+
+    <style name="DialogTheme" parent="android:Theme.Dialog">
+
+        <!-- No backgrounds, titles or window float -->
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+    <style name="spinnerCustomStyle" parent="@style/Widget.AppCompat.Spinner.DropDown"></style>
+
 </resources>

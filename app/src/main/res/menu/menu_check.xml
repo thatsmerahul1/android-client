@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_check"
-        android:enabled="false"
         app:showAsAction="always"
+        android:enabled="false"
         android:icon="@drawable/btn_check_selector"
         android:title="@string/settings_action_check"/>
 </menu>

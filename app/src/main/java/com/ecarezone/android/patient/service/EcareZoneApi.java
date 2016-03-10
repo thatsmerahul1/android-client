@@ -3,30 +3,40 @@ package com.ecarezone.android.patient.service;
 import com.ecarezone.android.patient.model.rest.AddDoctorRequest;
 import com.ecarezone.android.patient.model.rest.AddDoctorResponse;
 import com.ecarezone.android.patient.model.rest.CreateProfileRequest;
-import com.ecarezone.android.patient.model.rest.CreateProfileResposnse;
-import com.ecarezone.android.patient.model.rest.GetDoctorRequest;
+import com.ecarezone.android.patient.model.rest.CreateProfileResponse;
+import com.ecarezone.android.patient.model.rest.DeleteProfileRequest;
+import com.ecarezone.android.patient.model.rest.ForgetPassRequest;
 import com.ecarezone.android.patient.model.rest.GetDoctorResponse;
-import com.ecarezone.android.patient.model.rest.GetDoctorsRequest;
-import com.ecarezone.android.patient.model.rest.GetDoctorsResponse;
+import com.ecarezone.android.patient.model.rest.GetNewsResponse;
 import com.ecarezone.android.patient.model.rest.LoginRequest;
 import com.ecarezone.android.patient.model.rest.LoginResponse;
 import com.ecarezone.android.patient.model.rest.Repo;
 import com.ecarezone.android.patient.model.rest.SearchDoctorsRequest;
 import com.ecarezone.android.patient.model.rest.SearchDoctorsResponse;
+import com.ecarezone.android.patient.model.rest.SettingsRequest;
 import com.ecarezone.android.patient.model.rest.SignupRequest;
-import com.ecarezone.android.patient.model.rest.SignupResponse;
 import com.ecarezone.android.patient.model.rest.UpdateProfileRequest;
-import com.ecarezone.android.patient.model.rest.UpdateProfileResponse;
+import com.ecarezone.android.patient.model.rest.UploadImageResponse;
 import com.ecarezone.android.patient.model.rest.base.BaseRequest;
 import com.ecarezone.android.patient.model.rest.base.BaseResponse;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 import java.util.List;
 
 import retrofit.http.Body;
 import retrofit.http.GET;
+import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.PUT;
+import retrofit.http.Part;
 import retrofit.http.Path;
+import retrofit.http.RestMethod;
+import retrofit.mime.TypedFile;
+
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Created by jifeng.zhang on 14/06/15.
@@ -38,24 +48,61 @@ public interface EcareZoneApi {
     @POST("/login")
     LoginResponse login(@Body LoginRequest request);
 
+    @POST("/logout")
+    LoginResponse logout(@Body LoginRequest request);
+
+    @POST("/forgot-password")
+    LoginResponse forgetPassword(@Body ForgetPassRequest request);
+
     @POST("/signup")
-    SignupResponse signup(@Body SignupRequest request);
+    LoginResponse signup(@Body SignupRequest request);
+
+    @PUT("/users/{userid}/settings")
+    LoginResponse settingsUpdate(@Path("userid") Long userId, @Body SettingsRequest request);
 
     @POST("/doctors/search")
     SearchDoctorsResponse searchDoctors(@Body SearchDoctorsRequest request);
 
     @POST("/doctors/{doctorId}")
-    GetDoctorResponse getDoctor(@Path("doctorId") Long doctorId ,@Body BaseRequest request);
+    GetDoctorResponse getDoctor(@Path("doctorId") Long doctorId, @Body BaseRequest request);
 
-    @POST("/users/{userId}/doctors")
-    GetDoctorsResponse getDoctors(@Path("userId") Long userId ,@Body BaseRequest request);
+    @GET("/users/{userId}/doctors")
+    SearchDoctorsResponse getDoctors(@Path("userId") Long userId);
 
     @POST("/users/{userId}/doctors/{doctorId}")
-    BaseResponse addDoctor(@Path("userId") Long userId, @Path("doctorId") Long doctorId , @Body BaseRequest request);
+    AddDoctorResponse addDoctor(@Path("userId") Long userId, @Path("doctorId") Long doctorId, @Body AddDoctorRequest request);
 
     @PUT("/users/{userId}/profiles/{profileId}")
-    BaseResponse updateProfile(@Path("userId") Long userId, @Path("profileId") Long profileId, @Body UpdateProfileRequest request);
+    CreateProfileResponse updateProfile(@Path("userId") Long userId, @Path("profileId") Long profileId, @Body UpdateProfileRequest request);
 
     @POST("/users/{userId}/profiles")
-    CreateProfileResposnse createProfile(@Path("userId") Long userId, @Body CreateProfileRequest request);
+    CreateProfileResponse createProfile(@Path("userId") Long userId, @Body CreateProfileRequest request);
+
+    @DELETE("/users/{userId}/profiles/{profileId}")
+    BaseResponse deleteProfile(@Path("userId") Long userId, @Path("profileId") Long profileId, @Body DeleteProfileRequest request);
+
+    @GET("/users/{userId}/news")
+    GetNewsResponse getNews(@Path("userId") Long userId);
+
+    @Multipart
+    @POST("/users/{userId}/profilespic")
+    UploadImageResponse upload(@Part("profilepic") TypedFile file,
+                               @Path("userId") Long userId);
+
+    @GET("/users/recommendedDoctors")
+    SearchDoctorsResponse getRecommendedDoctors();
+
+}
+
+/**
+ * Retrofit DELETE request doesn't allow body in its request,
+ * created this custom DELETE interface to accept body content.
+ * TODO Need to delete this once the server side modifications are done.
+ */
+@Documented
+@Target(METHOD)
+@Retention(RUNTIME)
+@RestMethod(value = "DELETE", hasBody = true)
+@interface DELETE {
+    String value();
 }

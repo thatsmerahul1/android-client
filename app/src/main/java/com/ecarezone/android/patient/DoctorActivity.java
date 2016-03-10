@@ -1,20 +1,25 @@
 package com.ecarezone.android.patient;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.fragment.DoctorFragment;
 
 /**
  * Created by CHAO WEI on 6/1/2015.
  */
-public class DoctorActivity extends EcareZoneBaseActivity  {
+public class DoctorActivity extends EcareZoneBaseActivity {
 
+    private static final String TAG = DoctorActivity.class.getSimpleName();
     private ActionBar mActionBar = null;
     private Toolbar mToolBar = null;
+    private Bundle data;
 
     @Override
     protected String getCallerName() {
@@ -25,7 +30,9 @@ public class DoctorActivity extends EcareZoneBaseActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_doctor);
-        onNavigationChanged(R.layout.frag_doctor, null);
+        Log.i(TAG, Constants.DOCTOR_DETAIL + " = " + getIntent().getBundleExtra(Constants.DOCTOR_DETAIL));
+        data = getIntent().getBundleExtra(Constants.DOCTOR_DETAIL);
+        onNavigationChanged(R.layout.frag_doctor, data);
         mToolBar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
@@ -35,6 +42,12 @@ public class DoctorActivity extends EcareZoneBaseActivity  {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             // Handle menu item click event
+                            if (item.getItemId() == R.id.action_info) {
+                                Log.i(TAG, "Menu = " + item.getTitle() + ", " + item.getItemId());
+                                Intent showDoctorBioIntent = new Intent(DoctorActivity.this, DoctorBioActivity.class);
+                                showDoctorBioIntent.putExtra(Constants.DOCTOR_BIO_DETAIL, data);
+                                startActivity(showDoctorBioIntent);
+                            }
                             return true;
                         }
                     });
@@ -42,13 +55,15 @@ public class DoctorActivity extends EcareZoneBaseActivity  {
         mActionBar = getSupportActionBar();
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setTitle(getResources().getString(R.string.main_side_menu_doctors));
         addSupportOnBackStackChangedListener(this);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            popBackStack();
+            finish();
+            overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -62,9 +77,9 @@ public class DoctorActivity extends EcareZoneBaseActivity  {
 
     @Override
     public void onNavigationChanged(int fragmentLayoutResId, Bundle args) {
-        if(fragmentLayoutResId < 0) return;
+        if (fragmentLayoutResId < 0) return;
 
-        if(fragmentLayoutResId == R.layout.frag_doctor) {
+        if (fragmentLayoutResId == R.layout.frag_doctor) {
             changeFragment(R.id.screen_container, new DoctorFragment(),
                     DoctorFragment.class.getSimpleName(), args);
         }

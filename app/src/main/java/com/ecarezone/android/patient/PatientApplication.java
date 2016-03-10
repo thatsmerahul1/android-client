@@ -1,13 +1,11 @@
 package com.ecarezone.android.patient;
 
 import android.app.Application;
-import android.util.Log;
 
 /**
  * Created by CHAO WEI on 6/19/2015.
  */
 public class PatientApplication extends Application {
-
 
     final String getCallerName() {
         return  PatientApplication.class.getSimpleName();
@@ -16,7 +14,5 @@ public class PatientApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-
     }
 }

@@ -6,4 +6,6 @@ package com.ecarezone.android.patient.config;
 public class LoginInfo {
     public static String userName;
     public static String hashedPassword;
+    public static String role;
+    public static Long userId;
 }

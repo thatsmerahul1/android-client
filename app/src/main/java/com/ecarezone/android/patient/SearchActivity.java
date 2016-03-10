@@ -12,6 +12,7 @@ import com.ecarezone.android.patient.fragment.SearchFragment;
  */
 public class SearchActivity extends EcareZoneBaseActivity {
 
+    private static final String TAG = SearchActivity.class.getSimpleName();
     private ActionBar mActionBar = null;
     private Toolbar mToolBar = null;
 
@@ -24,7 +25,7 @@ public class SearchActivity extends EcareZoneBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_doctor);
-        onNavigationChanged(R.layout.frag_search_user_list, null);
+        onNavigationChanged(R.layout.frag_search_user_list, getIntent().getBundleExtra("doctorList"));
         mToolBar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
@@ -41,6 +42,7 @@ public class SearchActivity extends EcareZoneBaseActivity {
         mActionBar = getSupportActionBar();
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setTitle(getResources().getString(R.string.main_side_menu_doctors));
         addSupportOnBackStackChangedListener(this);
     }
 
@@ -55,9 +57,9 @@ public class SearchActivity extends EcareZoneBaseActivity {
 
     @Override
     public void onNavigationChanged(int fragmentLayoutResId, Bundle args) {
-        if(fragmentLayoutResId < 0) return;
+        if (fragmentLayoutResId < 0) return;
 
-        if(fragmentLayoutResId == R.layout.frag_search_user_list) {
+        if (fragmentLayoutResId == R.layout.frag_search_user_list) {
             changeFragment(R.id.screen_container, new SearchFragment(),
                     SearchFragment.class.getSimpleName(), args);
         }

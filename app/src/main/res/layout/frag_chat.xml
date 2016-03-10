@@ -9,55 +9,48 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="20dp">
+        >
 
-        <EditText
-            android:id="@+id/messageEdit"
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/chatboxLayput"
+            android:padding="10dp"
+            android:gravity="center"
+            android:background="@android:color/darker_gray"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:weightSum="5">
+            <EditText
+                android:id="@+id/chatBox"
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="40dp"
+                android:autoText="true"
+                android:gravity="center_vertical"
+                android:imeOptions="actionDone"
+                android:paddingLeft="5dp"
+                android:singleLine="true"
+                android:background="@drawable/search_edittext_border"
+                android:hint="message text" />
+
+            <ImageView
+                android:id="@+id/chatCameraBtn"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:src="@drawable/icon_chat_camera"
+                android:layout_alignParentRight="true"
+                android:text="Send" />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/chat_mesage_list"
+            android:scrollbars="vertical"
+            android:layout_above="@+id/chatboxLayput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@+id/chatSendButton"
-            android:autoText="true"
-            android:hint="message text" />
-
-        <Button
-            android:id="@+id/chatSendButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:text="Send" />
-
-        <ListView
-            android:id="@+id/messagesContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentTop="false"
-            android:layout_marginBottom="20dp"
-            android:layout_above="@+id/messageEdit"
-            android:layout_below="@+id/meLabel"
-            android:layout_marginTop="10dp"
-            android:listSelector="@android:color/transparent"
-            android:transcriptMode="alwaysScroll"
-            android:divider="@null" />
-
-        <TextView
-            android:id="@+id/meLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|center_vertical"
-            android:text="Me"
-            android:singleLine="false"
-            android:textSize="20dp" />
-
-        <TextView
-            android:id="@+id/companionLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="Friend"
-            android:textSize="20dp" />
+            />
 
     </RelativeLayout>
 </LinearLayout>

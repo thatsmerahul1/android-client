@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="right"
+        android:background="@drawable/incoming_message_bg"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:id="@+id/chatUser"
+            android:layout_gravity="top"
+            android:text="hi"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_gravity="left"
+            android:id="@+id/chatText"
+            android:text="hi"
+            />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:id="@+id/chatImage"
+                android:scaleType="centerCrop"
+                android:visibility="invisible"
+                />
+            <ProgressBar
+                android:id="@+id/chat_image_spinner"
+                android:layout_width="50dp"
+                android:layout_centerInParent="true"
+                android:layout_height="50dp"
+                android:progressDrawable="@drawable/circular_progress_bar"/>
+        </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:layout_marginStart="15dp"
+            android:id="@+id/chatTime"
+            android:text="10:20"
+            android:layout_gravity="right"
+            android:layout_below="@+id/chatText"
+            />
+    </LinearLayout>
+</LinearLayout>

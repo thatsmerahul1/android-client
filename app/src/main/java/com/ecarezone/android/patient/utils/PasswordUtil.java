@@ -10,8 +10,8 @@ import org.apache.commons.codec.digest.DigestUtils;
  */
 public class PasswordUtil {
 
-    public static String getHashedPassword(String password){
-        String temp = new String(Hex.encodeHex(DigestUtils.md5(password+ Constants.salt)));
+    public static String getHashedPassword(String password) {
+        String temp = new String(Hex.encodeHex(DigestUtils.md5(password + Constants.salt)));
         return new String(Hex.encodeHex(DigestUtils.md5(temp)));
     }
 }

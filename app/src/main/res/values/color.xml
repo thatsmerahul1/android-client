@@ -8,4 +8,6 @@
     <color name="ecarezone_light_gray">#EDECEC</color>
     <color name="ecarezone_news_categories_text_view_background_white">#5FFFFFFF</color>
     <color name="ecarezone_light_gray_alpha">#6FAAAAAA</color>
+    <color name="ecarezone_semi_white_transparent">#CCFFFFFF</color>
+
 </resources>

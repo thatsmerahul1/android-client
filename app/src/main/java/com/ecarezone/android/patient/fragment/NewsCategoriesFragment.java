@@ -1,5 +1,7 @@
 package com.ecarezone.android.patient.fragment;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,31 +9,31 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.ecarezone.android.patient.MainActivity;
+import com.ecarezone.android.patient.NewsListActivity;
 import com.ecarezone.android.patient.R;
-import com.ecarezone.android.patient.app.widget.adapter.NewsCategoriesAdapter;
+import com.ecarezone.android.patient.adapter.NewsCategoriesAdapter;
+import com.ecarezone.android.patient.model.News;
+import com.ecarezone.android.patient.model.rest.GetNewsResponse;
+import com.ecarezone.android.patient.model.rest.GetNewsRequest;
+import com.ecarezone.android.patient.utils.ProgressDialogUtil;
+import com.octo.android.robospice.persistence.DurationInMillis;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by CHAO WEI on 5/25/2015.
  */
 public class NewsCategoriesFragment extends EcareZoneBaseFragment implements GridView.OnItemClickListener {
 
-    private NewsCategoriesAdapter mNewsCategoriesAdapter = null;
-    ArrayList<HashMap<String, Integer>> mNewsCategories = null;
+    public static String NEWS_PARCELABLE = "news";
+    public static String NEWS_BUNDLE = "newsBundle";
 
-    private int[] mImageResIdArray = {
-            R.drawable.news_fitness, R.drawable.new_health_men,
-            R.drawable.new_health_women, R.drawable.news_eating,
-            R.drawable.news_family, R.drawable.news_other
-    };
-
-    private int[] mStringResIdArray = {
-            R.string.news_categories_fitness, R.string.news_categories_men,
-            R.string.news_categories_women, R.string.news_categories_eating,
-            R.string.news_categories_family, R.string.news_categories_other
-    };
+    private GetNewsResponse mGetNewsResonse = null;
+    private GridView mGridView;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected String getCallerName() {
@@ -41,27 +43,53 @@ public class NewsCategoriesFragment extends EcareZoneBaseFragment implements Gri
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mNewsCategories = new ArrayList<HashMap<String, Integer>>();
-        for (int i = 0; i<mImageResIdArray.length; i++ ) {
-            HashMap<String, Integer> data = new HashMap<String, Integer>();
-            data.put(NewsCategoriesAdapter.NEWS_CATEGORY_MAP_KEY_TITLE, mStringResIdArray[i]);
-            data.put(NewsCategoriesAdapter.NEWS_CATEGORY_MAP_KEY_IMAGE, mImageResIdArray[i]);
-            mNewsCategories.add(data);
-        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mProgressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
+                getActivity().getString(R.string.progress_dialog_loading));
+
+        GetNewsRequest getNewsRequest = new GetNewsRequest();
+        getSpiceManager().execute(getNewsRequest, "news", DurationInMillis.ONE_MINUTE, new NewsRequestListener());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.frag_news_categories, container, false);
-        final GridView gv = (GridView) view.findViewById(R.id.grid_view_categories_list);
-        mNewsCategoriesAdapter = new NewsCategoriesAdapter(getApplicationContext(), mNewsCategories);
-        gv.setAdapter(mNewsCategoriesAdapter);
-        gv.setOnItemClickListener(this);
+        mGridView = (GridView) view.findViewById(R.id.grid_view_categories_list);
+        mGridView.setOnItemClickListener(this);
+        ((MainActivity) getActivity()).getSupportActionBar()
+                .setTitle(getResources().getText(R.string.news_actionbar_title));
         return view;
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        ArrayList<News> newsList = (ArrayList<News>) mGetNewsResonse.data[position].newsAbstractList;
+        // Add the news list to the bundle and pass it to the intent
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(NEWS_PARCELABLE, newsList);
 
+        startActivity(new Intent(getApplicationContext(), NewsListActivity.class).putExtra(NEWS_BUNDLE, bundle));
+    }
+
+    private class NewsRequestListener implements RequestListener<GetNewsResponse> {
+
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            spiceException.printStackTrace();
+        }
+
+        @Override
+        public void onRequestSuccess(GetNewsResponse response) {
+            mGetNewsResonse = response;
+            NewsCategoriesAdapter mNewsCategoriesAdapter
+                    = new NewsCategoriesAdapter(getApplicationContext(), mGetNewsResonse.data);
+
+            mGridView.setAdapter(mNewsCategoriesAdapter);
+            mProgressDialog.dismiss();
+        }
     }
 }
