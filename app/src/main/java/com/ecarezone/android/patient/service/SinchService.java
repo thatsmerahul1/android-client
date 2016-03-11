@@ -48,9 +48,9 @@ import java.util.List;
 
 public class SinchService extends Service {
 
-    private static final String APP_KEY = "f992c69a-da68-4ae8-abcd-f81111f9b994";
-    private static final String APP_SECRET = "g96jWxKe/USsur3X3e2xXw==";
-    private static final String ENVIRONMENT = "sandbox.sinch.com";
+    private static final String APP_KEY = "6b84d17d-1cd8-4570-b29a-3783a1ba76e9";
+    private static final String APP_SECRET = "Qr+7+SDyUkmTYpCGicC96w==";
+    private static final String ENVIRONMENT = "clientapi.sinch.com";
 
     public static final String CALL_ID = "CALL_ID";
     public static final String INCOMING_CALL_USER = "INCOMING_CALL_USER";
