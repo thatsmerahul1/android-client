@@ -37,13 +37,7 @@
     <string name="welcome_button_cancel">@android:string/cancel</string>
 
     <!-- News -->
-    <string name="news_categories_fitness">Fitness&amp;Exercise</string>
-    <string name="news_categories_men">Men Health</string>
-    <string name="news_categories_women">Women Health</string>
-    <string name="news_categories_eating">Healthy Eating</string>
-    <string name="news_categories_family">Parenting&amp;Family</string>
-    <string name="news_categories_other">Other</string>
-    <string name="news_actionbar_title">News</string>
+    <string name="news_actionbar_title">News feed</string>
 
     <!-- Profile -->
     <string name="profile_add_your_profile">Add your profile</string>

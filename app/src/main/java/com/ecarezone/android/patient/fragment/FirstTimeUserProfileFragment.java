@@ -50,7 +50,7 @@ public class FirstTimeUserProfileFragment extends EcareZoneBaseFragment implemen
         if (requestCode == CREATE_PROFILE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 // profile created. remove the first time profile fragment & show the profile list fragment
-                getActivity().getSupportFragmentManager().popBackStack();
+                //getActivity().getSupportFragmentManager().popBackStack();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.remove(this);
                 transaction.replace(R.id.screen_container, new UserProfileFragment());

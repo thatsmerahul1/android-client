@@ -118,6 +118,56 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/profileFinishReminderLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:background="@drawable/blue_rectangle_layout_selector"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:gravity="center"
+                android:paddingTop="16dp"
+                android:text="@string/welcome_personal_profile"
+                android:textColor="@color/ecarezone_blue_light"
+                android:textSize="@dimen/text_size_normal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="horizontal"
+                android:paddingBottom="2dp">
+
+                <Button
+                    android:id="@+id/button_welcome_not_now"
+                    style="@style/EcareZoneGreenButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:text="@string/welcome_button_not_now" />
+
+                <Button
+                    android:id="@+id/button_finish_profile_ok"
+                    style="@style/EcareZoneGreenButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:text="@string/welcome_button_ok" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
         <RelativeLayout
             android:id="@+id/doctorRecommendationLayout"
             android:layout_width="wrap_content"
@@ -163,8 +213,6 @@
                 android:layout_alignParentRight="true"
                 android:src="@drawable/welcome_nurse" />
         </RelativeLayout>
-
-
 
     </LinearLayout>
 

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class UserProfileFragment extends EcareZoneBaseFragment implements
         AdapterView.OnItemClickListener {
 
-    private int VIEW_PROFILE_REQUEST_CODE = 1001;
+    public static int VIEW_PROFILE_REQUEST_CODE = 1001;
     ArrayList<UserProfile> mProfiesList;
     private ListView listView;
     private ProfilesAdapter adapter;

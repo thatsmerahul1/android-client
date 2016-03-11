@@ -54,7 +54,13 @@ public class ImageUtil {
         }
         TypedFile typedFile = new TypedFile("multipart/form-data", file);
         // upload the image to server
-        UploadImageResponse response = EcareZoneWebService.api.upload(typedFile, LoginInfo.userId);
+        UploadImageResponse response = null;
+        try {
+            response = EcareZoneWebService.api.upload(typedFile, LoginInfo.userId);
+        }catch (Exception e){
+            Log.i(TAG,"Exception during image upload. Image upload failed.");
+            e.printStackTrace();
+        }
         return response;
     }
 

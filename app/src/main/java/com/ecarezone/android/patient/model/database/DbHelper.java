@@ -76,9 +76,9 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
         return mUserDao;
     }
 
-    // user data-access-object(Dao).
+    // Chat data-access-object(Dao).
     public Dao<Chat, Integer> getChatDao() throws SQLException {
-        if (mUserDao == null) {
+        if (mChatDao == null) {
             mChatDao = getDao(Chat.class);
         }
         return mChatDao;

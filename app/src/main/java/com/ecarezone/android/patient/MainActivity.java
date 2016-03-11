@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.fragment.DoctorListFragment;
 import com.ecarezone.android.patient.fragment.FirstTimeUserProfileFragment;
@@ -73,6 +74,7 @@ public class MainActivity extends EcareZoneBaseActivity {
         mActionBar = getSupportActionBar();
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setTitle(Constants.ECARE_ZONE);
 
         /* queries the db and checks whether to show welcome screen or to show home screen.
            Check is based on whether the user has created a profile or not. */
@@ -146,10 +148,10 @@ public class MainActivity extends EcareZoneBaseActivity {
         if (fragmentLayoutResId < 0) return;
         if (fragmentLayoutResId == R.layout.frag_patient_main) {
             changeFragment(R.id.screen_container, new PatientFragment(),
-                    getString(R.string.main_side_menu_home), args);
+                    getString(R.string.main_side_menu_home), args, false);
         } else if (fragmentLayoutResId == R.layout.frag_welcome) {
             changeFragment(R.id.screen_container, new WelcomeFragment(),
-                    WelcomeFragment.class.getSimpleName(), args);
+                    WelcomeFragment.class.getSimpleName(), args, false);
         } else if (fragmentLayoutResId == R.layout.frag_news_categories) {
             changeFragment(R.id.screen_container, new NewsCategoriesFragment(),
                     getString(R.string.main_side_menu_news), args);
@@ -164,7 +166,7 @@ public class MainActivity extends EcareZoneBaseActivity {
                     UserProfileFragment.class.getSimpleName(), args);
         } else if (fragmentLayoutResId == R.layout.frag_first_time_profile) {
             changeFragment(R.id.screen_container, new FirstTimeUserProfileFragment(),
-                    FirstTimeUserProfileFragment.class.getSimpleName(), args);
+                    FirstTimeUserProfileFragment.class.getSimpleName(), args, false);
         }
 
         if (mDrawerLayout != null) {

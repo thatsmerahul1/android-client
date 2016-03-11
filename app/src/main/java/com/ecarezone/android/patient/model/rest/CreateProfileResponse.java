@@ -26,12 +26,14 @@ public class CreateProfileResponse extends BaseResponse implements Serializable 
     @Expose
     public String profileId;
     @Expose
+    public String ethnicity;
+    @Expose
     public String gender;
     @Expose
     public String birthdate;
 
     @Override
     public String toString() {
-        return profileName + ":" + email + ":" + height + ":" + name + ":" + address + ":" + weight + ":" + avatarUrl + ":" + profileId + ":" + gender + ":" + birthdate;
+        return profileName + ":" + email + ":" + height + ":" + name + ":" + address + ":" + weight + ":" + avatarUrl + ":" + profileId + ":" + ethnicity + ":" + gender + ":" + birthdate;
     }
 }

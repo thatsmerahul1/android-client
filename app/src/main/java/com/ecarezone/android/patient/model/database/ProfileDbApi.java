@@ -2,6 +2,8 @@ package com.ecarezone.android.patient.model.database;
 
 import android.content.Context;
 
+import com.ecarezone.android.patient.R;
+import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.UserProfile;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.DeleteBuilder;
@@ -67,6 +69,7 @@ public class ProfileDbApi {
             Dao<UserProfile, Integer> userProfileDao = mDbHelper.getProfileDao();
             userProfile.userId = userId;
             userProfile.profileId = profileId;
+            userProfile.isComplete = areAllFieldsFilled(userProfile);
             int status = userProfileDao.create(userProfile);
             return status != 0;
         } catch (SQLException e) {
@@ -95,6 +98,7 @@ public class ProfileDbApi {
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_HEIGHT, userProfile.height);
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_WEIGHT, userProfile.weight);
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_AVATAR_URL, userProfile.avatarUrl);
+            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_IS_COMPLETE, areAllFieldsFilled(userProfile));
 
             updateBuilder.update();
             return true;
@@ -152,5 +156,69 @@ public class ProfileDbApi {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public UserProfile getMyProfile() {
+        try {
+            Dao<UserProfile, Integer> userProfileDao = mDbHelper.getProfileDao();
+            QueryBuilder<UserProfile, Integer> queryBuilder = userProfileDao.queryBuilder();
+            return queryBuilder.where()
+                    .eq(DbContract.Profiles.COLUMN_NAME_USER_ID, LoginInfo.userId)
+                    .and()
+                    .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_NAME, mContext.getString(R.string.profile_mine))
+                    .queryForFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean isMyProfileComplete() {
+        try {
+            Dao<UserProfile, Integer> userProfileDao = mDbHelper.getProfileDao();
+            QueryBuilder<UserProfile, Integer> queryBuilder = userProfileDao.queryBuilder();
+            UserProfile myProfile = queryBuilder
+                    .where()
+                    .eq(DbContract.Profiles.COLUMN_NAME_USER_ID, LoginInfo.userId)
+                    .and()
+                    .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_NAME, mContext.getString(R.string.profile_mine))
+                    .queryForFirst();
+            return myProfile.isComplete;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private boolean areAllFieldsFilled(UserProfile userProfile) {
+        try {
+            if (userProfile.profileName.length() < 2) {
+                return false;
+            } else if (userProfile.address.length() < 2) {
+                return false;
+            } else if (userProfile.avatarUrl.length() < 2) {
+                return false;
+            } else if (userProfile.birthdate.length() < 2) {
+                return false;
+            } else if (userProfile.email.length() < 2) {
+                return false;
+            } else if (userProfile.ethnicity.length() < 2) {
+                return false;
+            } else if (userProfile.gender.length() < 2) {
+                return false;
+            } else if (userProfile.name.length() < 2) {
+                return false;
+            } else if (userProfile.height.length() < 1) {
+                return false;
+            } else if (userProfile.weight.length() < 1) {
+                return false;
+            } else {
+                // all fields have some data
+                return true;
+            }
+        } catch (NullPointerException e) {
+            // if any of the field is not set, null pointer exception is caught. it means profile is not Finished.
+            return false;
+        }
     }
 }

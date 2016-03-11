@@ -38,5 +38,6 @@ public final class DbContract {
         public static final String COLUMN_NAME_WEIGHT = "weight";
         public static final String COLUMN_NAME_GENDER = "gender";
         public static final String COLUMN_NAME_AVATAR_URL = "avatarUrl";
+        public static final String COLUMN_NAME_IS_COMPLETE = "isComplete";
     }
 }

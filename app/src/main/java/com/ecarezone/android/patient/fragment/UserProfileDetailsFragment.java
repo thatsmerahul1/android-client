@@ -471,6 +471,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             profile.weight = response.weight;
             profile.avatarUrl = response.avatarUrl;
             profile.profileId = response.profileId;
+            profile.ethnicity = response.ethnicity;
             profile.gender = response.gender;
             profile.birthdate = response.birthdate;
             return profile;

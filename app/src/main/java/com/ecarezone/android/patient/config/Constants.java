@@ -5,7 +5,7 @@ package com.ecarezone.android.patient.config;
  */
 public class Constants {
 
-    public static String ECARE_ZONE = "ecarezone";
+    public static String ECARE_ZONE = "eCareZone";
 
     public static String API_KEY = "O0mwYEyHQ0c0Knk78Ct9MtJbui9noo9y";
     public static String deviceUnique = "34a5dae02b2156dbdfff8da457922b0d";
