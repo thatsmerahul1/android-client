@@ -162,7 +162,7 @@
 
 
     <!-- Error -->
-    <string name="error_user_login">Invalid username or passwor</string>
+    <string name="error_user_login">Invalid username or password</string>
     <string name="error_user_registration">@string/error_user_login</string>
 
     <string name="cancel">Cancel</string>
@@ -183,7 +183,7 @@
     <string name="reset_password_email_hint">Enter Your Email</string>
     <string name="reset_password">Reset password</string>
     <string name="reset_password_notification">Your new password will be sent \nto by email</string>
-    <string name="reset_password_error">Youe email account is incorrect. Please try \n in if you are register user</string>
+    <string name="reset_password_error">Your email account is incorrect. Please try \n in if you are register user</string>
     <string name="title_activity_forget_password">ForgetPasswordActivity</string>
 
     <string name="gallery_chooser_select_picture">Select photo</string>

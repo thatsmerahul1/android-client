@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.ecarezone.android.patient.AppointmentActivity;
 import com.ecarezone.android.patient.CallActivity;
 import com.ecarezone.android.patient.ChatActivity;
+import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.VideoActivity;
 import com.ecarezone.android.patient.config.Constants;
@@ -94,6 +95,10 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         doctorVoice.setOnClickListener(this);
         addDoctorButton.setOnClickListener(this);
         buttonAppointment.setOnClickListener(this);
+
+        if (getActivity().getIntent().getBooleanExtra(DoctorListFragment.ADD_DOCTOR_DISABLE_CHECK, false)) {
+            addDoctorButton.setVisibility(View.GONE);
+        }
 
         if (doctor != null) {
             setDoctorPresenceIcon(doctor.status);
@@ -197,9 +202,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         @Override
         public void onRequestSuccess(AddDoctorResponse addDoctorResponse) {
             Log.d(TAG, "AddDoctorResponse Status " + addDoctorResponse.status.code);
-
+            progressDialog.dismiss();
             if (addDoctorResponse.status.code.equals(HTTP_STATUS_OK)) {
-                progressDialog.dismiss();
                 AddDoctorRequestDialog addDoctorRequestDialog = new AddDoctorRequestDialog(doctorName);
                 FragmentManager fragmentManager = getActivity().getFragmentManager();
                 addDoctorRequestDialog.show(fragmentManager, "AddDoctorRequestSuccessFragment");

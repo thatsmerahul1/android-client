@@ -321,11 +321,7 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                         userTable.saveUserData(Long.toString(data.userId), data.settings.email, hashedPassword, data.settings.language
                                 , Integer.toString(1), data.settings.country);
                     }
-                    SharedPreferences perPreferences = activity.getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = perPreferences.edit();
-                    editor.putBoolean(Constants.IS_LOGIN, true);
-                    editor.putString(Constants.USER_ID, String.valueOf(LoginInfo.userId));
-                    editor.commit();
+
 
                     getActivity().runOnUiThread(new Runnable() {
                         @Override

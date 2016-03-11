@@ -1,54 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="16dp"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:baselineAligned="false">
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/login_logo"
         android:padding="32dp"
-        />
+        android:src="@drawable/login_logo" />
 
     <EditText
         android:id="@+id/edit_text_login_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:hint="@string/login_username"/>
+        android:hint="@string/login_username"
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/edit_text_login_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:inputType="textPassword"
-        android:hint="@string/login_password"/>
+        android:hint="@string/login_password"
+        android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/textview_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/button_login"
+        style="@style/EcareZoneBlueButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="220dp"
-        android:layout_marginTop="20dp"
         android:layout_gravity="center"
-        android:text="@string/login_button_text"
-        style="@style/EcareZoneBlueButton"
-        />
+        android:layout_marginTop="20dp"
+        android:minWidth="220dp"
+        android:text="@string/login_button_text" />
 
     <TextView
         android:id="@+id/textview_forgotpwd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:enabled="false"
         android:gravity="center"
         android:text="@string/login_forgot_password"
         android:textColor="@color/ecarezone_blue_light"
-        android:textStyle="bold"
-        android:enabled="false"
-        android:textSize="16dp" />
+        android:textSize="16dp"
+        android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"
@@ -66,12 +76,12 @@
 
     <Button
         android:id="@+id/button_create_account"
+        style="@style/EcareZoneGreenButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="16dp"
         android:minWidth="220dp"
-        android:layout_gravity="center"
-        android:text="@string/login_create_account"
-        style="@style/EcareZoneGreenButton"/>
+        android:text="@string/login_create_account" />
 
 </LinearLayout>

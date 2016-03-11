@@ -40,6 +40,8 @@ import java.util.ArrayList;
  */
 public class DoctorListFragment extends EcareZoneBaseFragment {
 
+    public static final String ADD_DOCTOR_DISABLE_CHECK = "addDocotrDisablecheck";
+
     private static final String TAG = DoctorListFragment.class.getSimpleName();
     private static final int HTTP_STATUS_OK = 200;
     private ListView mycareDoctorListView = null;
@@ -67,14 +69,8 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
             setHasOptionsMenu(true);
         } catch (Exception e) {
         }
-
         ((MainActivity) getActivity()).getSupportActionBar()
                 .setTitle(getResources().getString(R.string.main_side_menu_doctors));
-        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
-                getText(R.string.progress_dialog_loading).toString());
-        checkProgress = true;
-        populateMyCareDoctorList();
-        populateRecommendedDoctorList();
     }
 
     @Override
@@ -100,6 +96,17 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         });
         View searchEditFrame = searchView.findViewById(R.id.search_edit_frame);
         searchEditFrame.setBackgroundResource(R.drawable.search_edittext_border);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
+                getText(R.string.progress_dialog_loading).toString());
+        checkProgress = true;
+        populateMyCareDoctorList();
+        populateRecommendedDoctorList();
+
     }
 
     @Override
@@ -187,6 +194,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                             if (activity != null) {
                                 Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorActivity.class);
                                 showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
+                                showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
                                 activity.startActivity(showDoctorIntent);
                             }
                         }
@@ -257,26 +265,37 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                     recommendedDoctorAdapter = new DoctorsAdapter(getActivity(), recommendedDoctorList);
                     recommendedDoctorListView.setAdapter(recommendedDoctorAdapter);
                     recommendedDoctorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Log.i(TAG, "position = " + position);
-                            Bundle data = new Bundle();
-                            data.putParcelable(Constants.DOCTOR_DETAIL, recommendedDoctorList.get(position));
-                            final Activity activity = getActivity();
-                            if (activity != null) {
-                                Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorActivity.class);
-                                showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
-                                activity.startActivity(showDoctorIntent);
-                            }
-                        }
-                    });
+                                                                         @Override
+                                                                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                                             Log.i(TAG, "position = " + position);
+                                                                             Bundle data = new Bundle();
+                                                                             data.putParcelable(Constants.DOCTOR_DETAIL, recommendedDoctorList.get(position));
+                                                                             final Activity activity = getActivity();
+                                                                             if (activity != null) {
+                                                                                 Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorActivity.class);
+                                                                                 showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
+                                                                                 if (checkDocotorExist(position)) {
+                                                                                     showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
+                                                                                 } else {
+                                                                                     showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, false);
+                                                                                 }
+                                                                                 activity.startActivity(showDoctorIntent);
+                                                                             }
+                                                                         }
+                                                                     }
+
+                    );
 
                     recommendedDoctorContainer.setVisibility(View.VISIBLE);
 
-                    if (doctorList != null && doctorList.size() > 0) {
+                    if (doctorList != null && doctorList.size() > 0)
+
+                    {
                         mycareDoctorContainer.setVisibility(View.VISIBLE);
                         doctorsDivider.setVisibility(View.VISIBLE);
-                    } else {
+                    } else
+
+                    {
                         mycareDoctorContainer.setVisibility(View.GONE);
                         doctorsDivider.setVisibility(View.GONE);
                     }
@@ -300,6 +319,18 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
             }
 
         }
+    }
+
+    private boolean checkDocotorExist(int position) {
+        Long id = ((Doctor) recommendedDoctorList.get(position)).doctorId;
+        for (Doctor doctor : doctorList) {
+            if (doctor.doctorId.equals(id)) {
+                return true;
+            }
+
+        }
+        return false;
+
     }
 
 

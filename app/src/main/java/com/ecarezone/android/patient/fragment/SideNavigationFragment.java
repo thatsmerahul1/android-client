@@ -30,6 +30,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 public class SideNavigationFragment extends EcareZoneBaseFragment implements NavigationItem.OnNavigationItemClickListener,
         View.OnClickListener,
         FragmentManager.OnBackStackChangedListener {
+    public static final String FRAGMENT_NAME="fragmentName";
     private ProgressDialog progressDialog;
 
     @Override
@@ -50,6 +51,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().getSupportFragmentManager().addOnBackStackChangedListener(this);
+
     }
 
     @Override
@@ -77,6 +79,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
         mLogout.setOnNavigationItemClickListener(this);
         mHome.highlightItem(true);
         highlightNavigationItem(null);
+
         return view;
     }
 

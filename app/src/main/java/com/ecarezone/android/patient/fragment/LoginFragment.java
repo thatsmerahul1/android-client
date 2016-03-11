@@ -56,6 +56,7 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
     private UserTable userTable;
     private LocationFinder locationFinder;
     private String hashedPassword;
+    private TextView textView_error;
 
     @Override
     protected String getCallerName() {
@@ -144,6 +145,7 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
         mButtonLogin = view.findViewById(R.id.button_login);
         mButtonLogin.setOnClickListener(this);
         view.findViewById(R.id.button_create_account).setOnClickListener(this);
+        textView_error = (TextView) view.findViewById(R.id.textview_error);
         return view;
     }
 
@@ -153,6 +155,7 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
 
         final int viewId = v.getId();
         if (viewId == R.id.button_login) {
+            textView_error.setVisibility(View.INVISIBLE);
             final String username = mEditTextUsername.getEditableText().toString();
             final String password = mEditTextPassword.getEditableText().toString();
             /*
@@ -160,17 +163,23 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
             */
             if (TextUtils.isEmpty(username)
                     || (!android.util.Patterns.EMAIL_ADDRESS.matcher(username.trim()).matches())
-                    || (TextUtils.isEmpty(username) || (password.trim().length() < 8))) {
+                    || (TextUtils.isEmpty(password) || (password.trim().length() < 8))) {
+                textView_error.setText(R.string.error_user_login);
+                textView_error.setVisibility(View.VISIBLE);
+                mEditTextPassword.setText("");
                 Toast.makeText(v.getContext(), R.string.error_user_login, Toast.LENGTH_LONG).show();
+                return;
             } else {
                 doLogin(username, password);
             }
+
         } else if (viewId == R.id.button_create_account) {
             // change to account creation
             invokeNavigationChanged(R.layout.frag_registration, null);
         } else if (viewId == R.id.textview_forgotpwd) {
             if (LoginInfo.userName == null) {
-                Toast.makeText(v.getContext(), R.string.error_user_login, Toast.LENGTH_LONG).show();
+                textView_error.setText(R.string.error_user_login);
+                textView_error.setVisibility(View.VISIBLE);
             } else {
                 invokeNavigationChanged(R.layout.act_forgotpassword, null);
             }
@@ -224,12 +233,13 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
                     progressDialog.dismiss();
                 }
             });
+            mEditTextPassword.setText("");
 
         }
 
         @Override
         public void onRequestSuccess(final LoginResponse response) {
-            Toast.makeText(getActivity(), "success", Toast.LENGTH_SHORT).show();
+            mEditTextPassword.setText("");
             Log.d(TAG, "Status Code " + response.status.code);
             if (response.status.code == 200) {
                 final Activity activity = getActivity();
@@ -283,13 +293,8 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
 
                 }
             } else {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), "Failed to login: " + response.status.message, Toast.LENGTH_LONG).show();
-
-                    }
-                });
+                textView_error.setText(response.status.message);
+                textView_error.setVisibility(View.VISIBLE);
             }
             getActivity().runOnUiThread(new Runnable() {
                 @Override

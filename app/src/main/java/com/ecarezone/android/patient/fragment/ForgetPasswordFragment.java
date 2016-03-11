@@ -2,11 +2,13 @@ package com.ecarezone.android.patient.fragment;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecarezone.android.patient.R;
@@ -22,6 +24,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 public class ForgetPasswordFragment extends EcareZoneBaseFragment implements View.OnClickListener {
     private EditText editTextForgetPwd;
     private ProgressDialog progressDialog;
+    private TextView textView_error;
 
     public static ForgetPasswordFragment newInstance() {
         return new ForgetPasswordFragment();
@@ -33,6 +36,7 @@ public class ForgetPasswordFragment extends EcareZoneBaseFragment implements Vie
         final View view = inflater.inflate(R.layout.act_forgotpassword, container, false);
         editTextForgetPwd = (EditText) view.findViewById(R.id.editText_ForgetPwd);
         Button buttonSend = (Button) view.findViewById(R.id.button_send);
+        textView_error=(TextView)view.findViewById(R.id.textview_error);
         buttonSend.setOnClickListener(this);
         return view;
     }
@@ -46,9 +50,11 @@ public class ForgetPasswordFragment extends EcareZoneBaseFragment implements Vie
     public void onClick(View v) {
         int viewId = v.getId();
         if (viewId == R.id.button_send) {
-
-            if (editTextForgetPwd.getText().length() == 0) {
-                editTextForgetPwd.setError("");
+            String email=editTextForgetPwd.getText().toString();
+            textView_error.setVisibility(View.INVISIBLE);
+            if (TextUtils.isEmpty(email)
+                    || (!android.util.Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()) ) {
+                textView_error.setVisibility(View.VISIBLE);
                 return;
             }
             //Foret Password request
@@ -76,8 +82,10 @@ public class ForgetPasswordFragment extends EcareZoneBaseFragment implements Vie
               password sent to email
              */
             if (loginResponse.status.code == 200) {
-                Toast.makeText(getApplicationContext(), loginResponse.status.message, Toast.LENGTH_LONG).show();
+
             }
+            textView_error.setVisibility(View.VISIBLE);
+            textView_error.setText(loginResponse.status.message);
             progressDialog.dismiss();
 
         }
