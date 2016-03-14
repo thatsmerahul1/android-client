@@ -196,6 +196,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                                 showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
                                 showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
                                 activity.startActivity(showDoctorIntent);
+                                activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                             }
                         }
                     });
@@ -280,6 +281,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                                                                                      showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, false);
                                                                                  }
                                                                                  activity.startActivity(showDoctorIntent);
+                                                                                 activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                                                                              }
                                                                          }
                                                                      }

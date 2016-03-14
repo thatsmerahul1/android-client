@@ -84,4 +84,10 @@ public class DoctorActivity extends EcareZoneBaseActivity {
                     DoctorFragment.class.getSimpleName(), args);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+    }
 }
