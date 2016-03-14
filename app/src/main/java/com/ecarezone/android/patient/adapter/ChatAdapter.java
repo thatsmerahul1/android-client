@@ -64,6 +64,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         if (mMessages == null) {
             mMessages = new ArrayList<Chat>();
         }
+        ChatDbApi.getInstance(mContext).updateChatReadStatus(userName,ChatDbApi.CHAT_READ_STATUS);
         Log.i("ChatAdapter", "size::" + mMessages.size());
         notifyDataSetChanged();
     }

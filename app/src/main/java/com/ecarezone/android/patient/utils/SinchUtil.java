@@ -1,13 +1,13 @@
 package com.ecarezone.android.patient.utils;
 
-        import android.content.Context;
+import android.content.Context;
 
-        import com.ecarezone.android.patient.app.AudioPlayer;
-        import com.ecarezone.android.patient.config.Constants;
-        import com.ecarezone.android.patient.model.Chat;
-        import com.ecarezone.android.patient.model.database.ChatDbApi;
-        import com.ecarezone.android.patient.service.SinchService;
-        import com.sinch.android.rtc.messaging.Message;
+import com.ecarezone.android.patient.app.AudioPlayer;
+import com.ecarezone.android.patient.config.Constants;
+import com.ecarezone.android.patient.model.Chat;
+import com.ecarezone.android.patient.model.database.ChatDbApi;
+import com.ecarezone.android.patient.service.SinchService;
+import com.sinch.android.rtc.messaging.Message;
 
 /**
  * Created by L&T Technology Services on 2/17/2016.
@@ -15,6 +15,11 @@ package com.ecarezone.android.patient.utils;
 public class SinchUtil {
     private static SinchService.SinchServiceInterface mSinchServiceInterface = null;
     private static AudioPlayer audioplayer;
+    private static onChatHistoryChangeListner chatHistoryListner;
+
+    public interface onChatHistoryChangeListner {
+        public void onChange(int noOfUnreadMessage);
+    }
 
     public static SinchService.SinchServiceInterface getSinchServiceInterface() {
         return mSinchServiceInterface;
@@ -32,6 +37,14 @@ public class SinchUtil {
         audioplayer = new AudioPlayer(context);
     }
 
+    public static void setChatHistoryChangeListner(onChatHistoryChangeListner listner) {
+        chatHistoryListner = listner;
+    }
+
+    public static void removeChatHistoryChangeListner() {
+        chatHistoryListner = null;
+    }
+
     public static void saveIncomingChatHistory(Message message, Context context) {
         Chat chat = new Chat();
         if (message.getTextBody().contains(Constants.ENDPOINTURL)) {
@@ -45,5 +58,9 @@ public class SinchUtil {
         chat.setReadStatus(ChatDbApi.CHAT_UNREAD_STATUS);
 
         ChatDbApi.getInstance(context).saveChat(chat);
+
+        if (chatHistoryListner != null) {
+            chatHistoryListner.onChange(ChatDbApi.getInstance(context).getUnReadChatCount());
+        }
     }
 }

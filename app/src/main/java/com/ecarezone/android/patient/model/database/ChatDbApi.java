@@ -44,7 +44,7 @@ public class ChatDbApi {
     }
 
     /* Saves a user chat in local database. Returns success failure response. */
-    public static boolean saveChat(Chat chat) {
+    public  boolean saveChat(Chat chat) {
         try {
             Dao<Chat, Integer> chatDao = mDbHelper.getChatDao();
             int status = chatDao.create(chat);
@@ -56,7 +56,7 @@ public class ChatDbApi {
     }
 
     /* retrieve the ChatHistory of a particular user */
-    public static List<Chat> getChatHistory(String userId) {
+    public List<Chat> getChatHistory(String userId) {
         try {
             Dao<Chat, Integer> chatDao = mDbHelper.getChatDao();
             QueryBuilder<Chat, Integer> queryBuilder = chatDao.queryBuilder();
@@ -68,7 +68,7 @@ public class ChatDbApi {
     }
 
     /* deletes chat History of particular user */
-    public static boolean deleteChat(String userId) {
+    public boolean deleteChat(String userId) {
         try {
             Dao<Chat, Integer> chatDao = mDbHelper.getChatDao();
             DeleteBuilder<Chat, Integer> deleteBuilder = chatDao.deleteBuilder();
@@ -83,12 +83,12 @@ public class ChatDbApi {
     }
 
     /* update read status of user Chat history */
-    public static boolean updateChatReadStatus(String userId, String readStatus) {
+    public boolean updateChatReadStatus(String userId, String readStatus) {
         try {
             Dao<Chat, Integer> chatDao = mDbHelper.getChatDao();
             UpdateBuilder<Chat, Integer> updateBuilder = chatDao.updateBuilder();
             updateBuilder.where()
-                    .eq(DbContract.Profiles.COLUMN_NAME_USER_ID, userId);
+                    .eq(COLUMN_NAME_CHAT_USER_ID, userId);
 
             updateBuilder.updateColumnValue(COLUMN_NAME_CHAT_READ_STATUS, readStatus);
 
@@ -101,7 +101,7 @@ public class ChatDbApi {
     }
 
     /* retrieve unread ChatCount from chat History by userId */
-    public static int getUnReadChatCountByUserId(String userId) {
+    public int getUnReadChatCountByUserId(String userId) {
         try {
             Dao<Chat, Integer> chatDao = mDbHelper.getChatDao();
             QueryBuilder<Chat, Integer> queryBuilder = chatDao.queryBuilder();
@@ -117,7 +117,7 @@ public class ChatDbApi {
     }
 
     /* retrieve unread ChatCount from chat History*/
-    public static int getUnReadChatCount() {
+    public int getUnReadChatCount() {
         try {
             Dao<Chat, Integer> chatDao = mDbHelper.getChatDao();
             QueryBuilder<Chat, Integer> queryBuilder = chatDao.queryBuilder();

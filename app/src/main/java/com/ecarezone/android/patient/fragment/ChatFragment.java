@@ -118,9 +118,9 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
 
     @Override
     public void onIncomingMessage(MessageClient messageClient, Message message) {
-        /*if (!message.getRecipientIds().get(0).equals(recipient)) {
+        if (!message.getRecipientIds().get(0).equals(recipient)) {
             return;
-        }*/
+        }
         chatAdapter.addMessage(incomingMessage(message));
         chatList.smoothScrollToPosition(chatAdapter.getItemCount() - 1);
     }

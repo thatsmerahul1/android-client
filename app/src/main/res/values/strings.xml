@@ -138,7 +138,7 @@
 
     <!-- Home -->
     <string name="home_last_news_feed">The latest news feed</string>
-    <string name="home_new_messages">News messages\nFrom: %s</string>
+    <string name="home_new_messages">New messages</string>
     <string name="home_user_message">Hi,\n\nWe have new doctor recommended for your case!</string>
     <string name="home_see_profile">See profile</string>
 

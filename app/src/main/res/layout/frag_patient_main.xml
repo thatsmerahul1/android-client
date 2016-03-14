@@ -85,6 +85,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/new_message_counter_layout"
                 android:layout_gravity="center">
 
                 <TextView
@@ -102,6 +103,7 @@
 
                 <TextView
                     android:id="@+id/text_view_home_message_value"
+                    android:text="@string/home_new_messages"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
