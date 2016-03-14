@@ -183,7 +183,10 @@ public class ProfileDbApi {
                     .and()
                     .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_NAME, mContext.getString(R.string.profile_mine))
                     .queryForFirst();
-            return myProfile.isComplete;
+            if(myProfile!=null){
+                return myProfile.isComplete;
+            }
+            return false;
         } catch (SQLException e) {
             e.printStackTrace();
         }

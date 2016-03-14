@@ -17,10 +17,24 @@ import java.util.List;
  */
 public class PermissionUtil {
     public static final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 100;
-    private static String sinchPermissions[] = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO
-            , Manifest.permission.READ_PHONE_STATE};
+    public static final int REQUEST_CODE_ASK_WRITE_EXTERNAL_STORAGE_PERMISSIONS = 101;
+    public static final int REQUEST_CODE_ASK_CAPTURE_PHOTO_PERMISSIONS = 102;
+
+    private static String sinchPermissions[] = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.READ_PHONE_STATE
+    };
+
+    private static String mCapturePhotoFromCameraPermissions[] = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     public static final int SINCH_PERMISSIONS = 1;
+    public static final int WRITE_EXTERNAL_STORAGE_PERMISSIONS = 2;
+    public static final int CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS = 3;
+
 
     public static String[] getAllpermissionRequired(Activity activity, int permissionType) {
         List<String> permissionList = new ArrayList<>(Arrays.asList(getRequiredTypePermission(permissionType)));
@@ -54,10 +68,14 @@ public class PermissionUtil {
         switch (type) {
             case SINCH_PERMISSIONS:
                 permissions = sinchPermissions;
+            break;
+            case WRITE_EXTERNAL_STORAGE_PERMISSIONS:
+                permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                break;
+            case CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS:
+                permissions = mCapturePhotoFromCameraPermissions;
                 break;
         }
-
         return permissions;
     }
-
 }
