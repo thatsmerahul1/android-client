@@ -91,7 +91,6 @@ public class ProfilesAdapter extends BaseAdapter {
             if (imageUrl != null && imageUrl.trim().length() > 8) {
                 Picasso.with(mContext)
                         .load(imageUrl)
-                        .fit()
                         .placeholder(R.drawable.news_other)
                         .error(R.drawable.news_other)
                         .into(profileItem.itemImage);

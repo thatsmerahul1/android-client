@@ -54,10 +54,10 @@ public class NewsCategoriesAdapter extends BaseAdapter {
             newsCategoryItem = ((NewsCategoryItem) convertView.getTag());
         }
 
-        if((newsCategoryItem != null) && (mNewsCategories != null)) {
+        if ((newsCategoryItem != null) && (mNewsCategories != null)) {
             NewsCategory item = mNewsCategories[position];
             // sets each grid item with image and news title
-            if(item.newsImageLink!=null && item.newsImageLink.trim().length()>8) {
+            if (item.newsImageLink != null && item.newsImageLink.trim().length() > 8) {
                 Picasso.with(mContext)
                         .load(item.newsImageLink)
                         .fit()
@@ -75,7 +75,7 @@ public class NewsCategoriesAdapter extends BaseAdapter {
         final ImageView itemImage;
         final TextView title;
 
-        NewsCategoryItem (final View view) {
+        NewsCategoryItem(final View view) {
             itemImage = (ImageView) view.findViewById(R.id.image_view_news_category_item);
             title = (TextView) view.findViewById(R.id.text_view_news_category_item);
         }

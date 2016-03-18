@@ -162,7 +162,6 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         if (imageUrl != null && imageUrl.trim().length() > 8) {
             Picasso.with(getApplicationContext())
                     .load(imageUrl)
-                    .fit()
                     .placeholder(R.drawable.news_other)
                     .error(R.drawable.news_other)
                     .into(profileImageButton);
