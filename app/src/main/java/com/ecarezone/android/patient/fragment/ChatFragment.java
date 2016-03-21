@@ -2,6 +2,7 @@ package com.ecarezone.android.patient.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,6 +29,7 @@ import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.Chat;
 import com.ecarezone.android.patient.model.database.ChatDbApi;
 import com.ecarezone.android.patient.utils.ImageUtil;
+import com.ecarezone.android.patient.utils.PermissionUtil;
 import com.ecarezone.android.patient.utils.SinchUtil;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.messaging.Message;
@@ -38,7 +40,9 @@ import com.sinch.android.rtc.messaging.MessageFailureInfo;
 
 import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by L&T Technology Services on 2/18/2016.
@@ -54,6 +58,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
     private final static String CHAT_TEXT = "text";
     String recipient = "ecareuser@mail.com";
     private String deviceImagePath;
+    Map<String, Integer> perms = new HashMap<>();
 
     @Override
     protected String getCallerName() {
@@ -97,6 +102,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         cameraBtn.setOnClickListener(this);
         getActivity().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        recipient = getArguments().getString(Constants.EXTRA_EMAIL);
         chatAdapter.getChatHistory(recipient);
     }
 
@@ -105,12 +111,13 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         int viewId = view.getId();
         switch (viewId) {
             case R.id.chatCameraBtn:
-                deviceImagePath = ImageUtil.dispatchTakePictureIntent(getActivity());
-                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                File f = new File(deviceImagePath);
-                Uri contentUri = Uri.fromFile(f);
-                mediaScanIntent.setData(contentUri);
-                getActivity().sendBroadcast(mediaScanIntent);
+                if (PermissionUtil.isPermissionRequired()
+                        && PermissionUtil.getAllpermissionRequired(getActivity(), PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS).length > 0) {
+                    PermissionUtil.setAllPermission(getActivity(), PermissionUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS
+                            , PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS);
+                } else {
+                    takePicture();
+                }
 
                 break;
         }
@@ -123,6 +130,15 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         }
         chatAdapter.addMessage(incomingMessage(message));
         chatList.smoothScrollToPosition(chatAdapter.getItemCount() - 1);
+    }
+
+    private void takePicture(){
+        deviceImagePath = ImageUtil.dispatchTakePictureIntent(getActivity());
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(deviceImagePath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        getActivity().sendBroadcast(mediaScanIntent);
     }
 
     @Override
@@ -210,6 +226,37 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
                 && requestCode == ImageUtil.REQUEST_IMAGE_CAPTURE
                 && resultCode == Activity.RESULT_OK) {
             sendMessage("", CHAT_IMAGE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        boolean permissionGranted = false;
+        switch (requestCode) {
+            case PermissionUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
+                // Fill with results
+                perms.clear();
+                for (int i = 0; i < permissions.length; i++) {
+                    perms.put(permissions[i], grantResults[i]);
+                }
+
+                for (int count = 0; count < perms.size(); count++) {
+                    if (perms.get(permissions[count]).equals(PackageManager.PERMISSION_GRANTED)) {
+                        // All Permissions Granted
+                        permissionGranted = true;
+                    } else {
+                        permissionGranted = false;
+                        break;
+                    }
+                }
+
+                if (permissionGranted) {
+                    takePicture();
+                }
+            }
+            break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 

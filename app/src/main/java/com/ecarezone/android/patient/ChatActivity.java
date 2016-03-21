@@ -82,4 +82,10 @@ public class ChatActivity extends EcareZoneBaseActivity {
         finish();
         overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        chatFragment.onRequestPermissionsResult(requestCode,permissions,grantResults);
+    }
 }

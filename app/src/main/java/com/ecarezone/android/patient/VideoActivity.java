@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.fragment.VideoFragment;
 import com.ecarezone.android.patient.service.SinchService;
 import com.ecarezone.android.patient.utils.PermissionUtil;
@@ -48,6 +49,7 @@ public class VideoActivity extends EcareZoneBaseActivity {
         actionbar.setTitle("");
         addSupportOnBackStackChangedListener(this);
         mCallId = getIntent().getStringExtra(SinchService.CALL_ID);
+        Log.i(TAG,"mCallID::"+mCallId);
         SinchUtil.setSinchAudioPlayer(this);
         if (mCallId == null) {
             if (PermissionUtil.isPermissionRequired()
@@ -55,6 +57,7 @@ public class VideoActivity extends EcareZoneBaseActivity {
                 PermissionUtil.setAllPermission(this, PermissionUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS
                         , PermissionUtil.SINCH_PERMISSIONS);
             } else {
+                userName = getIntent().getStringExtra(Constants.EXTRA_EMAIL);
                 establishOutGoingVideoCall(userName);
             }
         } else {
@@ -143,7 +146,6 @@ public class VideoActivity extends EcareZoneBaseActivity {
                         break;
                     }
                 }
-
                 if (permissionGranted) {
                     if (mCallId == null) {
                         establishOutGoingVideoCall(userName);

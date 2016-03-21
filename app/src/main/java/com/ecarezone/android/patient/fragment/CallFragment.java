@@ -73,9 +73,8 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
 
         ((CallActivity) getActivity()).hideActionbar();
 
-        if (incomingCallArguments != null) {
+        if (incomingCallArguments.getString(SinchService.CALL_ID) != null) {
             mCallId = incomingCallArguments.getString(SinchService.CALL_ID);
-
             incomingCallPanel = (LinearLayout) view.findViewById(R.id.incomingCallPanel);
             inComingVideoCallRemoteUser = (TextView) view.findViewById(R.id.remoteUser);
             answerButton = (Button) view.findViewById(R.id.answerButton);
