@@ -36,8 +36,8 @@ public class Constants {
     public static String AVAILABLE = "available";
     public static String BUSY = "busy";
 
-    public static String EXTRA_EMAIL;
-    public static String EXTRA_NAME;
+    public static String EXTRA_EMAIL ="email";
+    public static String EXTRA_NAME = "name";
 
     //Login Screen Constants
     public static String USER_ID = "UserId";
