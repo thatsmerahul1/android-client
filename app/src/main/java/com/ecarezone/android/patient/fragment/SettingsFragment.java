@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +23,7 @@ import com.ecarezone.android.patient.AboutEcareZoneActivity;
 import com.ecarezone.android.patient.ChatActivity;
 import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.R;
+import com.ecarezone.android.patient.UpdatePasswordActivity;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.fragment.dialog.RegistrationDialogFragment;
@@ -76,9 +78,11 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         mEditTextUsername = (EditText) view.findViewById(R.id.edit_text_registration_username);
         mEditTextUsername.setEnabled(false);
         mEditTextPassword = (EditText) view.findViewById(R.id.edit_text_registration_password);
+        mEditTextPassword.setOnClickListener(this);
+        mEditTextPassword.setKeyListener(null);
+        mEditTextPassword.setFocusable(false);
         //Disabling the username and password fields
         mEditTextUsername.setEnabled(false);
-        mEditTextPassword.setEnabled(false);
         // add editor action listener for password EditText to accept input from soft keyboard
         // Then the user need not to click login button
         mSpinnerCountry = (EditText) view.findViewById(R.id.country_spinner);
@@ -142,6 +146,10 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
             createRegestrationDialog(Constants.LANGUAGE);
         } else if (viewId == R.id.textview_registration_about) {
             getActivity().startActivity(new Intent(getActivity(), AboutEcareZoneActivity.class));
+        } else if(viewId == R.id.edit_text_registration_password)
+        {
+            Log.d("Naga","Updating Password ");
+            getActivity().startActivity(new Intent(getActivity(), UpdatePasswordActivity.class));
         }
 
     }

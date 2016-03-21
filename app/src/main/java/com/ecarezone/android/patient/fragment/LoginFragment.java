@@ -57,6 +57,7 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
     private LocationFinder locationFinder;
     private String hashedPassword;
     private TextView textView_error;
+    int i=1;
 
     @Override
     protected String getCallerName() {
@@ -73,7 +74,7 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
         View view = inflater.inflate(R.layout.frag_login, container, false);
         locationFinder = new LocationFinder(getActivity());
         mEditTextUsername = (EditText) view.findViewById(R.id.edit_text_login_username);
-        mEditTextUsername.addTextChangedListener(new TextWatcher() {
+         mEditTextUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }

@@ -15,6 +15,7 @@ import com.ecarezone.android.patient.model.rest.SearchDoctorsRequest;
 import com.ecarezone.android.patient.model.rest.SearchDoctorsResponse;
 import com.ecarezone.android.patient.model.rest.SettingsRequest;
 import com.ecarezone.android.patient.model.rest.SignupRequest;
+import com.ecarezone.android.patient.model.rest.UpdatePasswordRequest;
 import com.ecarezone.android.patient.model.rest.UpdateProfileRequest;
 import com.ecarezone.android.patient.model.rest.UploadImageResponse;
 import com.ecarezone.android.patient.model.rest.base.BaseRequest;
@@ -53,6 +54,9 @@ public interface EcareZoneApi {
 
     @POST("/forgot-password")
     LoginResponse forgetPassword(@Body ForgetPassRequest request);
+
+    @POST("/changePassword")
+    BaseResponse updatePassword(@Body UpdatePasswordRequest request);
 
     @POST("/signup")
     LoginResponse signup(@Body SignupRequest request);
