@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.fragment.CallFragment;
 import com.ecarezone.android.patient.fragment.VideoFragment;
 import com.ecarezone.android.patient.service.SinchService;
@@ -55,6 +56,7 @@ public class CallActivity extends EcareZoneBaseActivity {
                 PermissionUtil.setAllPermission(this, PermissionUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS
                         , PermissionUtil.SINCH_PERMISSIONS);
             } else {
+                userName = getIntent().getStringExtra(Constants.EXTRA_EMAIL);
                 establishOutgoingCall(userName);
             }
         } else {
@@ -119,6 +121,7 @@ public class CallActivity extends EcareZoneBaseActivity {
         switch (requestCode) {
             case PermissionUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
                 // Fill with results
+                perms.clear();
                 for (int i = 0; i < permissions.length; i++) {
                     perms.put(permissions[i], grantResults[i]);
                 }
@@ -156,4 +159,5 @@ public class CallActivity extends EcareZoneBaseActivity {
         SinchUtil.getSinchAudioPlayer().stopProgressTone();
         SinchUtil.getSinchAudioPlayer().stopRingtone();
     }
+
 }

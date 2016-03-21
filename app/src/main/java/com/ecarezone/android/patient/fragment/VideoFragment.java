@@ -81,7 +81,7 @@ public class VideoFragment extends EcareZoneBaseFragment implements View.OnClick
         bootomPanel.setVisibility(View.GONE);
         cameraPanel.setVisibility(View.GONE);
 
-        if (inComingvideoArguments != null) {
+        if (inComingvideoArguments.getString(SinchService.CALL_ID) != null) {
             mCallId = inComingvideoArguments.getString(SinchService.CALL_ID);
 
             incomingCallPanel = (LinearLayout) view.findViewById(R.id.incomingCallPanel);
