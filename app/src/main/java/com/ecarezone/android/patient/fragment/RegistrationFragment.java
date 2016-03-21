@@ -81,6 +81,7 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         mButtonRegister.setOnClickListener(this);
         mButtonRegister.setEnabled(false);
         mEditTextUsername = (EditText) view.findViewById(R.id.edit_text_registration_username);
+        mEditTextUsername.setCompoundDrawables(null,null,null,null);
         mEditTextUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -100,6 +101,7 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
             }
         });
         mEditTextPassword = (EditText) view.findViewById(R.id.edit_text_registration_password);
+        mEditTextPassword.setCompoundDrawables(null,null,null,null);
         mEditTextPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

@@ -1,88 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/mycare_doctors_container"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-              android:visibility="gone"
-           >
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/mycare_doctors_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="24dp"
-                android:text="@string/doctor_mycare_team"
-                android:textColor="@color/ecarezone_green_dark"
-                android:gravity="center"
-                android:textSize="22dp"
-                />
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <ListView
-                android:id="@+id/mycare_doctors_list"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="24dp"
+                    android:text="@string/doctor_mycare_team"
+                    android:textColor="@color/ecarezone_green_dark"
+                    android:textSize="22dp" />
+
+                <ListView
+                    android:id="@+id/mycare_doctors_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="14dp"
+                    android:padding="16dp" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/doctors_divider"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="16dp"
-                android:divider="@android:color/transparent"
-                android:fadeScrollbars="false"
-                android:dividerHeight="14dp"/>
+                android:layout_height="2dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@color/common_signin_btn_dark_text_disabled"
+                android:visibility="invisible" />
+
+            <LinearLayout
+                android:id="@+id/recommended_doctors_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="24dp"
+                    android:text="@string/doctor_recommended_doctors"
+                    android:textColor="@color/ecarezone_blue_dark"
+                    android:textSize="22dp" />
+
+                <ListView
+                    android:id="@+id/recommended_doctors_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="14dp"
+                    android:padding="16dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/doctors_divider"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:visibility="invisible"
-            android:background="@color/common_signin_btn_dark_text_disabled"/>
-
-        <LinearLayout
-            android:id="@+id/recommended_doctors_container"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="24dp"
-                android:text="@string/doctor_recommended_doctors"
-                android:textColor="@color/ecarezone_blue_dark"
-                android:gravity="center"
-                android:textSize="22dp"
-                />
-
-            <ListView
-                android:id="@+id/recommended_doctors_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="16dp"
-                android:fadeScrollbars="false"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="14dp"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
     </ScrollView>
-
 </FrameLayout>
 
 

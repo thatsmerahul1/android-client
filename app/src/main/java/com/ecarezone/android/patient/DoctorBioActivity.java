@@ -44,8 +44,8 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_doctor);
 
-        onNavigationChanged(R.layout.frag_doctor_bio, getIntent().getBundleExtra("doctorBioDetail"));
-        Log.i(TAG, "bio data = " + getIntent().getBundleExtra("doctorBioDetail"));
+        onNavigationChanged(R.layout.frag_doctor_bio, getIntent().getBundleExtra(Constants.DOCTOR_BIO_DETAIL));
+        Log.i(TAG, "bio data = " + getIntent().getBundleExtra(Constants.DOCTOR_BIO_DETAIL));
         mToolBar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);

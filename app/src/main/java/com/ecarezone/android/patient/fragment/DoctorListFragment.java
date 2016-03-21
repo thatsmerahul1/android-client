@@ -3,6 +3,7 @@ package com.ecarezone.android.patient.fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
@@ -12,11 +13,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.ecarezone.android.patient.DoctorActivity;
@@ -98,16 +102,6 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         searchEditFrame.setBackgroundResource(R.drawable.search_edittext_border);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
-                getText(R.string.progress_dialog_loading).toString());
-        checkProgress = true;
-        populateMyCareDoctorList();
-        populateRecommendedDoctorList();
-
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -125,10 +119,17 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         final View view = inflater.inflate(R.layout.frag_doctor_list_2, container, false);
 
         mycareDoctorListView = (ListView) view.findViewById(R.id.mycare_doctors_list);
+
         recommendedDoctorListView = (ListView) view.findViewById(R.id.recommended_doctors_list);
+
         mycareDoctorContainer = view.findViewById(R.id.mycare_doctors_container);
         recommendedDoctorContainer = view.findViewById(R.id.recommended_doctors_container);
         doctorsDivider = view.findViewById(R.id.doctors_divider);
+        checkProgress = true;
+        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
+                getText(R.string.progress_dialog_loading).toString());
+        populateMyCareDoctorList();
+        populateRecommendedDoctorList();
 
         return view;
     }
@@ -184,6 +185,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                 } else if (doctorList.size() > 0) {
                     mycareDoctorAdapter = new DoctorsAdapter(getActivity(), doctorList);
                     mycareDoctorListView.setAdapter(mycareDoctorAdapter);
+
                     mycareDoctorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -311,6 +313,8 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                         doctorsDivider.setVisibility(View.GONE);
                     }
                 }
+                Utility.setListViewHeightBasedOnChildren(mycareDoctorListView);
+                Utility.setListViewHeightBasedOnChildren(recommendedDoctorListView);
             } else {
                 Toast.makeText(getApplicationContext(), "Failed to get doctors: " + getRecommendedDoctorsResponse.status.message, Toast.LENGTH_LONG).show();
             }
@@ -336,4 +340,28 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
     }
 
 
+}
+
+class Utility {
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+
+        int totalHeight = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
 }

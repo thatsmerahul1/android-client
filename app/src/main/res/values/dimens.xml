@@ -10,5 +10,6 @@
 
     <dimen name="thumbnail_square_size">80dp</dimen>
     <dimen name="profile_thumbnail_edge_size">100dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>
