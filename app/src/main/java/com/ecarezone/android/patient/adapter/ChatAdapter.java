@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.Chat;
+import com.ecarezone.android.patient.model.database.ChatDbApi;
 import com.ecarezone.android.patient.model.rest.UploadImageResponse;
 import com.ecarezone.android.patient.utils.ImageUtil;
 import com.ecarezone.android.patient.utils.SinchUtil;
@@ -33,7 +35,7 @@ import java.util.List;
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public static final int DIRECTION_INCOMING = 0;
     public static final int DIRECTION_OUTGOING = 1;
-    private List<Pair<Chat, Integer>> mMessages;
+    private List<Chat> mMessages;
     private SimpleDateFormat mFormatter;
     private Context mContext;
 
@@ -52,18 +54,28 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
     }
 
-    public void addMessage(Chat message, int direction) {
-        mMessages.add(new Pair(message, direction));
+    public void addMessage(final Chat message) {
+        mMessages.add(message);
+        notifyDataSetChanged();
+    }
+
+    public void getChatHistory(String userName) {
+        mMessages = ChatDbApi.getInstance(mContext).getChatHistory(userName);
+        if (mMessages == null) {
+            mMessages = new ArrayList<Chat>();
+        }
+        ChatDbApi.getInstance(mContext).updateChatReadStatus(userName,ChatDbApi.CHAT_READ_STATUS);
+        Log.i("ChatAdapter", "size::" + mMessages.size());
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemViewType(int i) {
-        return mMessages.get(i).second;
+        return mMessages.get(i).getChatType().equals(ChatDbApi.CHAT_INCOMING) ? DIRECTION_INCOMING : DIRECTION_OUTGOING;
     }
 
     public ChatAdapter(Context context) {
-        mMessages = new ArrayList<Pair<Chat, Integer>>();
+        mMessages = new ArrayList<Chat>();
         mFormatter = new SimpleDateFormat("HH:mm");
         mContext = context;
     }
@@ -86,16 +98,30 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Chat chat = mMessages.get(position).first;
+        Chat chat = mMessages.get(position);
         String message = chat.getMessageText();
-        String name = chat.getSenderId();
+        String name = null;
+        String senderUserId;
+        if (chat.getChatType().equals(ChatDbApi.CHAT_OUTGOING)) {
+            name = "ME";
+            senderUserId = LoginInfo.userName;
+        } else {
+            name = chat.getChatUserId();
+            senderUserId = chat.getChatUserId();
+        }
         holder.mProgressBar.setVisibility(View.GONE);
 
-        if (chat.getSenderId().equals(LoginInfo.userName) &&
+        if (senderUserId.equals(LoginInfo.userName) &&
                 chat.getDeviceImagePath() != null) {
             holder.mChartImage.setVisibility(View.VISIBLE);
             holder.mChatText.setVisibility(View.GONE);
-            if (chat.getDiscImageFile() != null) {
+            if (!chat.isChatSending()) {
+                Picasso.with(mContext)
+                        .load("file://" + chat.getDeviceImagePath())
+                        .config(Bitmap.Config.RGB_565).fit()
+                        .centerCrop()
+                        .into(holder.mChartImage);
+            } else if (chat.getDiscImageFile() != null) {
                 Picasso.with(mContext)
                         .load(chat.getDiscImageFile())
                         .config(Bitmap.Config.RGB_565).fit()
@@ -162,7 +188,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
         @Override
         protected void onPostExecute(UploadImageResponse uploadImageResponse) {
-            SinchUtil.getSinchServiceInterface().sendMessage(chat.getReceiverId(), uploadImageResponse.data.avatarUrl);
+            SinchUtil.getSinchServiceInterface().sendMessage(chat.getChatUserId(), uploadImageResponse.data.avatarUrl);
         }
     }
 

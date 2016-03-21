@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.fragment.DoctorListFragment;
 import com.ecarezone.android.patient.fragment.FirstTimeUserProfileFragment;
@@ -34,6 +35,8 @@ public class MainActivity extends EcareZoneBaseActivity {
     private ActionBarDrawerToggle mDrawerToggle = null;
     private Toolbar mToolBar = null;
     private ActionBar mActionBar = null;
+    private boolean isBackStackRequired;
+    private boolean isWelcomeMainRequired;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,7 @@ public class MainActivity extends EcareZoneBaseActivity {
         mActionBar = getSupportActionBar();
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setTitle(Constants.ECARE_ZONE);
 
         /* queries the db and checks whether to show welcome screen or to show home screen.
            Check is based on whether the user has created a profile or not. */
@@ -92,6 +96,7 @@ public class MainActivity extends EcareZoneBaseActivity {
                 } else {
                     onNavigationChanged(R.layout.frag_welcome, null);
                 }
+                isWelcomeMainRequired = aBoolean;
                 super.onPostExecute(aBoolean);
             }
         }.execute();
@@ -132,7 +137,13 @@ public class MainActivity extends EcareZoneBaseActivity {
                 return;
             }
         }
-        super.onBackPressed();
+        if (isBackStackRequired) {
+            onNavigationChanged(isWelcomeMainRequired ? R.layout.frag_patient_main : R.layout.frag_welcome, null);
+            isBackStackRequired = false;
+        } else {
+            super.onBackPressed();
+        }
+
     }
 
     @Override
@@ -146,25 +157,33 @@ public class MainActivity extends EcareZoneBaseActivity {
         if (fragmentLayoutResId < 0) return;
         if (fragmentLayoutResId == R.layout.frag_patient_main) {
             changeFragment(R.id.screen_container, new PatientFragment(),
-                    getString(R.string.main_side_menu_home), args);
+                    getString(R.string.main_side_menu_home), args, false);
+            isBackStackRequired = false;
+            isWelcomeMainRequired = true;
         } else if (fragmentLayoutResId == R.layout.frag_welcome) {
             changeFragment(R.id.screen_container, new WelcomeFragment(),
-                    WelcomeFragment.class.getSimpleName(), args);
+                    WelcomeFragment.class.getSimpleName(), args, false);
+            isBackStackRequired = false;
         } else if (fragmentLayoutResId == R.layout.frag_news_categories) {
             changeFragment(R.id.screen_container, new NewsCategoriesFragment(),
-                    getString(R.string.main_side_menu_news), args);
+                    getString(R.string.main_side_menu_news), args, false);
+            isBackStackRequired = true;
         } else if (fragmentLayoutResId == R.layout.frag_doctor_list) {
             changeFragment(R.id.screen_container, new DoctorListFragment(),
-                    getString(R.string.main_side_menu_doctors), args);
+                    getString(R.string.main_side_menu_doctors), args, false);
+            isBackStackRequired = true;
         } else if (fragmentLayoutResId == R.layout.frag_settings) {
             changeFragment(R.id.screen_container, new SettingsFragment(),
-                    getString(R.string.main_side_menu_settings), args);
+                    getString(R.string.main_side_menu_settings), args, false);
+            isBackStackRequired = true;
         } else if (fragmentLayoutResId == R.layout.list_view) {
             changeFragment(R.id.screen_container, new UserProfileFragment(),
-                    UserProfileFragment.class.getSimpleName(), args);
+                    UserProfileFragment.class.getSimpleName(), args, false);
+            isBackStackRequired = true;
         } else if (fragmentLayoutResId == R.layout.frag_first_time_profile) {
             changeFragment(R.id.screen_container, new FirstTimeUserProfileFragment(),
-                    FirstTimeUserProfileFragment.class.getSimpleName(), args);
+                    FirstTimeUserProfileFragment.class.getSimpleName(), args, false);
+            isBackStackRequired = true;
         }
 
         if (mDrawerLayout != null) {
@@ -194,5 +213,4 @@ public class MainActivity extends EcareZoneBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 }

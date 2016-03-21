@@ -34,12 +34,13 @@ public class NewsListFragment extends EcareZoneBaseFragment implements AdapterVi
 
         Bundle bundle = getArguments();
         mNews = bundle.getParcelableArrayList(NewsCategoriesFragment.NEWS_PARCELABLE);
+        String categoryName = bundle.getString(NewsCategoriesFragment.NEWS_CATEGORY_NAME);
 
         listView.setAdapter(new NewsListAdapter(getApplicationContext(), mNews));
         listView.setOnItemClickListener(this);
 
         ((NewsListActivity) getActivity()).getSupportActionBar()
-                .setTitle(getResources().getText(R.string.news_actionbar_title));
+                .setTitle(categoryName);
         return view;
     }
 

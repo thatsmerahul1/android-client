@@ -26,6 +26,7 @@ import com.ecarezone.android.patient.adapter.ChatAdapter;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.Chat;
+import com.ecarezone.android.patient.model.database.ChatDbApi;
 import com.ecarezone.android.patient.utils.ImageUtil;
 import com.ecarezone.android.patient.utils.SinchUtil;
 import com.sinch.android.rtc.PushPair;
@@ -96,6 +97,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         cameraBtn.setOnClickListener(this);
         getActivity().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        chatAdapter.getChatHistory(recipient);
     }
 
     @Override
@@ -116,10 +118,10 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
 
     @Override
     public void onIncomingMessage(MessageClient messageClient, Message message) {
-        /*if (!message.getRecipientIds().get(0).equals(recipient)) {
+        if (!message.getRecipientIds().get(0).equals(recipient)) {
             return;
-        }*/
-        chatAdapter.addMessage(incomingMessage(message), ChatAdapter.DIRECTION_INCOMING);
+        }
+        chatAdapter.addMessage(incomingMessage(message));
         chatList.smoothScrollToPosition(chatAdapter.getItemCount() - 1);
     }
 
@@ -159,10 +161,11 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
             return;
         }
 
-        chat.setReceiverId(recipient);
-        chat.setSenderId(LoginInfo.userName);
+        chat.setChatUserId(recipient);
         chatBox.setText("");
         chat.setTimeStamp(new Date());
+        chat.setChatType(ChatDbApi.CHAT_OUTGOING);
+        chat.setReadStatus(ChatDbApi.CHAT_READ_STATUS);
 
         try {
             if (messageType.equals(CHAT_IMAGE)) {
@@ -174,23 +177,28 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         } catch (Exception e) {
             e.printStackTrace();
         }
-        chatAdapter.addMessage(chat, ChatAdapter.DIRECTION_OUTGOING);
+        chat.setIsChatSending(true);
+        chatAdapter.addMessage(chat);
         chatList.smoothScrollToPosition(chatAdapter.getItemCount() - 1);
+        new Thread() {
+            @Override
+            public void run() {
+                ChatDbApi.getInstance(getApplicationContext()).saveChat(chat);
+            }
+        }.start();
     }
 
     private Chat incomingMessage(Message message) {
         chat = new Chat();
-        chat.setReceiverId(message.getRecipientIds().get(0));
-        chat.setSenderId(message.getSenderId());
-
+        chat.setChatUserId(message.getSenderId());
         if (message.getTextBody().contains(Constants.ENDPOINTURL)) {
             chat.setInComingImageUrl(message.getTextBody());
         } else {
             chat.setMessageText(message.getTextBody());
         }
         chat.setTimeStamp(message.getTimestamp());
+        chat.setChatType(ChatDbApi.CHAT_INCOMING);
         chatBox.setText("");
-        message.getMessageId();
 
         return chat;
     }
@@ -204,4 +212,5 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
             sendMessage("", CHAT_IMAGE);
         }
     }
+
 }

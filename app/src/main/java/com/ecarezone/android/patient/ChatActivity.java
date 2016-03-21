@@ -76,4 +76,10 @@ public class ChatActivity extends EcareZoneBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         chatFragment.onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+    }
 }

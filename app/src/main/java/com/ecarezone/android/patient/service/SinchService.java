@@ -15,6 +15,10 @@ import android.util.Log;
 import com.ecarezone.android.patient.CallActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.VideoActivity;
+import com.ecarezone.android.patient.config.Constants;
+import com.ecarezone.android.patient.model.Chat;
+import com.ecarezone.android.patient.model.database.ChatDbApi;
+import com.ecarezone.android.patient.utils.SinchUtil;
 import com.sinch.android.rtc.AudioController;
 import com.sinch.android.rtc.ClientRegistration;
 import com.sinch.android.rtc.NotificationResult;
@@ -42,11 +46,11 @@ import java.util.List;
  * Created by L&T Technology Services.
  */
 
-public class SinchService extends Service{
+public class SinchService extends Service {
 
-    private static final String APP_KEY = "f992c69a-da68-4ae8-abcd-f81111f9b994";
-    private static final String APP_SECRET = "g96jWxKe/USsur3X3e2xXw==";
-    private static final String ENVIRONMENT = "sandbox.sinch.com";
+    private static final String APP_KEY = "6b84d17d-1cd8-4570-b29a-3783a1ba76e9";
+    private static final String APP_SECRET = "Qr+7+SDyUkmTYpCGicC96w==";
+    private static final String ENVIRONMENT = "clientapi.sinch.com";
 
     public static final String CALL_ID = "CALL_ID";
     public static final String INCOMING_CALL_USER = "INCOMING_CALL_USER";
@@ -55,7 +59,7 @@ public class SinchService extends Service{
     private SinchServiceInterface mSinchServiceInterface = new SinchServiceInterface();
     private SinchClient mSinchClient;
     private String mUserId;
-    private static ArrayList<MessageClientListener> messageClientList ;
+    private static ArrayList<MessageClientListener> messageClientList;
 
     private StartFailedListener mListener;
     private PersistedSettings mSettings;
@@ -75,6 +79,7 @@ public class SinchService extends Service{
         }
         super.onDestroy();
     }
+
     /*Start the sinch client by passing username*/
     private void start(String userName) {
         if (mSinchClient == null) {
@@ -83,10 +88,11 @@ public class SinchService extends Service{
             mSinchClient.start();
         }
     }
+
     /*create sinch client by passing proper username which will be unique
     * @param username
     * */
-    private void createClient(String userName){
+    private void createClient(String userName) {
         mUserId = userName;
         mSinchClient = Sinch.getSinchClientBuilder().context(getApplicationContext()).userId(userName)
                 .applicationKey(APP_KEY)
@@ -112,6 +118,7 @@ public class SinchService extends Service{
             mSinchClient = null;
         }
     }
+
     /*Sinch started or not before you start the client again*/
     private boolean isStarted() {
         return (mSinchClient != null && mSinchClient.isStarted());
@@ -119,17 +126,19 @@ public class SinchService extends Service{
 
     public void sendMessage(String recipientUserId, String textBody) {
         if (isStarted()) {
-            Log.i("sendMessage","isStarted::"+recipientUserId);
+            Log.i("sendMessage", "isStarted::" + recipientUserId);
             WritableMessage message = new WritableMessage(recipientUserId, textBody);
             mSinchClient.getMessageClient().send(message);
         }
     }
+
     /*Listner to listen all the incoming and outgoing messages*/
     public void addMessageClientListener(MessageClientListener listener) {
         if (mSinchClient != null) {
             registerMessageListner(listener);
         }
     }
+
     /*Remove all the message listner before destroying your activity*/
     public void removeMessageClientListener(MessageClientListener listener) {
         if (mSinchClient != null) {
@@ -148,6 +157,7 @@ public class SinchService extends Service{
         public Call callUserVideo(String userId) {
             return mSinchClient.getCallClient().callUserVideo(userId);
         }
+
         public Call callUser(String userId) {
             if (mSinchClient == null) {
                 return null;
@@ -194,7 +204,7 @@ public class SinchService extends Service{
         }
 
         public void sendMessage(String recipientUserId, String textBody) {
-            Log.i(TAG,"sendMessage::"+recipientUserId);
+            Log.i(TAG, "sendMessage::" + recipientUserId);
             SinchService.this.sendMessage(recipientUserId, textBody);
         }
 
@@ -216,15 +226,16 @@ public class SinchService extends Service{
             return mSinchClient.relayRemotePushNotificationPayload(intent);
         }
 
-        public boolean isMessageNotifcationRequired(){
-            if(messageClientList.size() == 0){
+        public boolean isMessageNotifcationRequired() {
+            if (messageClientList.size() == 0) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }
 
     }
+
     /*SInch client start and failed listner*/
     public interface StartFailedListener {
 
@@ -283,16 +294,17 @@ public class SinchService extends Service{
                                                       ClientRegistration clientRegistration) {
         }
     }
+
     /* Sinch call Listner for all incoming call*/
     private class SinchCallClientListener implements CallClientListener {
 
         @Override
         public void onIncomingCall(CallClient callClient, Call call) {
             Log.d(TAG, "Incoming call");
-            Intent intent = null ;
-            if(call.getDetails().isVideoOffered()) {
+            Intent intent = null;
+            if (call.getDetails().isVideoOffered()) {
                 intent = new Intent(SinchService.this, VideoActivity.class);
-            }else{
+            } else {
                 intent = new Intent(SinchService.this, CallActivity.class);
             }
             intent.putExtra(CALL_ID, call.getCallId());
@@ -301,13 +313,15 @@ public class SinchService extends Service{
             SinchService.this.startActivity(intent);
         }
     }
+
     /* Message Listner for all incoming and outgoing messages */
     private class MessageListner implements MessageClientListener {
         @Override
         public void onIncomingMessage(MessageClient messageClient, Message message) {
 
-            Log.i("inside listner","mesaage incoming");
-            if(mSinchServiceInterface.isMessageNotifcationRequired()){
+            Log.i("inside listner", "mesaage incoming");
+            SinchUtil.saveIncomingChatHistory(message, getApplicationContext());
+            if (mSinchServiceInterface.isMessageNotifcationRequired()) {
                 showNotification(message);
             }
             for (MessageClientListener messageClientListener : messageClientList) {
@@ -365,19 +379,22 @@ public class SinchService extends Service{
             editor.commit();
         }
     }
+
     /*Registering all the MessageClientListner whom want to listen the message*/
-    public static void registerMessageListner(MessageClientListener messageClientListener){
+    public static void registerMessageListner(MessageClientListener messageClientListener) {
         messageClientList.add(messageClientListener);
     }
+
     /*UnRegistering all the MessageClientListner whom want to listen the message*/
-    public static void unRegisterMessageListner(MessageClientListener messageClientListener){
+    public static void unRegisterMessageListner(MessageClientListener messageClientListener) {
         messageClientList.remove(messageClientListener);
     }
+
     /*Show the notfication while the user is offline*/
-    private void showNotification(Message message){
+    private void showNotification(Message message) {
         int notifyID = 1;
         NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(this)
-                .setContentTitle("Message from "+message.getSenderId())
+                .setContentTitle("Message from " + message.getSenderId())
                 .setContentText("You've received new messages.")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setDefaults(Notification.DEFAULT_SOUND)

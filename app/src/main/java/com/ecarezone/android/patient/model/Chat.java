@@ -1,29 +1,72 @@
 package com.ecarezone.android.patient.model;
 
+import android.renderscript.Element;
+
+import com.google.gson.annotations.Expose;
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
+
 import java.io.File;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by L&T Technology Services
  */
-public class Chat {
-    private String chatId;
+public class Chat implements Serializable {
+    @Expose
+    @DatabaseField(canBeNull = false)
+    private String chatUserId;
+
+    @Expose
+    @DatabaseField(canBeNull = true)
     private String outGoingImageUrl;
+
+    @Expose
+    @DatabaseField(canBeNull = true)
     private String inComingImageUrl;
+
+    @Expose
+    @DatabaseField(canBeNull = true)
     private String deviceImagePath;
-    private String senderId;
-    private String receiverId;
+
+    @Expose
+    @DatabaseField(canBeNull = true)
     private String messageText;
+
+    @Expose
+    @DatabaseField(canBeNull = true, dataType = DataType.DATE_STRING,
+            format = "yyyy-MM-dd HH:mm:ss")
     private Date timeStamp;
 
-    private File discImageFile;
+    @Expose
+    @DatabaseField(canBeNull = true)
+    private String readStatus;
 
-    public String getChatId() {
-        return chatId;
+    @Expose
+    @DatabaseField(canBeNull = true)
+    private String deliveryStatus;
+
+    @Expose
+    @DatabaseField(canBeNull = true)
+    private String chatType;
+
+    private File discImageFile;
+    private String senderId;
+    private String receiverId;
+    private boolean isChatSending;
+
+
+    public Chat() {
+
     }
 
-    public void setChatId(String chatId) {
-        this.chatId = chatId;
+    public boolean isChatSending() {
+        return isChatSending;
+    }
+
+    public void setIsChatSending(boolean isChatSending) {
+        this.isChatSending = isChatSending;
     }
 
     public Date getTimeStamp() {
@@ -88,5 +131,37 @@ public class Chat {
 
     public void setDiscImageFile(File discImageFile) {
         this.discImageFile = discImageFile;
+    }
+
+    public String getReadStatus() {
+        return readStatus;
+    }
+
+    public void setReadStatus(String readStatus) {
+        this.readStatus = readStatus;
+    }
+
+    public String getChatUserId() {
+        return chatUserId;
+    }
+
+    public void setChatUserId(String chatUserId) {
+        this.chatUserId = chatUserId;
+    }
+
+    public String getDeliveryStatus() {
+        return deliveryStatus;
+    }
+
+    public void setDeliveryStatus(String deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+    }
+
+    public String getChatType() {
+        return chatType;
+    }
+
+    public void setChatType(String chartType) {
+        this.chatType = chartType;
     }
 }

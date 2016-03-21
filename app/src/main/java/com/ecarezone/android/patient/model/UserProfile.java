@@ -45,11 +45,13 @@ public class UserProfile implements Serializable {
     @Expose
     @DatabaseField
     public String birthdate;
+    @DatabaseField
+    public boolean isComplete;
 
     public UserProfile() {
     }
 
     public String toString() {
-        return profileName + " " + email + " " + height + " " + name + " " + address + " " + weight + " " + avatarUrl + " " + profileId + " " + ethnicity + " " + gender + " " + birthdate;
+        return profileName + " " + email + " " + height + " " + name + " " + address + " " + weight + " " + avatarUrl + " " + profileId + " " + ethnicity + " " + gender + " " + birthdate + " " + isComplete;
     }
 }

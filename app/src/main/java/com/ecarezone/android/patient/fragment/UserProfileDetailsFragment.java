@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ import com.ecarezone.android.patient.model.rest.base.BaseResponse;
 import com.ecarezone.android.patient.utils.EcareZoneLog;
 import com.ecarezone.android.patient.utils.ImageUtil;
 import com.ecarezone.android.patient.utils.MD5Util;
+import com.ecarezone.android.patient.utils.PermissionUtil;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -160,7 +162,6 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         if (imageUrl != null && imageUrl.trim().length() > 8) {
             Picasso.with(getApplicationContext())
                     .load(imageUrl)
-                    .fit()
                     .placeholder(R.drawable.news_other)
                     .error(R.drawable.news_other)
                     .into(profileImageButton);
@@ -341,10 +342,31 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         new AlertDialog.Builder(getActivity())
                 .setItems(R.array.photo_options, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+
                         if (which == 1) {
-                            mSelectedPhotoPath = ImageUtil.dispatchTakePictureIntent(getActivity());
+                            if (PermissionUtil.isPermissionRequired()
+                                    && PermissionUtil.getAllpermissionRequired(getActivity(),
+                                    PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS).length > 0) {
+
+                                PermissionUtil.setAllPermission(getActivity(),
+                                        PermissionUtil.REQUEST_CODE_ASK_CAPTURE_PHOTO_PERMISSIONS,
+                                        PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS);
+                            } else {
+                                // already have all permissions
+                                mSelectedPhotoPath = ImageUtil.dispatchTakePictureIntent(getActivity());
+                            }
                         } else {
-                            dispatchSelectFromGalleryIntent();
+                            if (PermissionUtil.isPermissionRequired()
+                                    && PermissionUtil.getAllpermissionRequired(getActivity(),
+                                    PermissionUtil.WRITE_EXTERNAL_STORAGE_PERMISSIONS).length > 0) {
+
+                                PermissionUtil.setAllPermission(getActivity(),
+                                        PermissionUtil.REQUEST_CODE_ASK_WRITE_EXTERNAL_STORAGE_PERMISSIONS,
+                                        PermissionUtil.WRITE_EXTERNAL_STORAGE_PERMISSIONS);
+                            } else {
+                                // already have all permissions
+                                dispatchSelectFromGalleryIntent();
+                            }
                         }
                     }
                 })
@@ -471,6 +493,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             profile.weight = response.weight;
             profile.avatarUrl = response.avatarUrl;
             profile.profileId = response.profileId;
+            profile.ethnicity = response.ethnicity;
             profile.gender = response.gender;
             profile.birthdate = response.birthdate;
             return profile;
@@ -522,6 +545,27 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         public void onDateSet(DatePicker view, int year, int month, int day) {
             StringBuilder dateSb = new StringBuilder().append(year).append("-").append(month + 1).append("-").append(day);
             setDateToDobField(dateSb.toString());
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // if any of the permission is not granted. do not process anything. just return.
+        for (int isGranted : grantResults) {
+            if (isGranted == PackageManager.PERMISSION_DENIED) {
+                return;
+            }
+        }
+
+        switch (requestCode) {
+            case PermissionUtil.REQUEST_CODE_ASK_WRITE_EXTERNAL_STORAGE_PERMISSIONS:
+                dispatchSelectFromGalleryIntent();
+                break;
+            case PermissionUtil.REQUEST_CODE_ASK_CAPTURE_PHOTO_PERMISSIONS:
+                mSelectedPhotoPath = ImageUtil.dispatchTakePictureIntent(getActivity());
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 }

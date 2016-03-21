@@ -70,4 +70,9 @@ public class ProfileDetailsActivity extends EcareZoneBaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         userProfileDetailsFragment.onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        userProfileDetailsFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 }

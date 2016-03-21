@@ -30,6 +30,7 @@ public class NewsCategoriesFragment extends EcareZoneBaseFragment implements Gri
 
     public static String NEWS_PARCELABLE = "news";
     public static String NEWS_BUNDLE = "newsBundle";
+    public static String NEWS_CATEGORY_NAME = "newsCategoryName";
 
     private GetNewsResponse mGetNewsResonse = null;
     private GridView mGridView;
@@ -68,9 +69,10 @@ public class NewsCategoriesFragment extends EcareZoneBaseFragment implements Gri
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ArrayList<News> newsList = (ArrayList<News>) mGetNewsResonse.data[position].newsAbstractList;
-        // Add the news list to the bundle and pass it to the intent
+        // Add the news list & its category name to the bundle and pass it to the intent
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(NEWS_PARCELABLE, newsList);
+        bundle.putString(NEWS_CATEGORY_NAME, mGetNewsResonse.data[position].newsCategory);
 
         startActivity(new Intent(getApplicationContext(), NewsListActivity.class).putExtra(NEWS_BUNDLE, bundle));
     }

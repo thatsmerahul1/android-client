@@ -3,6 +3,7 @@ package com.ecarezone.android.patient.model.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.ecarezone.android.patient.model.Chat;
 import com.ecarezone.android.patient.model.User;
 import com.ecarezone.android.patient.model.UserProfile;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
@@ -24,6 +25,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
     private Context mContext;
     private Dao<UserProfile, Integer> mProfileDao = null;
     private Dao<User, Integer> mUserDao = null;
+    private Dao<Chat, Integer> mChatDao = null;
 
     private static final String SQL_DELETE_PROFILES =
             "DELETE FROM " + DbContract.Profiles.TABLE_NAME;
@@ -39,6 +41,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
         try {
             TableUtils.createTable(connectionSource, UserProfile.class);
             TableUtils.createTable(connectionSource, User.class);
+            TableUtils.createTable(connectionSource, Chat.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -50,6 +53,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
         try {
             TableUtils.dropTable(connectionSource, UserProfile.class, true);
             TableUtils.dropTable(connectionSource, User.class, true);
+            TableUtils.dropTable(connectionSource, Chat.class, true);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -70,6 +74,14 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
             mUserDao = getDao(User.class);
         }
         return mUserDao;
+    }
+
+    // Chat data-access-object(Dao).
+    public Dao<Chat, Integer> getChatDao() throws SQLException {
+        if (mChatDao == null) {
+            mChatDao = getDao(Chat.class);
+        }
+        return mChatDao;
     }
 
     @Override
