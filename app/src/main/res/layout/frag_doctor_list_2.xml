@@ -10,7 +10,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+           >
 
             <LinearLayout
                 android:id="@+id/mycare_doctors_container"
@@ -34,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:divider="@android:color/transparent"
                     android:dividerHeight="14dp"
-                    android:padding="16dp" />
+                    />
 
             </LinearLayout>
 
@@ -44,6 +45,7 @@
                 android:layout_height="2dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
                 android:background="@color/common_signin_btn_dark_text_disabled"
                 android:visibility="invisible" />
 

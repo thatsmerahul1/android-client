@@ -15,7 +15,7 @@
     <string name="registration_password">@string/login_password</string>
     <string name="registration_country">Country:</string>
     <string name="registration_create_account">@string/login_create_account</string>
-    <string name="registration_agreement">You agree the terms and privacy police</string>
+    <string name="registration_agreement">You agree the terms and privacy policy</string>
 
     <!-- side menu  -->
     <string name="main_profile_title">Profile</string>

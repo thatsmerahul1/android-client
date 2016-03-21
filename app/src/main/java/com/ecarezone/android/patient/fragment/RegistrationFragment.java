@@ -331,8 +331,9 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                             if (!SinchUtil.getSinchServiceInterface().isStarted()) {
                                 SinchUtil.getSinchServiceInterface().startClient(LoginInfo.userName);
                             }
-
+                            clearFields();
                             invokeNavigationChanged(R.layout.frag_login, null);
+
                         }
                     });
                 }
@@ -346,6 +347,18 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
             }
             progressDialog.dismiss();
         }
+    }
+
+    private void clearFields() {
+        mEditTextPassword.setText("");
+        mEditTextUsername.setText("");
+        mSpinnerCountry.setText("");
+        mSpinnerLanguage.setText("");
+        //English selected as a default language
+        mSpinnerLanguage.setText(R.string.language_english);
+        mSpinnerLanguage.setTag(getResources().getString(R.string.language_local_english));
+
+
     }
 
 }
