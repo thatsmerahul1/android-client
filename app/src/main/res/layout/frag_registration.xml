@@ -30,15 +30,14 @@
         android:paddingRight="10dp"
         android:inputType="textEmailAddress"
         android:hint="@string/registration_username"
-        android:drawableRight="@drawable/arrow_right"
-        />
+        android:drawableRight="@drawable/arrow_right" />
 
 
     <EditText
         android:id="@+id/edit_text_registration_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:inputType="textPassword"
         android:paddingRight="10dp"
         android:drawableRight="@drawable/arrow_right"
@@ -47,10 +46,9 @@
 
     <EditText
         android:id="@+id/country_spinner"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/spinnerCustomStyle"
         android:hint="@string/settings_country"
         android:focusable="false"
 
@@ -58,11 +56,11 @@
 
     <EditText
         android:id="@+id/spinner_language"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/settings_language"
-        style="@style/spinnerCustomStyle"
+
         android:focusable="false"
 
         />

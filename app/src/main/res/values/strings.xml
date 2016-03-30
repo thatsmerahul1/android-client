@@ -130,7 +130,7 @@
     <string name="doctor_add_my_care_team">ADD TO MY CARE-TEAM</string>
     <string name="doctor_bio">Doctor bio</string>
     <string name="doctor_mycare_team">My Care-team</string>
-    <string name="doctor_add_request_success">your request has been sent to\nDr. %1$s</string>
+    <string name="doctor_add_request_success">Your request has been sent to\nDr. %1$s</string>
 
     <!-- Appointment -->
     <string name="doctor_appointment">Make an appointment</string>
@@ -145,7 +145,7 @@
     <!-- Doctor details -->
     <string name="doctor_details_chat">Chat</string>
     <string name="doctor_details_video">Video call</string>
-    <string name="doctor_details_voice">Voice</string>
+    <string name="doctor_details_voice">VoIP</string>
     <string name="doctor_details_chat_history">CHAT HISTORY</string>
 
     <!-- Video chat details -->
@@ -160,7 +160,7 @@
     <string name="error_user_registration">@string/error_user_login</string>
 
     <string name="cancel">Cancel</string>
-    <string name="welcome_button_send">send</string>
+    <string name="welcome_button_send">SEND</string>
 
     <!-- dialog options for Gender in profile page -->
     <string-array name="gender">
@@ -176,11 +176,11 @@
 
     <string name="reset_password_email_hint">Enter Your Email</string>
     <string name="reset_password">Reset password</string>
-    <string name="reset_password_notification">Your new password will be sent \nto by email</string>
+    <string name="reset_password_notification">New password will be sent to your \nregistered email address</string>
     <string name="reset_password_error">Your email account is incorrect. Please try \n in if you are register user</string>
     <string name="title_activity_forget_password">ForgetPasswordActivity</string>
 
-    <string name="gallery_chooser_select_picture">Select photo</string>
+    <string name="gallery_chooser_select_picture">Choose from gallery</string>
 
     //Update Password
     <string name="current_password">Current Password</string>

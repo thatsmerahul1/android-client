@@ -353,6 +353,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                                         PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS);
                             } else {
                                 // already have all permissions
+
                                 mSelectedPhotoPath = ImageUtil.dispatchTakePictureIntent(getActivity());
                             }
                         } else {

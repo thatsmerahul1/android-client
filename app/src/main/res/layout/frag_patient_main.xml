@@ -43,6 +43,7 @@
                     android:gravity="center"
                     android:paddingBottom="1dp"
                     android:text="2"
+                    android:visibility="invisible"
                     android:textColor="@android:color/white"
                     android:textSize="18sp" />
 

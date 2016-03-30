@@ -44,6 +44,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginRight="10dp"
                 android:background="@android:color/white" />
 
             <com.ecarezone.android.patient.app.widget.NavigationItem
@@ -61,6 +62,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
+                    android:layout_marginRight="10dp"
                     android:background="@drawable/navigation_item_color_selector" />
 
                 <CheckBox
@@ -114,6 +116,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
+                    android:layout_marginRight="10dp"
                     android:background="@drawable/navigation_item_color_selector" />
 
                 <CheckBox
@@ -330,6 +333,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
+                    android:layout_marginRight="10dp"
                     android:background="@drawable/navigation_item_color_selector" />
 
                 <CheckBox
@@ -372,7 +376,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/white" />
+                android:background="@android:color/white"
+                android:layout_marginRight="10dp" />
 
             <com.ecarezone.android.patient.app.widget.NavigationItem
                 android:id="@+id/navigation_settings"
@@ -389,6 +394,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/navigation_item_color_selector" />
 
                 <CheckBox

@@ -195,7 +195,7 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
         LoginRequest request =
                 new LoginRequest(username, hashedPassword, 1, Constants.API_KEY, Constants.deviceUnique, locationFinder.getLatitude(), locationFinder.getLongitude());
         final LoginResponse response = new LoginResponse();
-        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Logging ........");
+        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Logging in........");
         getSpiceManager().execute(request, new LoginRequestListener());
 
     }

@@ -3,6 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+
     android:weightSum="1">
     <TextView
         android:id="@+id/textview_title"
@@ -16,8 +17,10 @@
         android:gravity="center"/>
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/background_dark" />
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_height="1.5dp"
+        android:background="@color/ecarezone_gray" />
     <ListView
         android:id="@+id/lisview_registration"
         android:layout_width="match_parent"
