@@ -7,8 +7,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -149,6 +151,15 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         mSpinnerLanguage.setOnClickListener(this);
         mCheckBoxTerms = (CheckBox) view.findViewById(R.id.checkbox_registration_terms);
         mCheckBoxTerms.setOnCheckedChangeListener(this);
+
+        String txt = "<HTML>"+getString(R.string.registration_agreement_you_agree)+
+                " <b><a href=\"http://google.com\">"+getString(R.string.terms)+"</a></b> " +getString(R.string.and)+"<b>" +
+                " <a href=\"http://google.com\">"+getString(R.string.privacy_policy)+"</a></b></HTML>";
+
+        mCheckBoxTerms.setText(Html.fromHtml(txt));
+        mCheckBoxTerms.setMovementMethod(LinkMovementMethod.getInstance());
+
+
         return view;
     }
 

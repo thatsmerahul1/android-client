@@ -9,6 +9,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -60,6 +61,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
     View doctorsDivider;
     private ProgressDialog progressDialog;
     private boolean checkProgress;
+    private float padding = 16;
 
     @Override
     protected String getCallerName() {
@@ -121,6 +123,8 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         mycareDoctorListView = (ListView) view.findViewById(R.id.mycare_doctors_list);
 
         recommendedDoctorListView = (ListView) view.findViewById(R.id.recommended_doctors_list);
+
+        padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, getResources().getDisplayMetrics());
 
         mycareDoctorContainer = view.findViewById(R.id.mycare_doctors_container);
         recommendedDoctorContainer = view.findViewById(R.id.recommended_doctors_container);
@@ -192,6 +196,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                             Log.i(TAG, "position = " + position);
                             Bundle data = new Bundle();
                             data.putParcelable(Constants.DOCTOR_DETAIL, doctorList.get(position));
+                            data.putBoolean(Constants.DOCTOR_ALEADY_ADDED, true);
                             final Activity activity = getActivity();
                             if (activity != null) {
                                 Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorActivity.class);
@@ -276,12 +281,13 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                                                                              final Activity activity = getActivity();
                                                                              if (activity != null) {
                                                                                  Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorActivity.class);
-                                                                                 showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
+
                                                                                  if (checkDocotorExist(position)) {
-                                                                                     showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
+                                                                                     data.putBoolean(ADD_DOCTOR_DISABLE_CHECK, true);
                                                                                  } else {
-                                                                                     showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, false);
+                                                                                     data.putBoolean(ADD_DOCTOR_DISABLE_CHECK, false);
                                                                                  }
+                                                                                 showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
                                                                                  activity.startActivity(showDoctorIntent);
                                                                                  activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                                                                              }
@@ -313,8 +319,8 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                         doctorsDivider.setVisibility(View.GONE);
                     }
                 }
-                Utility.setListViewHeightBasedOnChildren(mycareDoctorListView);
-                Utility.setListViewHeightBasedOnChildren(recommendedDoctorListView);
+                Utility.setListViewHeightBasedOnChildren(mycareDoctorListView, padding);
+                Utility.setListViewHeightBasedOnChildren(recommendedDoctorListView, padding);
             } else {
                 Toast.makeText(getApplicationContext(), "Failed to get doctors: " + getRecommendedDoctorsResponse.status.message, Toast.LENGTH_LONG).show();
             }
@@ -344,7 +350,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
 
 class Utility {
 
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
+    public static void setListViewHeightBasedOnChildren(ListView listView, float padding) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
             // pre-condition
@@ -352,12 +358,14 @@ class Utility {
         }
 
         int totalHeight = 0;
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
         for (int i = 0; i < listAdapter.getCount(); i++) {
             View listItem = listAdapter.getView(i, null, listView);
             listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
             totalHeight += listItem.getMeasuredHeight();
         }
+
+        totalHeight += padding;//for padding at the bottom
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));

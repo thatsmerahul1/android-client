@@ -57,6 +57,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     private Activity mActivity;
     private int viewId;
     private ProgressDialog progressDialog;
+    private boolean showAddDoctorOption;
 
     @Override
     public void onAttach(Activity activity) {
@@ -75,6 +76,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
         doctorDetailData = getArguments();
         doctor = doctorDetailData.getParcelable(Constants.DOCTOR_DETAIL);
+        showAddDoctorOption = doctorDetailData.getBoolean(DoctorListFragment.ADD_DOCTOR_DISABLE_CHECK, false);
         getAllComponent(view, doctor);
         return view;
     }
@@ -97,13 +99,19 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         addDoctorButton.setOnClickListener(this);
         buttonAppointment.setOnClickListener(this);
 
-        if (getActivity().getIntent().getBooleanExtra(DoctorListFragment.ADD_DOCTOR_DISABLE_CHECK, false)) {
+        if (!showAddDoctorOption) {
             addDoctorButton.setVisibility(View.GONE);
         }
 
         if (doctor != null) {
             setDoctorPresenceIcon(doctor.status);
-            doctorStatusText.setText(doctor.status);
+            if(doctor.status.equalsIgnoreCase("1")) {
+                doctorStatusText.setText(R.string.doctor_available);
+            }
+            else{
+                doctorStatusText.setText(R.string.doctor_busy);
+            }
+
             doctorNameView.setText("Dr. " + doctor.name);
             doctorSpecialist.setText(doctor.doctorCategory);
         }
@@ -176,11 +184,11 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         Doctor Status status updating
      */
     private void setDoctorPresenceIcon(String status) {
-        if (status.equalsIgnoreCase(Constants.AVAILABLE)) {
+        if (status.equalsIgnoreCase(Constants.AVAILABLE) || status.equalsIgnoreCase("1")) {
             doctorStatusIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.circle_green));
             doctorVideo.setEnabled(true);
             doctorVoice.setEnabled(true);
-        } else if (status.equalsIgnoreCase(Constants.BUSY)) {
+        } else if (status.equalsIgnoreCase(Constants.BUSY) || status.equalsIgnoreCase("0")) {
             doctorStatusIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.circle_red));
             doctorVideo.setEnabled(false);
             doctorVoice.setEnabled(false);

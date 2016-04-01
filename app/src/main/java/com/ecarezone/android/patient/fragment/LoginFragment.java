@@ -139,9 +139,9 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
         mTextViewForgotPwd = (TextView) view.findViewById(R.id.textview_forgotpwd);
         if (LoginInfo.userName != null) {
             mEditTextUsername.setText(LoginInfo.userName);
-            mTextViewForgotPwd.setOnClickListener(this);
-            mTextViewForgotPwd.setEnabled(true);
         }
+        mTextViewForgotPwd.setOnClickListener(this);
+        mTextViewForgotPwd.setEnabled(true);
 
         mButtonLogin = view.findViewById(R.id.button_login);
         mButtonLogin.setOnClickListener(this);
@@ -178,12 +178,12 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
             // change to account creation
             invokeNavigationChanged(R.layout.frag_registration, null);
         } else if (viewId == R.id.textview_forgotpwd) {
-            if (LoginInfo.userName == null) {
-                textView_error.setText(R.string.error_user_login);
-                textView_error.setVisibility(View.VISIBLE);
-            } else {
+//            if (LoginInfo.userName == null) {
+//                textView_error.setText(R.string.error_user_login);
+//                textView_error.setVisibility(View.VISIBLE);
+//            } else {
                 invokeNavigationChanged(R.layout.act_forgotpassword, null);
-            }
+//            }
         }
     }
 

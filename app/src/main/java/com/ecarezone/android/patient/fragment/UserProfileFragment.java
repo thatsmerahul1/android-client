@@ -75,9 +75,18 @@ public class UserProfileFragment extends EcareZoneBaseFragment implements
         if (requestCode == VIEW_PROFILE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 /* Successfully created/deleted the profile. Show list of profiles.*/
+
+                if(data != null){
+                    imagePath = data.getStringExtra("imagePath");
+                    if(imagePath != null) {
+                        mProfile = (UserProfile) data.getSerializableExtra("mProfile");
+                    }
+                }
+
                 getActivity().getSupportFragmentManager().popBackStack();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.remove(this);
+
                 transaction.replace(R.id.screen_container, new UserProfileFragment());
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
                 transaction.addToBackStack(UserProfileFragment.class.getSimpleName());
@@ -88,4 +97,9 @@ public class UserProfileFragment extends EcareZoneBaseFragment implements
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    private String imagePath;
+    private UserProfile mProfile;
 }
+
+

@@ -12,4 +12,6 @@
     <dimen name="profile_thumbnail_edge_size">100dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
+    <dimen name="doctor_list_item_margin">8dp</dimen>
+
 </resources>

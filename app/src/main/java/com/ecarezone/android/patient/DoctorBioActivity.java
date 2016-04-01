@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.ecarezone.android.patient.config.Constants;
@@ -33,6 +34,7 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
     private Long doctorId;
     private String doctorName;
     private ProgressDialog progressDialog;
+    private boolean isDocAlreadyAddded;
 
     @Override
     protected String getCallerName() {
@@ -44,36 +46,48 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_doctor);
 
-        onNavigationChanged(R.layout.frag_doctor_bio, getIntent().getBundleExtra(Constants.DOCTOR_BIO_DETAIL));
+        Bundle bundle = getIntent().getBundleExtra(Constants.DOCTOR_BIO_DETAIL);
+
+        onNavigationChanged(R.layout.frag_doctor_bio, bundle);
         Log.i(TAG, "bio data = " + getIntent().getBundleExtra(Constants.DOCTOR_BIO_DETAIL));
         mToolBar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+
+        isDocAlreadyAddded = bundle.getBoolean(Constants.DOCTOR_ALEADY_ADDED, false);
+
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
+
             mToolBar.setNavigationIcon(R.drawable.ic_action_menu);
-            mToolBar.setOnMenuItemClickListener(
-                    new Toolbar.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            if (item.getItemId() == R.id.action_add) {
-                                Log.i(TAG, "Menu = " + item.getTitle() + ", " + item.getItemId());
-                                sendAddDoctorRequest();
+            if (!isDocAlreadyAddded) {
+                mToolBar.setOnMenuItemClickListener(
+                        new Toolbar.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                if (item.getItemId() == R.id.action_add) {
+                                    Log.i(TAG, "Menu = " + item.getTitle() + ", " + item.getItemId());
+                                    sendAddDoctorRequest();
+                                }
+                                return true;
                             }
-                            return true;
-                        }
-                    });
+                        });
+            }
         }
+
         mActionBar = getSupportActionBar();
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setTitle(getResources().getString(R.string.doctor_bio));
-        doctorName = ((Doctor) getIntent().getBundleExtra(Constants.DOCTOR_BIO_DETAIL).getParcelable(Constants.DOCTOR_DETAIL)).name;
-        doctorId = ((Doctor) getIntent().getBundleExtra(Constants.DOCTOR_BIO_DETAIL).getParcelable(Constants.DOCTOR_DETAIL)).doctorId;
+        doctorName = ((Doctor) bundle.getParcelable(Constants.DOCTOR_DETAIL)).name;
+        doctorId = ((Doctor) bundle.getParcelable(Constants.DOCTOR_DETAIL)).doctorId;
         addSupportOnBackStackChangedListener(this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_add, menu);
+        if(isDocAlreadyAddded){
+            menu.findItem(R.id.action_add).setVisible(false);
+        }
         return true;
     }
 

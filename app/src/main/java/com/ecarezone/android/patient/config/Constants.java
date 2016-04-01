@@ -30,6 +30,7 @@ public class Constants {
 
     //Doctor Details Constants
     public static String DOCTOR_DETAIL = "doctorDetail";
+    public static final String DOCTOR_ALEADY_ADDED = "doc_already_added";
     public static String DOCTOR_BIO_DETAIL = "doctorBioDetail";
     public static String DOCTOR_LIST = "doctorList";
 

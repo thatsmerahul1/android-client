@@ -21,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -168,6 +169,15 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         } else {
             // When no avatarUrl found, use local default image.
             profileImageButton.setImageResource(R.drawable.news_other);
+        }
+
+        try {
+            getActivity().getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+            );
+        }
+        catch (Exception ex){
+            ex.printStackTrace();;
         }
     }
 

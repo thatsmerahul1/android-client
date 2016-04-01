@@ -63,10 +63,16 @@ public class DoctorsAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
-        holder.doctorName.setText("Dr. " + doctorList.get(position).name);
-        holder.doctorType.setText(doctorList.get(position).doctorCategory);
-        holder.doctorAvailability.setText(doctorList.get(position).status);
-        setDoctorPresence(holder, doctorList.get(position).status);
+        Doctor doctor = doctorList.get(position);
+        holder.doctorName.setText("Dr. " + doctor.name);
+        holder.doctorType.setText(doctor.doctorCategory);
+        if(doctor.status.equalsIgnoreCase("1")) {
+            holder.doctorAvailability.setText(R.string.doctor_available);
+        }
+        else{
+            holder.doctorAvailability.setText(R.string.doctor_busy);
+        }
+        setDoctorPresence(holder, doctor.status);
 
         return view;
     }

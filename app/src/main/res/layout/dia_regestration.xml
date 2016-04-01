@@ -25,7 +25,9 @@
         android:id="@+id/lisview_registration"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.8"/>
+        android:layout_weight="0.8"
+        android:divider="@null"
+        android:dividerHeight="0dp" />
 
      <RelativeLayout
          android:layout_width="match_parent"
@@ -37,11 +39,13 @@
              android:id="@+id/button_ok"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
+             android:minWidth="80dp"
              android:layout_gravity="center"
              android:text="@string/welcome_button_ok"
              android:textColor="@color/ecarezone_green_dark"
              android:layout_alignParentTop="true"
              android:textSize="20sp"
+             android:gravity="center"
              android:layout_marginRight="@dimen/activity_vertical_margin"
              android:layout_alignParentRight="true"
               />
@@ -50,11 +54,13 @@
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_gravity="center"
+             android:minWidth="80dp"
              android:text="@string/welcome_button_cancel"
              android:layout_marginRight="@dimen/activity_vertical_margin"
              android:textColor="@color/ecarezone_green_dark"
              android:layout_alignParentTop="true"
              android:textSize="20sp"
+             android:gravity="center"
              android:layout_toLeftOf="@+id/button_ok" />
      </RelativeLayout>
 

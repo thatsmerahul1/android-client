@@ -129,6 +129,10 @@ public class ProfilesAdapter extends BaseAdapter {
         }
     }
 
+    public void setImageForParticularProfile(String profileId, String imagePath){
+
+    }
+
     @Override
     public void notifyDataSetChanged() {
         // This is to refresh the data & UI after a profile is created/updated/deleted.
