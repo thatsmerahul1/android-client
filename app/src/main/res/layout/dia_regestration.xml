@@ -61,6 +61,7 @@
              android:layout_alignParentTop="true"
              android:textSize="20sp"
              android:gravity="center"
+             android:layout_marginLeft="20dp"
              android:layout_toLeftOf="@+id/button_ok" />
      </RelativeLayout>
 

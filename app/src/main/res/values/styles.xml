@@ -79,7 +79,7 @@
         <item name="android:layout_marginRight">@dimen/dialog_button_margin</item>
         <item name="android:layout_marginLeft">@dimen/dialog_button_margin</item>
         <item name="android:textColor">@android:color/black</item>
-        <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
+        <item name="android:layout_marginTop">5dp</item>
         <item name="android:background">@drawable/circle_blue</item>
         <item name="android:padding">15dp</item>
     </style>

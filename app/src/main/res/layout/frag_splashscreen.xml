@@ -9,7 +9,19 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:src="@drawable/splash_logo_white"/>
+        android:src="@drawable/splash_logo_white"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/logo_top_margin" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/vserion_info"
+        android:id="@+id/textView2"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>

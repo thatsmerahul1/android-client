@@ -34,7 +34,6 @@
         android:id="@+id/textview_error"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:padding="5dp"
         android:textColor="@android:color/holo_red_light"
         android:textSize="16sp"
@@ -61,12 +60,13 @@
         android:text="@string/login_forgot_password"
         android:textColor="@color/ecarezone_blue_dark"
         android:textSize="16dp"
+        android:padding="6dp"
         android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:background="@color/ecarezone_gray" />
 
     <TextView
