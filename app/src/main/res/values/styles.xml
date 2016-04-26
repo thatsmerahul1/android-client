@@ -59,7 +59,6 @@
 
     <style name="ProfileFormEditTextStyle" parent="android:Widget.EditText">
         <item name="android:gravity">end</item>
-        <item name="android:hint">@string/profile_details_hint</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
