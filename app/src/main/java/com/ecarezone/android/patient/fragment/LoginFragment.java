@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -85,6 +88,7 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
                     if (s != null) {
                         checkLoginButtonStatus(String.valueOf(s),
                                 mEditTextPassword.getEditableText().toString());
+                        mEditTextUsername.getBackground().clearColorFilter();
                     }
                 } catch (Exception e) {
                     EcareZoneLog.e(getCallerName(), e);
@@ -296,6 +300,10 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
             } else {
                 textView_error.setText(response.status.message);
                 textView_error.setVisibility(View.VISIBLE);
+
+                int color = getResources().getColor(android.R.color.holo_red_light);
+                mEditTextUsername.getBackground().setColorFilter(getResources().getColor(android.R.color.holo_red_light), PorterDuff.Mode.SRC_ATOP);
+                mEditTextPassword.getBackground().setColorFilter(getResources().getColor(android.R.color.holo_red_light), PorterDuff.Mode.SRC_ATOP);
             }
             getActivity().runOnUiThread(new Runnable() {
                 @Override

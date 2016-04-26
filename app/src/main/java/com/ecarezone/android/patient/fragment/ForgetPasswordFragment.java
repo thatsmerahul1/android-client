@@ -2,7 +2,9 @@ package com.ecarezone.android.patient.fragment;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ public class ForgetPasswordFragment extends EcareZoneBaseFragment implements Vie
     private EditText editTextForgetPwd;
     private ProgressDialog progressDialog;
     private TextView textView_error;
+    private Button buttonSend;
 
     public static ForgetPasswordFragment newInstance() {
         return new ForgetPasswordFragment();
@@ -35,9 +38,10 @@ public class ForgetPasswordFragment extends EcareZoneBaseFragment implements Vie
         super.onCreate(savedInstanceState);
         final View view = inflater.inflate(R.layout.act_forgotpassword, container, false);
         editTextForgetPwd = (EditText) view.findViewById(R.id.editText_ForgetPwd);
-        Button buttonSend = (Button) view.findViewById(R.id.button_send);
+        buttonSend = (Button) view.findViewById(R.id.button_send);
         textView_error=(TextView)view.findViewById(R.id.textview_error);
         buttonSend.setOnClickListener(this);
+        editTextForgetPwd.addTextChangedListener(mTextWatcher);
         return view;
     }
 
@@ -67,6 +71,29 @@ public class ForgetPasswordFragment extends EcareZoneBaseFragment implements Vie
         }
 
     }
+
+    private TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if(s.length() > 0){
+                buttonSend.setEnabled(true);
+            }
+            else{
+                buttonSend.setEnabled(false);
+            }
+            buttonSend.getBackground().clearColorFilter();
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
 
     //Forget password response
     public final class PasswordRequestListener implements RequestListener<LoginResponse> {
