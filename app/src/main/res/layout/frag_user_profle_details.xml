@@ -43,6 +43,8 @@
                     <EditText
                         android:id="@+id/name"
                         style="@style/ProfileFormEditTextStyle"
+                        android:lines="1"
+                        android:inputType="textPersonName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </FrameLayout>
@@ -197,6 +199,13 @@
         </FrameLayout>
 
         <View style="@style/ProfileFormLineViewStyle" />
+
+        <TextView
+            android:id="@+id/txtErrorMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_red_light"
+             />
 
         <Button
             android:id="@+id/deleteProfileBtn"

@@ -21,11 +21,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ecarezone.android.patient.ProfileDetailsActivity;
 import com.ecarezone.android.patient.R;
@@ -49,6 +51,8 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.util.Calendar;
 
 /**
@@ -69,6 +73,10 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     private String mUploadedImageUrl = null;
     private ProgressDialog mProgressDialog;
 
+    private EditText mHeightEditText;
+    private EditText mWeightEditText;
+    private TextView mErrorText;
+
     @Override
     protected String getCallerName() {
         return UserProfileDetailsFragment.class.getSimpleName();
@@ -78,7 +86,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.frag_user_profle_details, container, false);
         ((ProfileDetailsActivity) getActivity()).getSupportActionBar()
-                .setTitle(getResources().getText(R.string.profile_actionbar_title));
+                .setTitle(getResources().getText(R.string.profile_actionbar_details_title));
         mSelectedPhotoPath = null;
         mUploadedImageUrl = null;
         return view;
@@ -105,6 +113,10 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
 
         EditText nameET = (EditText) view.findViewById(R.id.name);
         nameET.addTextChangedListener(this);
+
+        mHeightEditText = (EditText) view.findViewById(R.id.height);
+        mWeightEditText = (EditText) view.findViewById(R.id.weight);
+        mErrorText = (TextView) view.findViewById(R.id.txtErrorMsg);
 
         ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
 
@@ -175,16 +187,47 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             getActivity().getWindow().setSoftInputMode(
                     WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
             );
-        }
-        catch (Exception ex){
-            ex.printStackTrace();;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ;
         }
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.action_check) {
-            saveProfile();
+            boolean isError = mErrorText.getText().length() > 0 ? true : false;
+            mErrorText.setText("");
+
+            String height = mHeightEditText.getText().toString();
+            if (height.trim().length() > 1) {
+                try {
+                    double heightVal = Double.parseDouble(height);
+                    if (!(heightVal < 243.84 && heightVal > 30)) {
+                        mErrorText.setText(getString(R.string.invalid_height));
+                        return true;
+                    }
+                } catch (NumberFormatException nfe) {
+
+                }
+            }
+
+            String weight = mWeightEditText.getText().toString();
+            if (weight.trim().length() > 1) {
+                try {
+                    double weightVal = Double.parseDouble(weight);
+                    if (!(weightVal < 300 && weightVal > 1)) {
+                        mErrorText.setText(getString(R.string.invalid_weight));
+                        return true;
+                    }
+                } catch (NumberFormatException nfe) {
+
+                }
+            }
+
+            if (!isError) {
+                saveProfile();
+            }
         }
         return true;
     }
@@ -217,8 +260,8 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         ((EditText) view.findViewById(R.id.dob)).setText(profile.birthdate);
         ((EditText) view.findViewById(R.id.ethnicity)).setText(profile.ethnicity);
         ((EditText) view.findViewById(R.id.profileName)).setText(profile.profileName);
-        ((EditText) view.findViewById(R.id.height)).setText(profile.height);
-        ((EditText) view.findViewById(R.id.weight)).setText(profile.weight);
+        mHeightEditText.setText(profile.height);
+        mWeightEditText.setText(profile.weight);
     }
 
     private void setDateToDobField(String date) {
@@ -241,6 +284,11 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 getResources().getString(R.string.progress_dialog_delete));
         DeleteProfileRequest request = new DeleteProfileRequest(profileId);
         getSpiceManager().execute(request, "profile_delete", DurationInMillis.ALWAYS_EXPIRED, new DeleteProfileResponseListener());
+    }
+
+    @Override
+    public void onOptionsMenuClosed(Menu menu) {
+        super.onOptionsMenuClosed(menu);
     }
 
     // read all the fields in the UI and save the profile
@@ -553,10 +601,69 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            StringBuilder dateSb = new StringBuilder().append(year).append("-").append(month + 1).append("-").append(day);
-            setDateToDobField(dateSb.toString());
+        @Override
+        public void onOptionsMenuClosed(Menu menu) {
+            super.onOptionsMenuClosed(menu);
         }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+
+            mErrorText.setText("");
+
+            Calendar cal = Calendar.getInstance();
+            int yearT = cal.get(Calendar.YEAR);
+            int monthT = cal.get(Calendar.MONTH);
+            int dayT = cal.get(Calendar.DAY_OF_MONTH);
+
+            boolean isDateValid = true;
+            if (yearT < year) {
+                isDateValid = false;
+            } else if (yearT == year && monthT < month) {
+                isDateValid = false;
+            } else if (yearT == year && monthT <= month && dayT <= day) {
+                isDateValid = false;
+            }
+
+            if (isDateValid) {
+                String monthStr;
+                if (month + 1 < 10) {
+                    monthStr = "0" + (month + 1);
+                } else {
+                    monthStr = String.valueOf(month + 1);
+                }
+                StringBuilder dateSb = new StringBuilder().append(year).append("-").append(month + 1).append("-").append(day);
+                setDateToDobField(dateSb.toString());
+            } else {
+                mErrorText.setText(getString(R.string.invalid_birth_date));
+            }
+
+
+            /*if (mErrorText.getText().length() > 0) {
+                View v = getActionBarView();
+                if (v != null) {
+                    View viewTick = v.findViewById(R.id.action_check);
+                    if (viewTick != null) {
+                        viewTick.setEnabled(false);
+                    }
+                }
+            }
+            else{
+                View v = getActionBarView();
+                if (v != null) {
+                    View viewTick = v.findViewById(R.id.action_check);
+                    if (viewTick != null) {
+                        viewTick.setEnabled(true);
+                    }
+                }
+            }*/
+        }
+    }
+
+    private View getActionBarView() {
+        Window window = getActivity().getWindow();
+        View v = window.getDecorView();
+        int resId = getResources().getIdentifier("action_bar_container", "id", "android");
+        return v.findViewById(resId);
     }
 
     @Override

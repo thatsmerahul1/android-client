@@ -50,6 +50,10 @@
     <string name="profile_kid">My daughter profile</string>
     <string name="profile_father">My father profile</string>
     <string name="profile_actionbar_title">Profile</string>
+    <string name="profile_actionbar_details_title">Profile detail</string>
+    <string name="invalid_height">Please enter valid height in (cms)</string>
+    <string name="invalid_weight">Please enter valid weight in (kgs)</string>
+    <string name="invalid_birth_date">Invalid birth date</string>
 
     <!-- Profile details -->
     <string name="profile_details_name">Name</string>
@@ -105,8 +109,8 @@
         <item>English</item>
         <item>Chinese</item>
         <item>Swedish</item>
-        <item>Norway</item>
-        <item>Finland</item>
+        <item>Norwegian</item>
+        <item>Finnish</item>
     </string-array>
 
     <string-array name="language_local_array">
@@ -140,6 +144,7 @@
     <!-- Appointment -->
     <string name="doctor_appointment">Make an appointment</string>
     <string name="doctor_appointment_header">Appointment</string>
+    <string name="invalid_date">Please enter valid date</string>
 
     <!-- Home -->
     <string name="home_last_news_feed">The latest news feed</string>
@@ -182,7 +187,7 @@
     <string name="reset_password_email_hint">Your email</string>
     <string name="reset_password">Reset password</string>
     <string name="reset_password_notification">New password will be sent \nto your registered email address</string>
-    <string name="reset_password_error">Your email account is incorrect. Please try \n in if you are register user</string>
+    <string name="reset_password_error">Your email account is incorrect. Please try in if you are register user</string>
     <string name="title_activity_forget_password">ForgetPasswordActivity</string>
 
     <string name="gallery_chooser_select_picture">Choose from gallery</string>
@@ -192,5 +197,6 @@
     <string name="new_password">New Password</string>
     <string name="retype_password">Confirm New Password</string>
     <string name="title_activity_update_password">UpdatePasswordActivity</string>
+    <string name="password_mismatch">New password and confirm password fields do not match</string>
 
 </resources>

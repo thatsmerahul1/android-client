@@ -123,6 +123,7 @@
             />
 
         <View
+            android:id="@+id/view_line"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/appointment_time"
@@ -130,6 +131,15 @@
             android:layout_marginRight="60dp"
             android:background="@android:color/black"
             />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtErrorMsg"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/view_line"
+            android:textColor="@android:color/holo_red_light" />
+
 
         <Button
             android:id="@+id/button_appointment"

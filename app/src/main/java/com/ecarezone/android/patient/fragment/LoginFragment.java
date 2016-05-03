@@ -155,6 +155,11 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
     public void onClick(View v) {
         if (v == null) return;
 
@@ -186,7 +191,9 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
 //                textView_error.setText(R.string.error_user_login);
 //                textView_error.setVisibility(View.VISIBLE);
 //            } else {
-                invokeNavigationChanged(R.layout.act_forgotpassword, null);
+            Bundle bndl = new Bundle();
+            bndl.putString("email", mEditTextUsername.getText().toString());
+            invokeNavigationChanged(R.layout.act_forgotpassword, bndl);
 //            }
         }
     }

@@ -1,6 +1,7 @@
 package com.ecarezone.android.patient.fragment;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -42,6 +43,13 @@ public class ForgetPasswordFragment extends EcareZoneBaseFragment implements Vie
         textView_error=(TextView)view.findViewById(R.id.textview_error);
         buttonSend.setOnClickListener(this);
         editTextForgetPwd.addTextChangedListener(mTextWatcher);
+        String emailId = getArguments().getString("email");
+        if(emailId != null && !emailId.isEmpty()){
+            editTextForgetPwd.setText(emailId);
+        }
+        else{
+            editTextForgetPwd.setText("");
+        }
         return view;
     }
 
@@ -109,7 +117,10 @@ public class ForgetPasswordFragment extends EcareZoneBaseFragment implements Vie
               password sent to email
              */
             if (loginResponse.status.code == 200) {
-
+                textView_error.setTextColor(Color.GREEN);
+            }
+            else{
+                textView_error.setTextColor(getResources().getColor(android.R.color.holo_red_light));
             }
             textView_error.setVisibility(View.VISIBLE);
             textView_error.setText(loginResponse.status.message);

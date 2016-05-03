@@ -54,6 +54,8 @@ public class UpdatePasswordActivity extends EcareZoneBaseActivity {
                             String confirmPwd = mEditTextConfirmPwd.getEditableText().toString();
                             Log.d("Naga", "Password Requesting");
                             if (newPwd.length() != 0 && confirmPwd.length() != 0 && !newPwd.equals(confirmPwd)) {
+                                mTextViewerror.setText(getString(R.string.password_mismatch));
+                                mTextViewerror.setVisibility(View.VISIBLE);
                                 return false;
                             }
                             mTextViewerror.setVisibility(View.GONE);
@@ -69,7 +71,7 @@ public class UpdatePasswordActivity extends EcareZoneBaseActivity {
         mActionBar = getSupportActionBar();
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
-        mActionBar.setTitle(getResources().getString(R.string.main_side_menu_doctors));
+        mActionBar.setTitle(getResources().getString(R.string.reset_password));
         addSupportOnBackStackChangedListener(this);
 
     }

@@ -42,7 +42,7 @@
             android:layout_gravity="center"
             android:text="@string/doctor_type1"
             android:textColor="@color/text_blue_color_selector"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
 
         <LinearLayout

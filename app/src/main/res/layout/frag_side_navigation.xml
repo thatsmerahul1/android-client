@@ -45,7 +45,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginRight="10dp"
-                android:background="@android:color/white" />
+                android:background="@android:color/white"
+                android:alpha="0.4"/>
 
             <com.ecarezone.android.patient.app.widget.NavigationItem
                 android:id="@+id/navigation_home"
@@ -155,6 +156,61 @@
                     tools:ignore="UnusedAttribute" />
             </com.ecarezone.android.patient.app.widget.NavigationItem>
 
+
+            <!-- <com.ecarezone.android.patient.app.widget.NavigationItem
+                 android:id="@+id/navigation_health"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:paddingTop="4dp"
+                 android:paddingBottom="4dp"
+                 side:niIcon="@+id/image_view_item_icon_health"
+                 side:niIconImage="@drawable/side_menu_arrow"
+                 side:niIndicator="@+id/check_box_indicator_health"
+                 side:niLabel="@+id/text_view_content_title_health"
+                 side:niTitle="@string/main_side_menu_health" >
+
+                 <View
+                     android:layout_width="match_parent"
+                     android:layout_height="56dp"
+                     android:background="@drawable/navigation_item_color_selector" />
+
+                 <CheckBox
+                     android:id="@id/check_box_indicator_health"
+                     android:layout_width="2dp"
+                     android:layout_height="wrap_content"
+                     android:layout_alignParentLeft="true"
+                     android:layout_centerVertical="true"
+                     android:button="@null"
+                     android:checked="false"
+                     android:clickable="false"
+                     android:duplicateParentState="true"
+                     android:minHeight="56dp" />
+
+                 <ImageView
+                     android:id="@id/image_view_item_icon_health"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_centerVertical="true"
+                     android:layout_marginLeft="8dp"
+                     android:layout_marginRight="8dp"
+                     android:layout_toRightOf="@id/check_box_indicator_health"
+                     android:scaleType="fitXY" />
+
+                 <TextView
+                     android:id="@id/text_view_content_title_health"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_centerVertical="true"
+                     android:layout_toRightOf="@id/image_view_item_icon_health"
+                     android:gravity="center_vertical"
+                     android:singleLine="false"
+                     android:textColor="@android:color/white"
+                     android:textIsSelectable="false"
+                     android:textSize="18sp"
+                     tools:ignore="UnusedAttribute" />
+             </com.ecarezone.android.patient.app.widget.NavigationItem>-->
+
+
             <com.ecarezone.android.patient.app.widget.NavigationItem
                 android:id="@+id/navigation_doctors"
                 android:layout_width="match_parent"
@@ -208,10 +264,121 @@
                     tools:ignore="UnusedAttribute" />
             </com.ecarezone.android.patient.app.widget.NavigationItem>
 
+
+            <!--<com.ecarezone.android.patient.app.widget.NavigationItem
+                android:id="@+id/navigation_medication"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                side:niIcon="@+id/image_view_item_icon_medication"
+                side:niIconImage="@drawable/side_menu_arrow"
+                side:niIndicator="@+id/check_box_indicator_medication"
+                side:niLabel="@+id/text_view_content_title_medication"
+                side:niTitle="@string/main_side_menu_medication" >
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@drawable/navigation_item_color_selector" />
+
+                <CheckBox
+                    android:id="@id/check_box_indicator_medication"
+                    android:layout_width="2dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:button="@null"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:duplicateParentState="true"
+                    android:minHeight="56dp" />
+
+                <ImageView
+                    android:id="@id/image_view_item_icon_medication"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_toRightOf="@id/check_box_indicator_medication"
+                    android:scaleType="fitXY" />
+
+                <TextView
+                    android:id="@id/text_view_content_title_medication"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/image_view_item_icon_medication"
+                    android:gravity="center_vertical"
+                    android:singleLine="false"
+                    android:textColor="@android:color/white"
+                    android:textIsSelectable="false"
+                    android:textSize="18sp"
+                    tools:ignore="UnusedAttribute" />
+            </com.ecarezone.android.patient.app.widget.NavigationItem>
+
+
+            <com.ecarezone.android.patient.app.widget.NavigationItem
+                android:id="@+id/navigation_plan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                side:niIcon="@+id/image_view_item_icon_plan"
+                side:niIconImage="@drawable/side_menu_arrow"
+                side:niIndicator="@+id/check_box_indicator_plan"
+                side:niLabel="@+id/text_view_content_title_plan"
+                side:niTitle="@string/main_side_menu_health_plan" >
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/navigation_item_color_selector" />
+
+                <CheckBox
+                    android:id="@id/check_box_indicator_plan"
+                    android:layout_width="2dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:button="@null"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:duplicateParentState="true"
+                    android:minHeight="56dp" />
+
+                <ImageView
+                    android:id="@id/image_view_item_icon_plan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_toRightOf="@id/check_box_indicator_plan"
+                    android:scaleType="fitXY" />
+
+                <TextView
+                    android:id="@id/text_view_content_title_plan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/image_view_item_icon_plan"
+                    android:gravity="center_vertical"
+                    android:singleLine="false"
+                    android:textColor="@android:color/white"
+                    android:textIsSelectable="false"
+                    android:textSize="18sp"
+                    tools:ignore="UnusedAttribute" />
+            </com.ecarezone.android.patient.app.widget.NavigationItem>-->
+
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@android:color/white"
+                android:alpha="0.4"
                 android:layout_marginRight="10dp" />
 
             <com.ecarezone.android.patient.app.widget.NavigationItem

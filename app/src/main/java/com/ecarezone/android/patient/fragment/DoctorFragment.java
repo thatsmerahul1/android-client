@@ -111,7 +111,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             else{
                 doctorStatusText.setText(R.string.doctor_busy);
             }
-
+            doctorStatusText.setVisibility(View.VISIBLE);
             doctorNameView.setText("Dr. " + doctor.name);
             doctorSpecialist.setText(doctor.doctorCategory);
         }
