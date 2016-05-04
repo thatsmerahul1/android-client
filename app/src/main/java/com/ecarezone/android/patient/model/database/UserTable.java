@@ -1,7 +1,10 @@
 package com.ecarezone.android.patient.model.database;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 
+import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.model.User;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -68,6 +71,15 @@ public class UserTable {
             updateBuilder.updateColumnValue(DbContract.Users.COLUMN_NAME_LANGUAGE, language);
             updateBuilder.updateColumnValue(DbContract.Users.COLUMN_NAME_ROLE, role);
             updateBuilder.updateColumnValue(DbContract.Users.COLUMN_NAME_COUNTRY, country);
+
+            SharedPreferences languagePreferences = context.getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
+            SharedPreferences.Editor langEditor = languagePreferences.edit();
+            langEditor.putString(Constants.LANGUAGE, language);
+            langEditor.commit();
+            SharedPreferences countryPreferences = context.getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
+            SharedPreferences.Editor countryEditor = countryPreferences.edit();
+            countryEditor.putString(Constants.COUNTRY, country);
+            countryEditor.commit();
 
             return updateBuilder.update() > 0;
         } catch (SQLException e) {

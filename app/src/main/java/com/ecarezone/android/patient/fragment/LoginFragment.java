@@ -25,6 +25,7 @@ import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
+import com.ecarezone.android.patient.fragment.dialog.RegistrationDialogFragment;
 import com.ecarezone.android.patient.model.database.ProfileDbApi;
 import com.ecarezone.android.patient.model.database.UserTable;
 import com.ecarezone.android.patient.model.rest.Data;
@@ -293,6 +294,15 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
                     editor.putString(Constants.USER_ID, String.valueOf(LoginInfo.userId));
                     editor.commit();
 
+                    SharedPreferences languagePreferences = activity.getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor langEditor = languagePreferences.edit();
+                    langEditor.putString(Constants.LANGUAGE,  data.settings.language);
+                    langEditor.commit();
+                    SharedPreferences countryPreferences = activity.getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor countryEditor = countryPreferences.edit();
+                    countryEditor.putString(Constants.COUNTRY,  data.settings.language);
+                    countryEditor.commit();
+
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -321,6 +331,7 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
             Log.d(TAG, "Login Success");
         }
     }
+
 
     private void nextScreen(Activity activity) {
         activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));

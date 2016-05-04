@@ -1,14 +1,18 @@
 package com.ecarezone.android.patient.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.model.News;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -59,6 +63,12 @@ public class NewsListAdapter extends BaseAdapter {
             News item = mNews.get(position);
             newsListItem.title.setText(item.newsTitle);
             newsListItem.description.setText(item.newsAbstract);
+
+            newsListItem.image.setImageURI(Uri.parse(item.newsLink));
+            Picasso.with(mContext)
+                    .load(item.newsLink)
+                    .fit()
+                    .into(newsListItem.image);
         }
 
         return convertView;
@@ -68,10 +78,12 @@ public class NewsListAdapter extends BaseAdapter {
     static class NewsListItem {
         final TextView title;
         final TextView description;
+        final ImageView image;
 
         NewsListItem(final View view) {
             title = (TextView) view.findViewById(R.id.title);
             description = (TextView) view.findViewById(R.id.description);
+            image = (ImageView)view.findViewById(R.id.news_image_link);
         }
     }
 }

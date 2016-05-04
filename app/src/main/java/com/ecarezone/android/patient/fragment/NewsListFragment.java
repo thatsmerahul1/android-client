@@ -37,7 +37,7 @@ public class NewsListFragment extends EcareZoneBaseFragment implements AdapterVi
         String categoryName = bundle.getString(NewsCategoriesFragment.NEWS_CATEGORY_NAME);
 
         listView.setAdapter(new NewsListAdapter(getApplicationContext(), mNews));
-        listView.setOnItemClickListener(this);
+//        listView.setOnItemClickListener(this);
 
         ((NewsListActivity) getActivity()).getSupportActionBar()
                 .setTitle(categoryName);
