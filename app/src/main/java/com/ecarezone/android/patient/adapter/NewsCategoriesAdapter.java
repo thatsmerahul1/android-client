@@ -60,10 +60,8 @@ public class NewsCategoriesAdapter extends BaseAdapter {
             if (item.newsImageLink != null && item.newsImageLink.trim().length() > 8) {
                 Picasso.with(mContext)
                         .load(item.newsImageLink)
-                        .fit()
-                        .placeholder(R.drawable.news_other)
-                        .error(R.drawable.news_other)
-                        .into(newsCategoryItem.itemImage);
+                        .fit().into(newsCategoryItem.itemImage);
+
             }
             newsCategoryItem.title.setText(item.newsCategory);
         }
