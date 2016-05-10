@@ -334,12 +334,13 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
     }
 
     private boolean checkDocotorExist(int position) {
-        Long id = ((Doctor) recommendedDoctorList.get(position)).doctorId;
-        for (Doctor doctor : doctorList) {
-            if (doctor.doctorId.equals(id)) {
-                return true;
+        if(recommendedDoctorList != null && doctorList != null){
+            Long id = ((Doctor) recommendedDoctorList.get(position)).doctorId;
+            for (Doctor doctor : doctorList) {
+                if (doctor.doctorId.equals(id)) {
+                    return true;
+                }
             }
-
         }
         return false;
 

@@ -151,7 +151,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         } else {
             Intent videoScreen = new Intent(mActivity, VideoActivity.class);
             videoScreen.putExtra(Constants.EXTRA_NAME, doctor.name);
-            videoScreen.putExtra(Constants.EXTRA_EMAIL, doctor.email);
+            videoScreen.putExtra(Constants.EXTRA_EMAIL, doctor.emailId);
             startActivity(videoScreen);
         }
     }
@@ -162,7 +162,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         } else {
             Intent callScreen = new Intent(mActivity, CallActivity.class);
             callScreen.putExtra(Constants.EXTRA_NAME, doctor.name);
-            callScreen.putExtra(Constants.EXTRA_EMAIL, doctor.email);
+            callScreen.putExtra(Constants.EXTRA_EMAIL, doctor.emailId);
             startActivity(callScreen);
         }
     }
@@ -170,7 +170,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     private void chatButtonClicked() {
         Intent chatIntent = new Intent(mActivity.getApplicationContext(), ChatActivity.class);
         chatIntent.putExtra(Constants.EXTRA_NAME, doctor.name);
-        chatIntent.putExtra(Constants.EXTRA_EMAIL, doctor.email);
+        chatIntent.putExtra(Constants.EXTRA_EMAIL, doctor.emailId);
         mActivity.startActivity(chatIntent);
         mActivity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }

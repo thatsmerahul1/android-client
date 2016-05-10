@@ -14,7 +14,7 @@ public class Doctor implements Parcelable, Serializable {
     @Expose
     public Long doctorId;
     @Expose
-    public String email;
+    public String emailId;
     @Expose
     public String name;
     @Expose
@@ -30,9 +30,9 @@ public class Doctor implements Parcelable, Serializable {
     @Expose
     public String doctorLanguage;
 
-    public Doctor(Long doctorId, String email, String name, String doctorDescription, String status, String doctorCategory, String doctorGender, String doctorCountry, String doctorLanguage) {
+    public Doctor(Long doctorId, String emailId, String name, String doctorDescription, String status, String doctorCategory, String doctorGender, String doctorCountry, String doctorLanguage) {
         this.doctorId = doctorId;
-        this.email = email;
+        this.emailId = emailId;
         this.name = name;
         this.doctorDescription = doctorDescription;
         this.status = status;
@@ -44,7 +44,7 @@ public class Doctor implements Parcelable, Serializable {
 
     public Doctor(Parcel in) {
         this.doctorId = in.readLong();
-        this.email = in.readString();
+        this.emailId = in.readString();
         this.name = in.readString();
         this.doctorDescription = in.readString();
         this.status = in.readString();
@@ -62,7 +62,7 @@ public class Doctor implements Parcelable, Serializable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(doctorId);
-        dest.writeString(email);
+        dest.writeString(emailId);
         dest.writeString(name);
         dest.writeString(doctorDescription);
         dest.writeString(status);
