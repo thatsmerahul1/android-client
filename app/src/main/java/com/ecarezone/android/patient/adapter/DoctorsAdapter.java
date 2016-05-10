@@ -66,11 +66,12 @@ public class DoctorsAdapter extends BaseAdapter {
         Doctor doctor = doctorList.get(position);
         holder.doctorName.setText("Dr. " + doctor.name);
         holder.doctorType.setText(doctor.doctorCategory);
-        if(doctor.status.equalsIgnoreCase("1")) {
-            holder.doctorAvailability.setText(R.string.doctor_available);
-        }
-        else{
-            holder.doctorAvailability.setText(R.string.doctor_busy);
+        if(doctor.status != null) {
+            if (doctor.status.equalsIgnoreCase("1")) {
+                holder.doctorAvailability.setText(R.string.doctor_available);
+            } else {
+                holder.doctorAvailability.setText(R.string.doctor_busy);
+            }
         }
         setDoctorPresence(holder, doctor.status);
 
@@ -78,10 +79,12 @@ public class DoctorsAdapter extends BaseAdapter {
     }
 
     private void setDoctorPresence(ViewHolder holder, String status) {
-        if (status.equalsIgnoreCase("available")) {
-            holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_green));
-        } else if (status.equalsIgnoreCase("busy")) {
-            holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_red));
+        if(status != null) {
+            if (status.equalsIgnoreCase("available")) {
+                holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_green));
+            } else if (status.equalsIgnoreCase("busy")) {
+                holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_red));
+            }
         }
     }
 
