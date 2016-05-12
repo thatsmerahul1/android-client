@@ -116,7 +116,7 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
         SinchUtil.getSinchAudioPlayer().stopProgressTone();
         mActivity.setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);
         String endMsg = "Call ended: " + call.getDetails().toString();
-        Toast.makeText(mActivity, endMsg, Toast.LENGTH_LONG).show();
+        Toast.makeText(mActivity, "Call ended "/*endMsg*/, Toast.LENGTH_LONG).show();
         mCallId = call.getCallId();
         endCall();
     }

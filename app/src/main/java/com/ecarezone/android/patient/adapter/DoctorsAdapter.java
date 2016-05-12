@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.model.Doctor;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -49,6 +50,7 @@ public class DoctorsAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         ViewHolder holder;
+        int dp = activity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
 
         if (convertView == null) {
             view = inflater.inflate(R.layout.doctor_list_item_layout, null);
@@ -65,6 +67,15 @@ public class DoctorsAdapter extends BaseAdapter {
 
         Doctor doctor = doctorList.get(position);
         holder.doctorName.setText("Dr. " + doctor.name);
+        String imageUrl = doctor.avatarUrl;
+
+        if (imageUrl != null && imageUrl.trim().length() > 8) {
+            Picasso.with(activity)
+                    .load(imageUrl).resize(dp, dp)
+                    .centerCrop().placeholder(R.drawable.news_other)
+                    .error(R.drawable.news_other)
+                    .into(holder.avatar);
+        }
         holder.doctorType.setText(doctor.doctorCategory);
         if(doctor.status != null) {
             if (doctor.status.equalsIgnoreCase("1")) {

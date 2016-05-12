@@ -1,9 +1,13 @@
 package com.ecarezone.android.patient.fragment;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,9 +66,19 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
 
         mMessageCounterLayout = (RelativeLayout)view.findViewById(R.id.new_message_counter_layout);
         mHomeMessageIndicator = (TextView)view.findViewById(R.id.text_view_home_message_indicator);
-        updateUnreadMessageCount(ChatDbApi.getInstance(getApplicationContext()).getUnReadChatCount());
-
         return view;
+    }
+    BroadcastReceiver message = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateUnreadMessageCount(ChatDbApi.getInstance(context).getUnReadChatCount());
+        }
+    };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateUnreadMessageCount(ChatDbApi.getInstance(getContext()).getUnReadChatCount());
     }
 
     @Override
@@ -73,6 +87,8 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(Constants.ECARE_ZONE);
         new ProfileFinishedAsyncTask().execute();
         SinchUtil.setChatHistoryChangeListner(this);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(message,
+                new IntentFilter("send"));
     }
 
     @Override
@@ -100,7 +116,7 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
 
     @Override
     public void onChange(int noOfUnreadMessage) {
-        updateUnreadMessageCount(noOfUnreadMessage);
+//        updateUnreadMessageCount(noOfUnreadMessage);
     }
 
     private void updateUnreadMessageCount(int noOfUnreadMessage){
@@ -108,8 +124,14 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
             mHomeMessageIndicator.setVisibility(View.VISIBLE);
             mHomeMessageIndicator.setText(String.valueOf(noOfUnreadMessage));
         }else{
-            mHomeMessageIndicator.setVisibility(View.INVISIBLE);
+            mHomeMessageIndicator.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(message);
     }
 
     class ProfileFinishedAsyncTask extends AsyncTask<Void, Void, Boolean> {
