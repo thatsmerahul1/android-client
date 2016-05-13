@@ -218,7 +218,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                     }
                 }
             } else {
-                Toast.makeText(getApplicationContext(), "Failed to get doctors: " + getDoctorsResponse.status.message, Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "Doctors are not accepted your request Or send a request to add a doctor", Toast.LENGTH_LONG).show();
             }
             if (checkProgress) {
                 checkProgress = false;
