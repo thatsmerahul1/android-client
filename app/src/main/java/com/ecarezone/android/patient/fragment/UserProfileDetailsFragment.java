@@ -631,7 +631,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 } else {
                     monthStr = String.valueOf(month + 1);
                 }
-                StringBuilder dateSb = new StringBuilder().append(year).append("-").append(month + 1).append("-").append(day);
+                StringBuilder dateSb = new StringBuilder().append(year).append("-").append(month + 1).append("-").append(day+1);
                 setDateToDobField(dateSb.toString());
             } else {
                 mErrorText.setText(getString(R.string.invalid_birth_date));

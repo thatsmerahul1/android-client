@@ -50,7 +50,7 @@ public class UpdatePasswordActivity extends EcareZoneBaseActivity {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             currentPwd = mEditTextCurrentPwd.getEditableText().toString();
-                            String newPwd = mEditTextNewPwd.getEditableText().toString();
+                            newPwd = mEditTextNewPwd.getEditableText().toString();
                             String confirmPwd = mEditTextConfirmPwd.getEditableText().toString();
                             Log.d("Naga", "Password Requesting");
                             if (newPwd.length() != 0 && confirmPwd.length() != 0 && !newPwd.equals(confirmPwd)) {

@@ -77,11 +77,11 @@ public class SplashScreenFragment extends EcareZoneBaseFragment implements Sinch
                             Log.i(TAG, "userId::" + userId);
                             SinchUtil.getSinchServiceInterface().startClient(LoginInfo.userName);
 
-                        } else {
+                        } /*else {*/
                             Intent intent = new Intent(activity.getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                             activity.finish();
-                        }
+                       /* }*/
                     } else {
                         if (user != null) {
                             LoginInfo.userName = user.email;

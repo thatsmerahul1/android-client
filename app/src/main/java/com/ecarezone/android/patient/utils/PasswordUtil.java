@@ -10,8 +10,16 @@ import org.apache.commons.codec.digest.DigestUtils;
  */
 public class PasswordUtil {
 
+    private static boolean isTemporaryFix = true;
+
     public static String getHashedPassword(String password) {
-        String temp = new String(Hex.encodeHex(DigestUtils.md5(password + Constants.salt)));
-        return new String(Hex.encodeHex(DigestUtils.md5(temp)));
+
+        if(isTemporaryFix){
+            return password;
+        }
+        else {
+            String temp = new String(Hex.encodeHex(DigestUtils.md5(password + Constants.salt)));
+            return new String(Hex.encodeHex(DigestUtils.md5(temp)));
+        }
     }
 }
