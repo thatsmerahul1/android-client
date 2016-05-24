@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.ecarezone.android.patient.DoctorActivity;
+import com.ecarezone.android.patient.DoctorBioActivity;
 import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.SearchActivity;
@@ -300,14 +301,14 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                                                                              data.putParcelable(Constants.DOCTOR_DETAIL, recommendedDoctorList.get(position));
                                                                              final Activity activity = getActivity();
                                                                              if (activity != null) {
-                                                                                 Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorActivity.class);
+                                                                                 Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorBioActivity.class);
 
                                                                                  if (checkDocotorExist(position)) {
                                                                                      data.putBoolean(ADD_DOCTOR_DISABLE_CHECK, true);
                                                                                  } else {
                                                                                      data.putBoolean(ADD_DOCTOR_DISABLE_CHECK, false);
                                                                                  }
-                                                                                 showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
+                                                                                 showDoctorIntent.putExtra(Constants.DOCTOR_BIO_DETAIL, data);
                                                                                  activity.startActivity(showDoctorIntent);
                                                                                  activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                                                                              }

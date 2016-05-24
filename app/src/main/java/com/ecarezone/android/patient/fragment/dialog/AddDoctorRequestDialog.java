@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.ecarezone.android.patient.R;
@@ -32,7 +33,13 @@ public class AddDoctorRequestDialog extends DialogFragment {
         final View view = inflater.inflate(R.layout.add_doctor_successful_dialog, container, false);
         addDoctorSuccessTextView = (TextView) view.findViewById(R.id.add_doctor_success_text);
         addDoctorSuccessTextView.setText(String.format(getResources().getString(R.string.doctor_add_request_success), doctorName));
-
+        Button btn = (Button)view.findViewById(R.id.ok_btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+             }
+        });
         return view;
     }
 }
