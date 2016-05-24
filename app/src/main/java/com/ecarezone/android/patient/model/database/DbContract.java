@@ -40,4 +40,16 @@ public final class DbContract {
         public static final String COLUMN_NAME_AVATAR_URL = "avatarUrl";
         public static final String COLUMN_NAME_IS_COMPLETE = "isComplete";
     }
+    /*Inner class that defines doctors profile table content*/
+    public static abstract class DoctorProfiles implements BaseColumns {
+        public static final String TABLE_NAME = "DoctorProfile";
+
+        public static final String COLUMN_NAME_USER_ID = "doctorId";
+        public static final String COLUMN_NAME_STATUS = "status";
+        public static final String COLUMN_NAME_EMAIL = "emailId";
+        public static final String COLUMN_NAME_NAME = "name";
+        public static final String COLUMN_NAME_AVATAR_URL = "avatarUrl";
+        public static final String COLUMN_NAME_DOCTOR_DESCRIPTION = "doctorDescription";
+        public static final String COLUMN_NAME_DOCTOR_CATEGORY = "doctorCategory";
+    }
 }

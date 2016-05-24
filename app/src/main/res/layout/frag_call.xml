@@ -42,15 +42,14 @@
             style="@style/EcareZoneBlueButton"/>
 
     </LinearLayout>
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:layout_gravity="center"
+    <com.ecarezone.android.patient.view.CircleImageView
         android:id="@+id/doctor_avatar"
-        android:visibility="visible"
-        android:src="@drawable/dr_song_photo"
-        />
-
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_margin="4dp"
+        android:src="@drawable/dr_song_photo" >
+    </com.ecarezone.android.patient.view.CircleImageView>
     <include
         layout="@layout/incoming_call_screen"
         />

@@ -17,14 +17,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecarezone.android.patient.CallActivity;
-import com.ecarezone.android.patient.ChatActivity;
 import com.ecarezone.android.patient.R;
+import com.ecarezone.android.patient.model.Doctor;
+import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 import com.ecarezone.android.patient.service.SinchService;
 import com.ecarezone.android.patient.utils.SinchUtil;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallEndCause;
 import com.sinch.android.rtc.calling.CallListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -37,6 +39,8 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
     private Bundle incomingCallArguments;
     private TextView topPanel, progressPanel, inComingVideoCallRemoteUser;
     private LinearLayout bootomPanel, incomingCallPanel;
+    private ImageView incomingUserProfilePic;
+    private ImageView incomingUserProfilePic2;
     private ImageView doctorAvatar;
     private FrameLayout callMainBackground;
     private Button endcallButton, answerButton, declineButton;
@@ -79,6 +83,8 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
             inComingVideoCallRemoteUser = (TextView) view.findViewById(R.id.remoteUser);
             answerButton = (Button) view.findViewById(R.id.answerButton);
             declineButton = (Button) view.findViewById(R.id.declineButton);
+            incomingUserProfilePic = (ImageView)view.findViewById(R.id.doctor_avatar);
+            incomingUserProfilePic2 = (ImageView)view.findViewById(R.id.incomingUserProfilePic);
             incomingCallPanel.setVisibility(View.VISIBLE);
             inComingVideoCallRemoteUser.setText(incomingCallArguments.getString(SinchService.INCOMING_CALL_USER));
 
@@ -86,8 +92,55 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
             declineButton.setOnClickListener(this);
 
         }
-        endcallButton.setOnClickListener(this);
+        //to get user name and image
+        DoctorProfileDbApi profileDbApi = new DoctorProfileDbApi(mActivity);
+        String email = incomingCallArguments.getString("email");
+        Doctor tempProfiles;
+        int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
+        if(email != null){
+           tempProfiles = profileDbApi.getProfile(email);
+            if(tempProfiles != null) {
+                String imageUrl = tempProfiles.avatarUrl;
+                if (imageUrl != null && imageUrl.trim().length() > 8) {
+                    Picasso.with(mActivity)
+                            .load(imageUrl).resize(dp, dp)
+                            .centerCrop().placeholder(R.drawable.news_other)
+                            .error(R.drawable.news_other)
+                            .into(doctorAvatar);
 
+                }
+            }
+        } else {
+            tempProfiles = profileDbApi.getProfile(incomingCallArguments.getString("INCOMING_CALL_USER"));
+            inComingVideoCallRemoteUser.setText(tempProfiles.name);
+            if (tempProfiles != null) {
+                String imageUrl = tempProfiles.avatarUrl;
+                if (imageUrl != null && imageUrl.trim().length() > 8) {
+                    Picasso.with(mActivity)
+                            .load(imageUrl).resize(dp, dp)
+                            .centerCrop().placeholder(R.drawable.news_other)
+                            .error(R.drawable.news_other)
+                            .into(incomingUserProfilePic);
+                    Picasso.with(mActivity)
+                            .load(imageUrl).resize(dp, dp)
+                            .centerCrop().placeholder(R.drawable.news_other)
+                            .error(R.drawable.news_other)
+                            .into(incomingUserProfilePic2);
+                }
+            }
+
+        }
+        String imageUrl = tempProfiles.avatarUrl;
+        if (imageUrl != null && imageUrl.trim().length() > 8) {
+            Picasso.with(mActivity)
+                    .load(imageUrl).resize(dp, dp)
+                    .centerCrop().placeholder(R.drawable.news_other)
+                    .error(R.drawable.news_other)
+                    .into(doctorAvatar);
+
+        }
+        endcallButton.setOnClickListener(this);
+        topPanel.setText(tempProfiles.name);
         topPanel.setVisibility(View.GONE);
         bootomPanel.setVisibility(View.GONE);
         doctorAvatar.setVisibility(View.GONE);

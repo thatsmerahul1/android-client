@@ -3,8 +3,8 @@ package com.ecarezone.android.patient.fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
@@ -14,14 +14,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.ecarezone.android.patient.DoctorActivity;
@@ -32,13 +30,19 @@ import com.ecarezone.android.patient.adapter.DoctorsAdapter;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.Doctor;
+import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 import com.ecarezone.android.patient.model.rest.SearchDoctorsRequest;
 import com.ecarezone.android.patient.model.rest.SearchDoctorsResponse;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 /**
  * Created by CHAO WEI on 5/25/2015.
@@ -77,6 +81,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         }
         ((MainActivity) getActivity()).getSupportActionBar()
                 .setTitle(getResources().getString(R.string.main_side_menu_doctors));
+        pullDBFromdevice();
     }
 
     @Override
@@ -132,10 +137,14 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         checkProgress = true;
         progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
                 getText(R.string.progress_dialog_loading).toString());
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         populateMyCareDoctorList();
         populateRecommendedDoctorList();
-
-        return view;
     }
 
     private void populateMyCareDoctorList() {
@@ -162,9 +171,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         getSpiceManager().execute(request, new DoSearchRequestListener());
     }
 
-
     public final class PopulateMyCareDoctorListRequestListener implements RequestListener<SearchDoctorsResponse> {
-
         @Override
         public void onRequestFailure(SpiceException spiceException) {
             if (checkProgress) {
@@ -178,6 +185,19 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         public void onRequestSuccess(SearchDoctorsResponse getDoctorsResponse) {
             if (getDoctorsResponse.status.code == HTTP_STATUS_OK) {
                 doctorList = (ArrayList<Doctor>) getDoctorsResponse.data;
+                ListIterator<Doctor> iter = doctorList.listIterator();
+                Doctor doctor = null;
+                while (iter.hasNext()) {
+                    doctor = iter.next();
+                    DoctorProfileDbApi doctorProfileDbApi = new DoctorProfileDbApi(getActivity());
+                    Doctor id = doctorProfileDbApi.getProfile(doctor.emailId);
+                    if (id == null || doctor.doctorId != id.doctorId) {
+                        doctorProfileDbApi.saveProfile(doctor.doctorId, doctor);
+                    } else {
+                        doctorProfileDbApi.updateProfile(String.valueOf(doctor.doctorId), doctor);
+                    }
+                }
+
                 if (doctorList.size() == 0) {
                     mycareDoctorContainer.setVisibility(View.GONE);
                     doctorsDivider.setVisibility(View.GONE);
@@ -187,6 +207,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                         recommendedDoctorContainer.setVisibility(View.GONE);
                     }
                 } else if (doctorList.size() > 0) {
+
                     mycareDoctorAdapter = new DoctorsAdapter(getActivity(), doctorList);
                     mycareDoctorListView.setAdapter(mycareDoctorAdapter);
 
@@ -218,7 +239,6 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                     }
                 }
             } else {
-//                Toast.makeText(getApplicationContext(), "Doctors are not accepted your request Or send a request to add a doctor", Toast.LENGTH_LONG).show();
             }
             if (checkProgress) {
                 checkProgress = false;
@@ -334,7 +354,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
     }
 
     private boolean checkDocotorExist(int position) {
-        if(recommendedDoctorList != null && doctorList != null){
+        if (recommendedDoctorList != null && doctorList != null) {
             Long id = ((Doctor) recommendedDoctorList.get(position)).doctorId;
             for (Doctor doctor : doctorList) {
                 if (doctor.doctorId.equals(id)) {
@@ -346,6 +366,36 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
 
     }
 
+    @SuppressWarnings("resource")
+    private void pullDBFromdevice() {
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+
+            if (sd.canWrite()) {
+
+                String currentDBPath = getApplicationContext().getDatabasePath("ecarezone.db").toString();/*"/data/" + getApplicationContext().getPackageName() + "/databases/ecarezone"*/
+
+                File currentDB = new File(currentDBPath);
+
+                String backupDBPath = "ecarezone.db";
+                File backupDB = new File(sd, "/Download/" + backupDBPath);
+                if (!backupDB.exists()) {
+                    backupDB.createNewFile();
+                }
+
+                FileChannel src = new FileInputStream(currentDB)
+                        .getChannel();
+                FileChannel dst = new FileOutputStream(backupDB)
+                        .getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+
+            }
+        } catch (Exception e) {
+            Log.e("", e.toString());
+        }
+    }
 
 }
 
@@ -369,8 +419,9 @@ class Utility {
         totalHeight += padding;//for padding at the bottom
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1)) + 20;
         listView.setLayoutParams(params);
         listView.requestLayout();
     }
+
 }

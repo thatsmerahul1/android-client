@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.ecarezone.android.patient.model.Chat;
+import com.ecarezone.android.patient.model.Doctor;
 import com.ecarezone.android.patient.model.User;
 import com.ecarezone.android.patient.model.UserProfile;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
@@ -24,12 +25,15 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
 
     private Context mContext;
     private Dao<UserProfile, Integer> mProfileDao = null;
+    private Dao<Doctor, Integer> mDoctorProfileDao = null;
     private Dao<User, Integer> mUserDao = null;
     private Dao<Chat, Integer> mChatDao = null;
 
     private static final String SQL_DELETE_PROFILES =
             "DELETE FROM " + DbContract.Profiles.TABLE_NAME;
 
+    private static final String SQL_DELETE_DOCTOR_PROFILES =
+            "DELETE FROM " + DbContract.DoctorProfiles.TABLE_NAME;
     /* Constructor */
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -42,6 +46,8 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, UserProfile.class);
             TableUtils.createTable(connectionSource, User.class);
             TableUtils.createTable(connectionSource, Chat.class);
+            TableUtils.createTable(connectionSource, Doctor.class);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -54,6 +60,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, UserProfile.class, true);
             TableUtils.dropTable(connectionSource, User.class, true);
             TableUtils.dropTable(connectionSource, Chat.class, true);
+            TableUtils.dropTable(connectionSource, Doctor.class, true);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -68,6 +75,12 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
         return mProfileDao;
     }
 
+    public Dao<Doctor, Integer> getDoctorsProfileDao() throws SQLException {
+        if (mDoctorProfileDao == null) {
+            mDoctorProfileDao = getDao(Doctor.class);
+        }
+        return mDoctorProfileDao;
+    }
     // user data-access-object(Dao).
     public Dao<User, Integer> getUserDao() throws SQLException {
         if (mUserDao == null) {

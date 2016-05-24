@@ -2,17 +2,25 @@ package com.ecarezone.android.patient.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecarezone.android.patient.R;
+import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.Doctor;
+import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
+import com.ecarezone.android.patient.utils.ImageUtil;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -69,6 +77,12 @@ public class DoctorsAdapter extends BaseAdapter {
         holder.doctorName.setText("Dr. " + doctor.name);
         String imageUrl = doctor.avatarUrl;
 
+//        DoctorProfileDbApi doctorProfileDbApi = new DoctorProfileDbApi(activity);
+////                doctorProfileDbApi.saveMultipleProfiles(LoginInfo.userId, doctorList);
+//        doctorProfileDbApi.saveProfile(LoginInfo.userId, doctor);
+//        doctorProfileDbApi.updateProfile(String.valueOf(LoginInfo.userId), doctor);
+
+//        setPic(imageUrl, holder.avatar.getWidth(),holder.avatar.getHeight(),holder.avatar);
         if (imageUrl != null && imageUrl.trim().length() > 8) {
             Picasso.with(activity)
                     .load(imageUrl).resize(dp, dp)
@@ -88,6 +102,59 @@ public class DoctorsAdapter extends BaseAdapter {
 
         return view;
     }
+
+    /* scales & sets the image thumbnail to the profile image button*/
+    private void setPic(String imagePath, int width, int height, ImageView avatar) {
+        Bitmap bitmap = ImageUtil.createScaledBitmap(imagePath, width, height);
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(imagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED);
+
+        boolean doApplyMatrix = false;
+        Matrix matrix = new Matrix();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.postRotate(90);
+                doApplyMatrix = true;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.postRotate(180);
+                doApplyMatrix = true;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                matrix.postRotate(270);
+                doApplyMatrix = true;
+                break;
+            default:
+                break;
+        }
+        int dp = activity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
+
+        if (doApplyMatrix) {
+            Picasso.with(activity)
+                    .load(imagePath).resize(dp, dp)
+                    .centerCrop().placeholder(R.drawable.news_other)
+                    .error(R.drawable.news_other)
+                    .into(avatar);
+//            Bitmap imgBitmap = Bitmap.createBitmap(bitmap, 0,
+//                    0, bitmap.getWidth(), bitmap.getHeight(),
+//                    matrix, true);
+//            avatar.setImageBitmap(imgBitmap);
+        } else {
+            Picasso.with(activity)
+                    .load(imagePath).resize(dp, dp)
+                    .centerCrop().placeholder(R.drawable.news_other)
+                    .error(R.drawable.news_other)
+                    .into(avatar);
+//            avatar.setImageBitmap(bitmap);
+        }
+    }
+
 
     private void setDoctorPresence(ViewHolder holder, String status) {
         if(status != null) {

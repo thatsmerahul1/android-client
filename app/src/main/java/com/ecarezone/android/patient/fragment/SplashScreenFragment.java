@@ -56,42 +56,46 @@ public class SplashScreenFragment extends EcareZoneBaseFragment implements Sinch
 
     private void performSplashTask() {
         final Activity activity = getActivity();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (activity != null) {
-                    // we use SharedPreferences to show a indicator for checking
-                    // if the user has logged in
-                    SharedPreferences perPreferences =
-                            activity.getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
-                    boolean is_login = perPreferences.getBoolean(Constants.IS_LOGIN, false);
-                    String userId = perPreferences.getString(Constants.USER_ID, null);
-                    userTable = new UserTable(getApplicationContext());
-                    User user = userTable.getUserData(userId);
-                    if (is_login) { // the current user is still in login status
-                        LoginInfo.userId = Long.parseLong(userId);
-                        LoginInfo.userName = user.email;
-                        LoginInfo.hashedPassword = user.password;
-                        LoginInfo.role = user.role;
-                        if (!SinchUtil.getSinchServiceInterface().isStarted()) {
-                            Log.i(TAG, "userId::" + userId);
-                            SinchUtil.getSinchServiceInterface().startClient(LoginInfo.userName);
+        try {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (activity != null) {
+                        // we use SharedPreferences to show a indicator for checking
+                        // if the user has logged in
+                        SharedPreferences perPreferences =
+                                activity.getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
+                        boolean is_login = perPreferences.getBoolean(Constants.IS_LOGIN, false);
+                        String userId = perPreferences.getString(Constants.USER_ID, null);
+                        userTable = new UserTable(getApplicationContext());
+                        User user = userTable.getUserData(userId);
+                        if (is_login) { // the current user is still in login status
+                            LoginInfo.userId = Long.parseLong(userId);
+                            LoginInfo.userName = user.email;
+                            LoginInfo.hashedPassword = user.password;
+                            LoginInfo.role = user.role;
+                            if (!SinchUtil.getSinchServiceInterface().isStarted()) {
+                                Log.i(TAG, "userId::" + userId);
+                                SinchUtil.getSinchServiceInterface().startClient(LoginInfo.userName);
 
-                        } /*else {*/
+                            } /*else {*/
                             Intent intent = new Intent(activity.getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                             activity.finish();
                        /* }*/
-                    } else {
-                        if (user != null) {
-                            LoginInfo.userName = user.email;
+                        } else {
+                            if (user != null) {
+                                LoginInfo.userName = user.email;
+                            }
+                            activity.startActivity(new Intent(activity.getApplicationContext(), RegistrationActivity.class));
+//                            activity.finish();
                         }
-                        activity.startActivity(new Intent(activity.getApplicationContext(), RegistrationActivity.class));
-                        activity.finish();
                     }
                 }
-            }
-        }, 1500L);
+            }, 1500L);
+        } catch (Exception e) {
+
+        }
 
     }
 

@@ -100,7 +100,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
     private void doLogout() {
         progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), getText(R.string.progress_dialog_logout).toString());
         LoginRequest request =
-                new LoginRequest(LoginInfo.userName, null, Integer.parseInt(LoginInfo.role), null, null, null, null);
+                new LoginRequest(LoginInfo.userName, null, 1, null, null, null, null);
         getSpiceManager().execute(request, new LogoutRequestListener());
     }
 

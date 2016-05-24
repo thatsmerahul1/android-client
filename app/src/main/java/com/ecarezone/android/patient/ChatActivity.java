@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.fragment.ChatFragment;
 import com.ecarezone.android.patient.utils.SinchUtil;
 
@@ -75,6 +76,13 @@ public class ChatActivity extends EcareZoneBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         chatFragment.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Bundle extras = intent.getBundleExtra(Constants.EXTRA_EMAIL);
+        onNavigationChanged(R.layout.frag_chat, ((extras == null) ? null : extras));
     }
 
     @Override

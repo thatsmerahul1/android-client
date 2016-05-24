@@ -4,12 +4,14 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.rest.UpdatePasswordRequest;
@@ -52,14 +54,28 @@ public class UpdatePasswordActivity extends EcareZoneBaseActivity {
                             currentPwd = mEditTextCurrentPwd.getEditableText().toString();
                             newPwd = mEditTextNewPwd.getEditableText().toString();
                             String confirmPwd = mEditTextConfirmPwd.getEditableText().toString();
-                            Log.d("Naga", "Password Requesting");
-                            if (newPwd.length() != 0 && confirmPwd.length() != 0 && !newPwd.equals(confirmPwd)) {
-                                mTextViewerror.setText(getString(R.string.password_mismatch));
+
+                            if (TextUtils.isEmpty(newPwd) || (newPwd.trim().length() < 8) ||!newPwd.equals(confirmPwd)) {
                                 mTextViewerror.setVisibility(View.VISIBLE);
-                                return false;
+                                if(newPwd.length() != 0 || confirmPwd.length() != 0 || !newPwd.equals(confirmPwd) ) {
+                                    if((newPwd.trim().length() < 8)) {
+                                        mTextViewerror.setText(getString(R.string.error_password_less_than_registration));
+                                    } else {
+                                        mTextViewerror.setText(getString(R.string.password_mismatch));
+                                    }
+                                } else {
+                                    mTextViewerror.setText(getString(R.string.error_password_less_than_registration));
+                                }
+                            } else {
+                                doPasswordUpdate();
                             }
-                            mTextViewerror.setVisibility(View.GONE);
-                            doPasswordUpdate();
+//                            if (newPwd.length() != 0 && confirmPwd.length() != 0 && !newPwd.equals(confirmPwd)) {
+//                                mTextViewerror.setText(getString(R.string.password_mismatch));
+//                                mTextViewerror.setVisibility(View.VISIBLE);
+//                                return false;
+//                            }
+//                            mTextViewerror.setVisibility(View.GONE);
+//                            doPasswordUpdate();
                             return true;
                         }
                     });

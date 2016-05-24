@@ -33,6 +33,7 @@ import com.ecarezone.android.patient.utils.PermissionUtil;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.squareup.picasso.Picasso;
 
 
 /**
@@ -120,6 +121,18 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         }
         doctorId = doctor.doctorId;
         doctorName = doctor.name;
+
+
+        String imageUrl = doctor.avatarUrl;
+
+        if (imageUrl != null && imageUrl.trim().length() > 8) {
+            int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);;
+            Picasso.with(mActivity)
+                    .load(imageUrl).resize(dp, dp)
+                    .centerCrop().placeholder(R.drawable.news_other)
+                    .error(R.drawable.news_other)
+                    .into(doctorProfileImg);
+        }
     }
 
     @Override

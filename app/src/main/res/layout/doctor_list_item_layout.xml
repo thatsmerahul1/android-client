@@ -11,7 +11,7 @@
         android:id="@+id/doctor_avatar"
         android:layout_width="@dimen/profile_thumbnail_edge_size"
         android:layout_height="@dimen/profile_thumbnail_edge_size"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center_vertical"
         android:layout_margin="4dp"
         android:src="@drawable/dr_john_photo"
         >
@@ -20,8 +20,8 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="16dp">

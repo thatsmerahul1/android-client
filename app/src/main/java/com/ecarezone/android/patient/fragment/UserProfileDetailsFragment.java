@@ -8,12 +8,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,7 +30,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ecarezone.android.patient.ProfileDetailsActivity;
 import com.ecarezone.android.patient.R;
@@ -53,6 +58,8 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 
 /**
@@ -248,10 +255,69 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
 
     /* scales & sets the image thumbnail to the profile image button*/
     private void setPic(String imagePath) {
-        Bitmap bitmap = ImageUtil.createScaledBitmap(imagePath, profileImageButton.getWidth(), profileImageButton.getHeight());
-        profileImageButton.setImageBitmap(bitmap);
-    }
+            Bitmap bitmap = ImageUtil.createScaledBitmap(imagePath, profileImageButton.getWidth(), profileImageButton.getHeight());
+            ExifInterface exif = null;
+            try {
+                exif = new ExifInterface(imagePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED);
 
+            boolean doApplyMatrix = false;
+            Matrix matrix = new Matrix();
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    matrix.postRotate(90);
+                    doApplyMatrix = true;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    matrix.postRotate(180);
+                    doApplyMatrix = true;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    matrix.postRotate(270);
+                    doApplyMatrix = true;
+                    break;
+                default:
+                    break;
+            }
+
+            if (doApplyMatrix) {
+                Bitmap imgBitmap = Bitmap.createBitmap(bitmap, 0,
+                        0, bitmap.getWidth(), bitmap.getHeight(),
+                        matrix, true);
+                saveBitmapToFile(imagePath, imgBitmap);
+
+
+                profileImageButton.setImageBitmap(imgBitmap);
+            } else {
+                profileImageButton.setImageBitmap(bitmap);
+            }
+        }
+
+    public static boolean saveBitmapToFile(String file, Bitmap bmp) {
+
+        FileOutputStream out = null;
+        boolean isSavingSuccessful = false;
+        try {
+            out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
+            isSavingSuccessful = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return isSavingSuccessful;
+    }
     /* sets the provide profile details in the UI fields */
     private void setProfileValuesToFormFields(UserProfile profile) {
         ((EditText) view.findViewById(R.id.name)).setText(profile.name);
@@ -304,8 +370,20 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         userProfile.height = ((EditText) view.findViewById(R.id.height)).getText().toString();
         userProfile.weight = ((EditText) view.findViewById(R.id.weight)).getText().toString();
 
-        SaveProfileAsyncTask saveProfileAsyncTask = new SaveProfileAsyncTask();
-        saveProfileAsyncTask.execute(userProfile);
+        if ((TextUtils.isEmpty(((EditText) view.findViewById(R.id.name)).getText().toString())) ||
+                (TextUtils.isEmpty(((EditText) view.findViewById(R.id.gender)).getText().toString())) ||
+                (TextUtils.isEmpty(((EditText) view.findViewById(R.id.dob)).getText().toString())) ||
+                (TextUtils.isEmpty(((EditText) view.findViewById(R.id.ethnicity)).getText().toString())) ||
+                (TextUtils.isEmpty(((EditText) view.findViewById(R.id.height)).getText().toString())) ||
+                (TextUtils.isEmpty(((EditText) view.findViewById(R.id.weight)).getText().toString()))) {
+
+            Toast.makeText(mActivity, "Please enter all the fields", Toast.LENGTH_LONG).show();
+
+        } else {
+            SaveProfileAsyncTask saveProfileAsyncTask = new SaveProfileAsyncTask();
+            saveProfileAsyncTask.execute(userProfile);
+        }
+
     }
 
     class SaveProfileAsyncTask extends AsyncTask<UserProfile, Void, Void> {
@@ -631,7 +709,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 } else {
                     monthStr = String.valueOf(month + 1);
                 }
-                StringBuilder dateSb = new StringBuilder().append(year).append("-").append(month + 1).append("-").append(day+1);
+                StringBuilder dateSb = new StringBuilder().append(year).append("-").append(month + 1).append("-").append(day);
                 setDateToDobField(dateSb.toString());
             } else {
                 mErrorText.setText(getString(R.string.invalid_birth_date));

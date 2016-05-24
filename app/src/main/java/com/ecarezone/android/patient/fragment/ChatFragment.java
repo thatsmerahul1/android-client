@@ -217,7 +217,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         }
         chat.setTimeStamp(message.getTimestamp());
         chat.setChatType(ChatDbApi.CHAT_INCOMING);
-        chatBox.setText("");
+//        chatBox.setText("");
 
         return chat;
     }

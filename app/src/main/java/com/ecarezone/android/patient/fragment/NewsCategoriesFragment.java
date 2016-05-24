@@ -2,12 +2,17 @@ package com.ecarezone.android.patient.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 
 import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.NewsListActivity;
@@ -35,6 +40,7 @@ public class NewsCategoriesFragment extends EcareZoneBaseFragment implements Gri
     private GetNewsResponse mGetNewsResonse = null;
     private GridView mGridView;
     private ProgressDialog mProgressDialog;
+    private Point mScreenSize;
 
     @Override
     protected String getCallerName() {
@@ -61,6 +67,18 @@ public class NewsCategoriesFragment extends EcareZoneBaseFragment implements Gri
         final View view = inflater.inflate(R.layout.frag_news_categories, container, false);
         mGridView = (GridView) view.findViewById(R.id.grid_view_categories_list);
         mGridView.setOnItemClickListener(this);
+
+        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+        int px = (int)((140 * displayMetrics.density) + 0.5);
+        int marginInPx = (int)((10 * displayMetrics.density) + 0.5);
+        int widthOfScreen = Resources.getSystem().getDisplayMetrics().widthPixels;
+        int numOfCloumns = (widthOfScreen  - marginInPx) / px;
+        mGridView.setNumColumns(numOfCloumns);
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(mGridView.getLayoutParams());
+        lp.setMargins(marginInPx, 0, marginInPx, 0);
+        mGridView.setLayoutParams(lp);
+
         ((MainActivity) getActivity()).getSupportActionBar()
                 .setTitle(getResources().getText(R.string.news_actionbar_title));
         return view;

@@ -212,6 +212,7 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
 
     }
 
+
     /*
          Login Button is enable only all fields entered
      */

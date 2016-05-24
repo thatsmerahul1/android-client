@@ -11,12 +11,13 @@
         android:orientation="vertical"
         android:layout_margin="20dp">
 
-        <ImageView
+        <com.ecarezone.android.patient.view.CircleImageView
             android:id="@+id/doctor_bio_profile_pic_id"
             android:layout_width="160dp"
             android:layout_height="160dp"
             android:layout_gravity="center"
-            android:src="@drawable/dr_john_photo" />
+            android:src="@drawable/dr_john_photo" >
+            </com.ecarezone.android.patient.view.CircleImageView>
 
         <TextView
             android:id="@+id/doctor_bio_name_id"
