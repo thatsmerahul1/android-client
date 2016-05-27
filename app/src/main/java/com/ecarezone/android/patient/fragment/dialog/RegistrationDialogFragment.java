@@ -82,12 +82,10 @@ public class RegistrationDialogFragment extends DialogFragment implements View.O
                 }
 
                 System.out.println(" Registration Dialog itemCode " + itemCode);
-
             }
         });
         return v;
     }
-
 
     @Override
     public void onClick(View v) {

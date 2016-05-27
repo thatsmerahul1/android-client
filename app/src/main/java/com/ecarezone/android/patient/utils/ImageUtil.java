@@ -22,7 +22,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import retrofit.ErrorHandler;
+import retrofit.RetrofitError;
 import retrofit.mime.TypedFile;
 
 /**
@@ -130,6 +136,26 @@ public class ImageUtil {
         return image;
     }
 
+    /* creates an image in external storage and returns the File */
+    public static File createChatImageFile( String recipient) throws IOException {
+        File storageDir = new File(Environment.getExternalStorageDirectory()
+                +  "/eCareZone"+ "/" + recipient + "/outgoing");
+
+        if (!storageDir.exists()) {
+            storageDir.mkdirs();
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy_HH-mm-ss");
+        String todayDate = dateFormat.format(new Date());
+
+        File image = File.createTempFile(
+                "IMG-"+ todayDate,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        return image;
+    }
+
     /* Utility to save the passed bitmap image to the file */
     public static boolean saveBitmapToFile(Bitmap bitmap, File file) throws IOException {
         boolean success = false;
@@ -146,7 +172,7 @@ public class ImageUtil {
     /* fires an intent to open camera to take a photo.
     *  Passes the empty file through bundle to place the captured photo into it
     * */
-    public static String dispatchTakePictureIntent(Activity context) {
+    public static String dispatchTakePictureIntent(Activity context, boolean fromChat, String recipient) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         String imagePath = null;
         // Ensure that there's a camera activity to handle the intent
@@ -154,7 +180,11 @@ public class ImageUtil {
             // Create the File where the photo should go
             File photoFile = null;
             try {
-                photoFile = ImageUtil.createImageFile();
+                if(fromChat){
+                    photoFile = ImageUtil.createChatImageFile(recipient);
+                } else {
+                    photoFile = ImageUtil.createImageFile();
+                }
                 imagePath = photoFile.getAbsolutePath();
             } catch (IOException ex) {
                 // Error occurred while creating the File
@@ -193,4 +223,6 @@ public class ImageUtil {
         }
         return file;
     }
+
+
 }

@@ -2,11 +2,12 @@ package com.ecarezone.android.patient.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private List<Chat> mMessages;
     private SimpleDateFormat mFormatter;
     private Context mContext;
+    String recipient;
+    private String[] localImgFileArr;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy_HH-mm-ss");
+    private File direct;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mChatUser, mChatText, mChartTime;
@@ -74,15 +79,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         return mMessages.get(i).getChatType().equals(ChatDbApi.CHAT_INCOMING) ? DIRECTION_INCOMING : DIRECTION_OUTGOING;
     }
 
-    public ChatAdapter(Context context) {
+    public ChatAdapter(Context context, String recipient) {
         mMessages = new ArrayList<Chat>();
         mFormatter = new SimpleDateFormat("HH:mm");
         mContext = context;
+        this.recipient = recipient;
+
+        direct = new File(Environment.getExternalStorageDirectory()
+                + "/eCareZone" + "/" + recipient + "/incoming");
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent,
-                                         int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         int direction = viewType;
         int res = 0;
         if (direction == DIRECTION_INCOMING) {
@@ -99,8 +107,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Chat chat = mMessages.get(position);
-        String message = chat.getMessageText();
-        String name = null;
+         String name = null;
         String senderUserId;
         if (chat.getChatType().equals(ChatDbApi.CHAT_OUTGOING)) {
             name = "ME";
@@ -134,25 +141,43 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         } else if (chat.getInComingImageUrl() != null) {
             holder.mChartImage.setVisibility(View.VISIBLE);
             holder.mChatText.setVisibility(View.GONE);
-            Picasso.with(mContext)
-                    .load(chat.getInComingImageUrl())
-                    .into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            holder.mProgressBar.setVisibility(View.GONE);
-                            holder.mChartImage.setImageBitmap(bitmap);
-                        }
 
-                        @Override
-                        public void onBitmapFailed(Drawable errorDrawable) {
-                            holder.mProgressBar.setVisibility(View.GONE);
-                        }
+            String imagePath = null;
+            if (direct.isDirectory()) {
+                String formattedDate = dateFormat.format(chat.getTimeStamp());
+                localImgFileArr = direct.list();
+                for (String fileName : localImgFileArr) {
+                    Log.i("Comapring: ", fileName + " with " +formattedDate + ".jpg");
+                    if (fileName.equalsIgnoreCase(formattedDate + ".jpg")) {
+                        imagePath = direct.getAbsolutePath() + File.separator + fileName;
+                        break;
+                    }
+                }
+            }
+            if (imagePath != null) {
+                Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+                holder.mChartImage.setImageBitmap(bitmap);
+            } else {
+                Picasso.with(mContext)
+                        .load(chat.getInComingImageUrl())
+                        .into(new Target() {
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                holder.mProgressBar.setVisibility(View.GONE);
+                                holder.mChartImage.setImageBitmap(bitmap);
+                            }
 
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-                            holder.mProgressBar.setVisibility(View.VISIBLE);
-                        }
-                    });
+                            @Override
+                            public void onBitmapFailed(Drawable errorDrawable) {
+                                holder.mProgressBar.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                                holder.mProgressBar.setVisibility(View.VISIBLE);
+                            }
+                        });
+            }
         } else {
             holder.mChatText.setText(chat.getMessageText());
             holder.mChatText.setVisibility(View.VISIBLE);
@@ -160,7 +185,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
         holder.mChatUser.setText(name);
         holder.mChartTime.setText(mFormatter.format(chat.getTimeStamp()));
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -210,7 +234,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
         @Override
         protected void onPostExecute(File file) {
-
             chat.setDiscImageFile(file);
             Picasso.with(mContext)
                     .load(file)

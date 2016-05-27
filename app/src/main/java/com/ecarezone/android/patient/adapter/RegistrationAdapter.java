@@ -12,8 +12,6 @@ import android.widget.TextView;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.config.Constants;
 
-import java.util.ArrayList;
-
 /**
  * Created by L&T Technology Services  on 2/20/2016.
  */
@@ -46,7 +44,6 @@ public class RegistrationAdapter extends ArrayAdapter<String> {
         mCountry = countryPreferences.getString(Constants.COUNTRY, "");
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -64,8 +61,6 @@ public class RegistrationAdapter extends ArrayAdapter<String> {
                 itemView.setBackgroundResource(R.drawable.circle_blue_complete);
             }
         }
-
-
         return v;
     }
 }

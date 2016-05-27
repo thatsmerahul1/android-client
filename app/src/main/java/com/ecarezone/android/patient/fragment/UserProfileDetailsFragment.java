@@ -30,7 +30,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,8 +54,6 @@ import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -490,7 +487,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                             } else {
                                 // already have all permissions
 
-                                mSelectedPhotoPath = ImageUtil.dispatchTakePictureIntent(getActivity());
+                                mSelectedPhotoPath = ImageUtil.dispatchTakePictureIntent(getActivity(),false, null);
                             }
                         } else {
                             if (PermissionUtil.isPermissionRequired()
@@ -758,7 +755,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 dispatchSelectFromGalleryIntent();
                 break;
             case PermissionUtil.REQUEST_CODE_ASK_CAPTURE_PHOTO_PERMISSIONS:
-                mSelectedPhotoPath = ImageUtil.dispatchTakePictureIntent(getActivity());
+                mSelectedPhotoPath = ImageUtil.dispatchTakePictureIntent(getActivity(),false, null);
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);

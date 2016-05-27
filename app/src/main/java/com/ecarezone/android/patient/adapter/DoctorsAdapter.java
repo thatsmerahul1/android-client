@@ -9,14 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecarezone.android.patient.R;
-import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.Doctor;
-import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 import com.ecarezone.android.patient.utils.ImageUtil;
 import com.squareup.picasso.Picasso;
 
@@ -77,12 +74,6 @@ public class DoctorsAdapter extends BaseAdapter {
         holder.doctorName.setText("Dr. " + doctor.name);
         String imageUrl = doctor.avatarUrl;
 
-//        DoctorProfileDbApi doctorProfileDbApi = new DoctorProfileDbApi(activity);
-////                doctorProfileDbApi.saveMultipleProfiles(LoginInfo.userId, doctorList);
-//        doctorProfileDbApi.saveProfile(LoginInfo.userId, doctor);
-//        doctorProfileDbApi.updateProfile(String.valueOf(LoginInfo.userId), doctor);
-
-//        setPic(imageUrl, holder.avatar.getWidth(),holder.avatar.getHeight(),holder.avatar);
         if (imageUrl != null && imageUrl.trim().length() > 8) {
             Picasso.with(activity)
                     .load(imageUrl).resize(dp, dp)
