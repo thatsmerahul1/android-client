@@ -21,6 +21,7 @@ import com.ecarezone.android.patient.AppointmentActivity;
 import com.ecarezone.android.patient.CallActivity;
 import com.ecarezone.android.patient.ChatActivity;
 import com.ecarezone.android.patient.MainActivity;
+import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.VideoActivity;
 import com.ecarezone.android.patient.config.Constants;
@@ -140,7 +141,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         if (v == null) return;
 
         viewId = v.getId();
-        if(isNetworkAvailable(mActivity)) {
+        if(NetworkCheck.isNetworkAvailable(mActivity)) {
             switch (viewId) {
                 case R.id.btn_doctor_chat_id:
                     chatButtonClicked();
@@ -161,49 +162,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         } else {
             Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
         }
-        switch (viewId) {
-            case R.id.btn_doctor_chat_id:
-                if(isNetworkAvailable(mActivity)) {
-                    chatButtonClicked();
-                } else {
-                    Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case R.id.btn_doctor_video_id:
-                if(isNetworkAvailable(mActivity)) {
-                    callVideoButtonClicked();
-                } else {
-                    Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case R.id.btn_doctor_voice_id:
-                if(isNetworkAvailable(mActivity)) {
-                    callButtonClicked();
-                } else {
-                    Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case R.id.button_appointment:
-                if(isNetworkAvailable(mActivity)) {
-                    createAppointment();
-                } else {
-                    Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case R.id.add_doctor_button:
-                if(isNetworkAvailable(mActivity)) {
-                    sendAddDoctorRequest();
-                } else {
-                    Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
-                }
-                break;
-        }
-    }
-
-    public boolean isNetworkAvailable(final Context context) {
-        final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
-    }
+     }
 
     private void callVideoButtonClicked() {
         if (PermissionUtil.isPermissionRequired() && PermissionUtil.getAllpermissionRequired(mActivity, PermissionUtil.SINCH_PERMISSIONS).length > 0) {

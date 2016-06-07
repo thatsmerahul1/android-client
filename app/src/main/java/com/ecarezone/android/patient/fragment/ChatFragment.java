@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecarezone.android.patient.ChatActivity;
+import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.ProfileDetailsActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.adapter.ChatAdapter;
@@ -219,7 +220,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         chat.setChatUserId(message.getSenderId());
         if (message.getTextBody().contains(Constants.ENDPOINTURL)) {
             chat.setInComingImageUrl(message.getTextBody());
-            if(isNetworkAvailable(getActivity())) {
+            if(NetworkCheck.isNetworkAvailable(getActivity())) {
                 downloadFile(chat.getInComingImageUrl(), message.getTimestamp());
             } else {
                 Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
@@ -301,8 +302,4 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         }
     }
 
-    public boolean isNetworkAvailable(final Context context) {
-        final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
-    }
 }
