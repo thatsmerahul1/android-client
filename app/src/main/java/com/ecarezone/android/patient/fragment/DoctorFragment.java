@@ -239,7 +239,10 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             Log.d(TAG, "AddDoctorResponse Status " + addDoctorResponse.status.code);
             progressDialog.dismiss();
             if (addDoctorResponse.status.code.equals(HTTP_STATUS_OK)) {
-                AddDoctorRequestDialog addDoctorRequestDialog = new AddDoctorRequestDialog(doctorName);
+                AddDoctorRequestDialog addDoctorRequestDialog = new AddDoctorRequestDialog();
+                Bundle bndl = new Bundle();
+                bndl.putString("doctor_name", doctorName);
+                addDoctorRequestDialog.setArguments(bndl);
                 FragmentManager fragmentManager = getActivity().getFragmentManager();
                 addDoctorRequestDialog.show(fragmentManager, "AddDoctorRequestSuccessFragment");
             } else {

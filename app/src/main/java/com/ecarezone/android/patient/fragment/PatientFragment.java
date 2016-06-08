@@ -102,6 +102,8 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
                 break;
             case R.id.viewDoctorProfile:
                 // TODO call the doctor profile activity.
+                ((MainActivity) getActivity()).onNavigationChanged(R.layout.frag_doctor_list, null);
+
                 break;
             case R.id.button_finish_profile_ok:
                 ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());

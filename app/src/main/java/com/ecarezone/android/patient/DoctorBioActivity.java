@@ -19,6 +19,7 @@ import com.ecarezone.android.patient.model.Doctor;
 import com.ecarezone.android.patient.model.rest.AddDoctorRequest;
 import com.ecarezone.android.patient.model.rest.AddDoctorResponse;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
+import com.google.android.gms.internal.bn;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -65,7 +66,11 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
                             public boolean onMenuItemClick(MenuItem item) {
                                 if (item.getItemId() == R.id.action_add) {
                                     Log.i(TAG, "Menu = " + item.getTitle() + ", " + item.getItemId());
-                                    sendAddDoctorRequest();
+                                    if(NetworkCheck.isNetworkAvailable(getBaseContext())) {
+                                        sendAddDoctorRequest();
+                                    } else {
+                                        Toast.makeText(getBaseContext(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+                                    }
                                 }
                                 return true;
                             }
@@ -131,13 +136,15 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
             Log.d(TAG, "ResponseCode " + addDoctorResponse.status.code);
 
             if (addDoctorResponse.status.code == HTTP_STATUS_OK) {
-                AddDoctorRequestDialog addDoctorRequestDialog = new AddDoctorRequestDialog(doctorName);
+                AddDoctorRequestDialog addDoctorRequestDialog = new AddDoctorRequestDialog();
+                Bundle bndl = new Bundle();
+                bndl.putString("doctor_name", doctorName);
+                addDoctorRequestDialog.setArguments(bndl);
                 FragmentManager fragmentManager = getFragmentManager();
                 addDoctorRequestDialog.show(fragmentManager, "AddDoctorRequestSuccessFragment");
             } else {
                 Toast.makeText(DoctorBioActivity.this, addDoctorResponse.status.message, Toast.LENGTH_LONG).show();
             }
-
 
         }
     }
