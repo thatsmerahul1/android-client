@@ -50,6 +50,7 @@ import com.ecarezone.android.patient.utils.ImageUtil;
 import com.ecarezone.android.patient.utils.MD5Util;
 import com.ecarezone.android.patient.utils.PermissionUtil;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
+import com.ecarezone.android.patient.utils.Util;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -200,6 +201,9 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.action_check) {
+
+            Util.hideKeyboard(getActivity());
+
             boolean isError = mErrorText.getText().length() > 0 ? true : false;
             mErrorText.setText("");
 

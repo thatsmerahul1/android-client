@@ -62,8 +62,33 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/appointment_month"
+            android:id="@+id/appointment_year"
             android:layout_below="@+id/dateTimeLevel"
+            android:gravity="center"
+            android:text="2016"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:textColor="@color/text_black_color_selector"
+            android:layout_marginTop="10dp"
+            />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:id="@+id/line0"
+            android:layout_below="@+id/appointment_year"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:textColor="@android:color/black"
+            android:background="@android:color/black"
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/appointment_month"
+            android:layout_below="@+id/line0"
             android:gravity="center"
             android:text="January"
             android:layout_marginBottom="10dp"
@@ -140,7 +165,6 @@
             android:layout_below="@+id/view_line"
             android:textColor="@android:color/holo_red_light" />
 
-
         <Button
             android:id="@+id/button_appointment"
             style="@style/EcareZoneBlueButton"
@@ -148,7 +172,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="20dp"
             android:text="Book"
             android:minWidth="220dp" />
 

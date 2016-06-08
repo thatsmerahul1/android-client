@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/doctor_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        >
+
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@android:color/white">
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,12 +51,11 @@
 
             <com.ecarezone.android.patient.view.CircleImageView
                 android:id="@+id/doctor_profile_pic_id"
-                android:layout_width="@dimen/profile_thumbnail_edge_size"
-                android:layout_height="@dimen/profile_thumbnail_edge_size"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:layout_margin="4dp"
-                android:src="@drawable/dr_john_photo" >
-            </com.ecarezone.android.patient.view.CircleImageView>
+                android:src="@drawable/dr_john_photo"></com.ecarezone.android.patient.view.CircleImageView>
 
 
             <TextView
@@ -83,16 +82,16 @@
 
             <Button
                 android:id="@+id/add_doctor_button"
+                style="@style/EcareZoneGreenBorderButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="15dp"
+                android:layout_marginTop="10dp"
+                android:elevation="0dp"
                 android:padding="15dp"
                 android:text="@string/doctor_add_my_care_team"
-                android:elevation="0dp"
-                android:visibility="visible"
-                style="@style/EcareZoneGreenBorderButton"/>
+                android:visibility="visible" />
 
 
         </LinearLayout>
@@ -100,15 +99,16 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center_horizontal|bottom"
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <Button
@@ -151,17 +151,17 @@
 
             <Button
                 android:id="@+id/button_appointment"
-                android:background="@drawable/circle_blue_complete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="16dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/circle_blue_complete"
+                android:minWidth="220dp"
                 android:text="@string/doctor_appointment"
-                android:textColor="@android:color/white"
                 android:textAllCaps="false"
-                android:minWidth="220dp" />
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
         <!--<View

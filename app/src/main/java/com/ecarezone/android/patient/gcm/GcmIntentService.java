@@ -51,7 +51,7 @@ public class GcmIntentService extends IntentService implements ServiceConnection
             SinchService.SinchServiceInterface sinchService = (SinchService.SinchServiceInterface) iBinder;
             if (sinchService != null) {
                 NotificationResult result = sinchService.relayRemotePushNotificationPayload(mIntent);
-                if (result.isMessage() && sinchService.isMessageNotifcationRequired()) {
+                if (result != null && result.isMessage() && sinchService.isMessageNotifcationRequired()) {
                     // handle result, e.g. show a notification or similar
                     sendBroadcast();
 

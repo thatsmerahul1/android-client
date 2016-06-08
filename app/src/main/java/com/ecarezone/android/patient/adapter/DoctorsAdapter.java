@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.model.Doctor;
+import com.ecarezone.android.patient.model.database.ChatDbApi;
 import com.ecarezone.android.patient.utils.ImageUtil;
 import com.squareup.picasso.Picasso;
 
@@ -64,6 +65,7 @@ public class DoctorsAdapter extends BaseAdapter {
             holder.doctorAvailability = (TextView) view.findViewById(R.id.doctor_status);
             holder.doctorName = (TextView) view.findViewById(R.id.doctor_name);
             holder.doctorPresence = view.findViewById(R.id.doctor_presence);
+            holder.chatCount = (TextView) view.findViewById(R.id.chat_count);
             holder.doctorType = (TextView) view.findViewById(R.id.doctor_type);
             view.setTag(holder);
         } else {
@@ -81,7 +83,21 @@ public class DoctorsAdapter extends BaseAdapter {
                     .error(R.drawable.news_other)
                     .into(holder.avatar);
         }
-        holder.doctorType.setText(doctor.doctorCategory);
+        if(doctor.doctorCategory == null){
+            holder.doctorType.setText(doctor.category);
+        }
+        else {
+            holder.doctorType.setText(doctor.doctorCategory);
+        }
+
+        String count = String.valueOf(ChatDbApi.getInstance(activity).getUnReadChatCountByUserId(doctor.emailId));
+        if(!count.equalsIgnoreCase("0")){
+            holder.chatCount.setText(count);
+            holder.chatCount.setVisibility(View.VISIBLE);
+        } else {
+            holder.chatCount.setVisibility(View.GONE);
+        }
+
         if(doctor.status != null) {
             if (doctor.status.equalsIgnoreCase("1")) {
                 holder.doctorAvailability.setText(R.string.doctor_available);
@@ -161,6 +177,7 @@ public class DoctorsAdapter extends BaseAdapter {
         ImageView avatar;
         TextView doctorName;
         TextView doctorType;
+        TextView chatCount;
         View doctorPresence;
         TextView doctorAvailability;
     }

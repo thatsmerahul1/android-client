@@ -30,6 +30,10 @@ public class RegistrationActivity extends EcareZoneBaseActivity {
         setContentView(R.layout.act_registraion);
         onNavigationChanged(R.layout.frag_login, null);
         addSupportOnBackStackChangedListener(this);
+
+        if(getIntent().getBooleanExtra("stop_sinch", false)){
+            stopSinchService();
+        }
     }
 
     @Override

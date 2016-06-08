@@ -17,6 +17,10 @@ public class SplashScreenActivty extends EcareZoneBaseActivity {
         splashScreenFragment = SplashScreenFragment.newInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_splash);
+
+//        Crittercism.initialize(getApplicationContext(),
+//                "56b49f2fb35f950b00e1ad37");
+
         onNavigationChanged(R.layout.frag_splashscreen, null);
         addSupportOnBackStackChangedListener(this);
     }

@@ -9,7 +9,7 @@
     <dimen name="text_size_small">16sp</dimen>
 
     <dimen name="thumbnail_square_size">80dp</dimen>
-    <dimen name="profile_thumbnail_edge_size">100dp</dimen>
+    <dimen name="profile_thumbnail_edge_size">80dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="doctor_list_item_margin">8dp</dimen>

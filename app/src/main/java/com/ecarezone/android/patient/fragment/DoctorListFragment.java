@@ -2,9 +2,13 @@ package com.ecarezone.android.patient.fragment;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
@@ -31,6 +35,7 @@ import com.ecarezone.android.patient.adapter.DoctorsAdapter;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.Doctor;
+import com.ecarezone.android.patient.model.database.ChatDbApi;
 import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 import com.ecarezone.android.patient.model.rest.SearchDoctorsRequest;
 import com.ecarezone.android.patient.model.rest.SearchDoctorsResponse;
@@ -144,8 +149,16 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(message,
+                new IntentFilter("send"));
         populateMyCareDoctorList();
         populateRecommendedDoctorList();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(message);
     }
 
     private void populateMyCareDoctorList() {
@@ -397,6 +410,25 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
             Log.e("", e.toString());
         }
     }
+
+//    BroadcastReceiver message = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            updateUnreadMessageCount(ChatDbApi.getInstance(context).getUnReadChatCount());
+//        }
+//    };
+
+    BroadcastReceiver message = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(mycareDoctorAdapter != null) {
+                mycareDoctorAdapter.notifyDataSetChanged();
+            }
+            if(recommendedDoctorAdapter != null) {
+                recommendedDoctorAdapter.notifyDataSetChanged();
+            }
+        }
+    };
 
 }
 

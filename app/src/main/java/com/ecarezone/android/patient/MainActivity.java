@@ -114,7 +114,7 @@ public class MainActivity extends EcareZoneBaseActivity {
     public void toggleDrawer(boolean open) {
         if (mDrawerLayout != null) {
             if (open) {
-                mDrawerLayout.openDrawer(Gravity.START | Gravity.LEFT);
+                mDrawerLayout.openDrawer(Gravity.LEFT);
             } else {
                 mDrawerLayout.closeDrawers();
             }
@@ -132,7 +132,7 @@ public class MainActivity extends EcareZoneBaseActivity {
     @Override
     public void onBackPressed() {
         if (mDrawerLayout != null) {
-            if (mDrawerLayout.isDrawerOpen(Gravity.START | Gravity.LEFT)) {
+            if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
                 mDrawerLayout.closeDrawers();
                 return;
             }

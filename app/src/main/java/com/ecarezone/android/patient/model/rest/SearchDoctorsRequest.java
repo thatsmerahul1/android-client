@@ -36,7 +36,7 @@ public class SearchDoctorsRequest extends RetrofitSpiceRequest<SearchDoctorsResp
     @Override
     public SearchDoctorsResponse loadDataFromNetwork() throws Exception {
 
-        //This file is common for searchDoctor , recommendedDoctot and mycareteam doctors
+        //This file is common for searchDoctor , recommended Doctor and mycareteam doctors
         if (keyword == null) {
             if (userId == null) {
                 return getService().getRecommendedDoctors();

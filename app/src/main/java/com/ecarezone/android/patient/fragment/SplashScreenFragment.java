@@ -107,8 +107,10 @@ public class SplashScreenFragment extends EcareZoneBaseFragment implements Sinch
 
     @Override
     public void onStarted() {
-        Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
-        startActivity(intent);
-        getActivity().finish();
+        try {
+            Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+        }catch (Exception ex){ex.printStackTrace();}
     }
 }

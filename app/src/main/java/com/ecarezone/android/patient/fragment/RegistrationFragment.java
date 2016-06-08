@@ -43,6 +43,7 @@ import com.ecarezone.android.patient.utils.EcareZoneLog;
 import com.ecarezone.android.patient.utils.PasswordUtil;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
 import com.ecarezone.android.patient.utils.SinchUtil;
+import com.ecarezone.android.patient.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.sinch.android.rtc.SinchError;
@@ -179,6 +180,8 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
     public void onClick(View v) {
         if (v == null) return;
 
+        Util.hideKeyboard(getActivity());
+
         final int viewId = v.getId();
         if (viewId == R.id.button_register) {
             final String username = mEditTextUsername.getEditableText().toString();
@@ -299,6 +302,8 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         SignupRequest signupRequest = new SignupRequest(username, hashedPassword, 1,
                 country, language, "N/A", "N/A", Constants.API_KEY, Constants.deviceUnique);
         getSpiceManager().execute(signupRequest, new DosSettingsRequestListener());
+
+
     }
 
     private void doLogin(final String username, final String password) {

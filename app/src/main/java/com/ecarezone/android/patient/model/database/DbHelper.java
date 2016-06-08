@@ -3,6 +3,7 @@ package com.ecarezone.android.patient.model.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.ecarezone.android.patient.model.Appointment;
 import com.ecarezone.android.patient.model.Chat;
 import com.ecarezone.android.patient.model.Doctor;
 import com.ecarezone.android.patient.model.User;
@@ -28,6 +29,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
     private Dao<Doctor, Integer> mDoctorProfileDao = null;
     private Dao<User, Integer> mUserDao = null;
     private Dao<Chat, Integer> mChatDao = null;
+    private Dao<Appointment, Integer> mAppointmentDao = null;
 
     private static final String SQL_DELETE_PROFILES =
             "DELETE FROM " + DbContract.Profiles.TABLE_NAME;
@@ -47,7 +49,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, User.class);
             TableUtils.createTable(connectionSource, Chat.class);
             TableUtils.createTable(connectionSource, Doctor.class);
-
+            TableUtils.createTable(connectionSource, Appointment.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -61,6 +63,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, User.class, true);
             TableUtils.dropTable(connectionSource, Chat.class, true);
             TableUtils.dropTable(connectionSource, Doctor.class, true);
+            TableUtils.dropTable(connectionSource, Appointment.class, true);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -95,6 +98,13 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
             mChatDao = getDao(Chat.class);
         }
         return mChatDao;
+    }
+
+    public Dao<Appointment, Integer> getAppointmentDao() throws SQLException {
+        if (mAppointmentDao == null) {
+            mAppointmentDao = getDao(Appointment.class);
+        }
+        return mAppointmentDao;
     }
 
     @Override

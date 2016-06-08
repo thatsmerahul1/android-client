@@ -31,6 +31,8 @@ public class Doctor implements Parcelable, Serializable {
     @DatabaseField
     public String doctorCategory;
     @Expose
+    public String category;
+    @Expose
     public String doctorGender;
     @Expose
     public String doctorCountry;

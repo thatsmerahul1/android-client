@@ -10,7 +10,7 @@
 
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="1"
             android:background="#fffafafa"
@@ -44,12 +44,12 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_gravity="center"
-        android:layout_margin="4dp"
+        android:layout_weight="3"
         android:src="@drawable/dr_song_photo" >
     </com.ecarezone.android.patient.view.CircleImageView>
     <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center"
             android:gravity="center">
@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/EcareZoneBlueButton"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
                     />
             <Button
                     android:id="@+id/declineButton"

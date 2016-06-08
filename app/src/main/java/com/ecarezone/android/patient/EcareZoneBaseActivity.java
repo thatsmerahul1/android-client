@@ -61,6 +61,10 @@ public abstract class EcareZoneBaseActivity extends AbstractBaseActivity impleme
         }
     }
 
+    public void stopSinchService(){
+        SinchUtil.getSinchServiceInterface().stopClient();
+    }
+
     protected void onServiceConnected() {
         // for subclasses
     }

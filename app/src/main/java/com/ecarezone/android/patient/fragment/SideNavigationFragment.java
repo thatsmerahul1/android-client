@@ -125,7 +125,11 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
                         editor.putBoolean(Constants.IS_LOGIN, false);
                         editor.commit();
 
-                        activity.startActivity(new Intent(activity.getApplicationContext(), RegistrationActivity.class));
+
+                        Intent intent = new Intent(activity.getApplicationContext(), RegistrationActivity.class);
+                        intent.putExtra("stop_sinch", true);
+                        activity.startActivity(intent);
+//                        activity.startActivity(new Intent(activity.getApplicationContext(), RegistrationActivity.class));
                         activity.finish();
                     }
 

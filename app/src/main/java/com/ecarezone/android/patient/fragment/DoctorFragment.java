@@ -26,7 +26,9 @@ import com.ecarezone.android.patient.VideoActivity;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.fragment.dialog.AddDoctorRequestDialog;
+import com.ecarezone.android.patient.model.Appointment;
 import com.ecarezone.android.patient.model.Doctor;
+import com.ecarezone.android.patient.model.database.AppointmentDbApi;
 import com.ecarezone.android.patient.model.rest.AddDoctorRequest;
 import com.ecarezone.android.patient.model.rest.AddDoctorResponse;
 import com.ecarezone.android.patient.utils.PermissionUtil;
@@ -34,6 +36,9 @@ import com.ecarezone.android.patient.utils.ProgressDialogUtil;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -109,10 +114,9 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
         if (doctor != null) {
             setDoctorPresenceIcon(doctor.status);
-            if(doctor.status.equalsIgnoreCase("1")) {
+            if (doctor.status.equalsIgnoreCase("1")) {
                 doctorStatusText.setText(R.string.doctor_available);
-            }
-            else{
+            } else {
                 doctorStatusText.setText(R.string.doctor_busy);
             }
             doctorStatusText.setVisibility(View.VISIBLE);
@@ -126,7 +130,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         String imageUrl = doctor.avatarUrl;
 
         if (imageUrl != null && imageUrl.trim().length() > 8) {
-            int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);;
+            int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
+            ;
             Picasso.with(mActivity)
                     .load(imageUrl).resize(dp, dp)
                     .centerCrop().placeholder(R.drawable.news_other)
@@ -140,7 +145,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         if (v == null) return;
 
         viewId = v.getId();
-        if(isNetworkAvailable(mActivity)) {
+        if (isNetworkAvailable(mActivity)) {
             switch (viewId) {
                 case R.id.btn_doctor_chat_id:
                     chatButtonClicked();
@@ -163,35 +168,35 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         }
         switch (viewId) {
             case R.id.btn_doctor_chat_id:
-                if(isNetworkAvailable(mActivity)) {
+                if (isNetworkAvailable(mActivity)) {
                     chatButtonClicked();
                 } else {
                     Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.btn_doctor_video_id:
-                if(isNetworkAvailable(mActivity)) {
+                if (isNetworkAvailable(mActivity)) {
                     callVideoButtonClicked();
                 } else {
                     Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.btn_doctor_voice_id:
-                if(isNetworkAvailable(mActivity)) {
+                if (isNetworkAvailable(mActivity)) {
                     callButtonClicked();
                 } else {
                     Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.button_appointment:
-                if(isNetworkAvailable(mActivity)) {
+                if (isNetworkAvailable(mActivity)) {
                     createAppointment();
                 } else {
                     Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.add_doctor_button:
-                if(isNetworkAvailable(mActivity)) {
+                if (isNetworkAvailable(mActivity)) {
                     sendAddDoctorRequest();
                 } else {
                     Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
@@ -236,7 +241,9 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     }
 
     private void createAppointment() {
-        mActivity.startActivity(new Intent(mActivity.getApplicationContext(), AppointmentActivity.class));
+        Intent intent = new Intent(mActivity.getApplicationContext(), AppointmentActivity.class);
+        intent.putExtra("doctorId", doctor.doctorId);
+        mActivity.startActivity(intent);
         mActivity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }
 
@@ -265,9 +272,54 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         getSpiceManager().execute(request, new AddDoctorTaskRequestListener());
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        AppointmentDbApi appointmentDbApi = AppointmentDbApi.getInstance(getApplicationContext());
+        Date currentDate = new Date();
+        List<Appointment> appointmentsList = appointmentDbApi.getAppointmentHistory(doctor.doctorId, LoginInfo.userId, currentDate);
+        if (appointmentsList != null) {
+
+
+            if (appointmentsList.size() > 0) {
+                Appointment appointment = appointmentsList.get(0);
+
+                if (appointmentsList.get(0).isConfirmed().equalsIgnoreCase("1")) {
+                    if (appointment.getTimeStamp().equals(currentDate) || appointment.getTimeStamp().before(currentDate)) {
+                        if (appointmentsList.get(0).getCallType().equalsIgnoreCase("voip")) {
+                            doctorVideo.setCompoundDrawablesWithIntrinsicBounds(null,
+                                    getResources().getDrawable(R.drawable.button_video_call_with_green_notification), null, null);
+                            doctorVideo.setTag("locked");
+                        } else {
+                            doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
+                                    getResources().getDrawable(R.drawable.button_voip_normal_with_green_notification), null, null);
+                            doctorVoice.setTag("locked");
+                        }
+                    } else {
+                        if (appointmentsList.get(0).getCallType().equalsIgnoreCase("voip")) {
+                            doctorVideo.setCompoundDrawablesWithIntrinsicBounds(null,
+                                    getResources().getDrawable(R.drawable.button_video_call_with_notification), null, null);
+                            doctorVideo.setTag(null);
+                        } else {
+                            doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
+                                    getResources().getDrawable(R.drawable.button_voip_normal_with_notification), null, null);
+                            doctorVoice.setTag(null);
+                        }
+                    }
+                }
+            } else {
+                doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
+                        getResources().getDrawable(R.drawable.button_voip_normal), null, null);//.setBackgroundResource(R.drawable.button_voip_normal);
+                doctorVideo.setCompoundDrawablesWithIntrinsicBounds(null,
+                        getResources().getDrawable(R.drawable.button_video_call_normal), null, null);
+            }
+        }
+    }
+
     /*
-            Add Doctor request response
-     */
+                Add Doctor request response
+         */
     public final class AddDoctorTaskRequestListener implements RequestListener<AddDoctorResponse> {
 
         @Override

@@ -14,6 +14,7 @@ public class AppointmentActivity extends EcareZoneBaseActivity {
 
     private Toolbar mToolBar = null;
     private ActionBar mActionBar;
+    private long doctorId;
 
     @Override
     protected String getCallerName() {
@@ -25,6 +26,7 @@ public class AppointmentActivity extends EcareZoneBaseActivity {
         if (fragmentLayoutResId < 0) return;
 
         if (fragmentLayoutResId == R.layout.frag_appointment) {
+            args.putLong("doctorId", doctorId);
             changeFragment(R.id.screen_container, new AppointmentFragment(),
                     AppointmentFragment.class.getSimpleName(), args);
         }
@@ -35,6 +37,7 @@ public class AppointmentActivity extends EcareZoneBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_appointment);
         Bundle data = getIntent().getExtras();
+        doctorId = getIntent().getLongExtra("doctorId", -1);
         onNavigationChanged(R.layout.frag_appointment, ((data == null) ? null : data));
         mToolBar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         if (mToolBar != null) {

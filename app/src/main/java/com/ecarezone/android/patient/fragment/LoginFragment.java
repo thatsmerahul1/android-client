@@ -37,6 +37,7 @@ import com.ecarezone.android.patient.utils.EcareZoneLog;
 import com.ecarezone.android.patient.utils.PasswordUtil;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
 import com.ecarezone.android.patient.utils.SinchUtil;
+import com.ecarezone.android.patient.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.sinch.android.rtc.SinchError;
@@ -61,7 +62,7 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
     private LocationFinder locationFinder;
     private String hashedPassword;
     private TextView textView_error;
-    int i=1;
+    int i = 1;
 
     @Override
     protected String getCallerName() {
@@ -78,7 +79,7 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
         View view = inflater.inflate(R.layout.frag_login, container, false);
         locationFinder = new LocationFinder(getActivity());
         mEditTextUsername = (EditText) view.findViewById(R.id.edit_text_login_username);
-         mEditTextUsername.addTextChangedListener(new TextWatcher() {
+        mEditTextUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -163,6 +164,8 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
     @Override
     public void onClick(View v) {
         if (v == null) return;
+
+        Util.hideKeyboard(getActivity());
 
         final int viewId = v.getId();
         if (viewId == R.id.button_login) {
@@ -297,11 +300,11 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
 
                     SharedPreferences languagePreferences = activity.getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
                     SharedPreferences.Editor langEditor = languagePreferences.edit();
-                    langEditor.putString(Constants.LANGUAGE,  data.settings.language);
+                    langEditor.putString(Constants.LANGUAGE, data.settings.language);
                     langEditor.commit();
                     SharedPreferences countryPreferences = activity.getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
                     SharedPreferences.Editor countryEditor = countryPreferences.edit();
-                    countryEditor.putString(Constants.COUNTRY,  data.settings.language);
+                    countryEditor.putString(Constants.COUNTRY, data.settings.language);
                     countryEditor.commit();
 
                     getActivity().runOnUiThread(new Runnable() {
