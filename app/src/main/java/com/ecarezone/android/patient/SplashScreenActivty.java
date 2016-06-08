@@ -14,13 +14,12 @@ public class SplashScreenActivty extends EcareZoneBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        splashScreenFragment = SplashScreenFragment.newInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_splash);
 
-//        Crittercism.initialize(getApplicationContext(),
-//                "56b49f2fb35f950b00e1ad37");
-
+        Crittercism.initialize(getApplicationContext(),
+                "56b49f2fb35f950b00e1ad37");
+        splashScreenFragment = SplashScreenFragment.newInstance();
         onNavigationChanged(R.layout.frag_splashscreen, null);
         addSupportOnBackStackChangedListener(this);
     }
