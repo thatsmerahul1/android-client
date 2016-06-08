@@ -21,6 +21,7 @@ import com.ecarezone.android.patient.AppointmentActivity;
 import com.ecarezone.android.patient.CallActivity;
 import com.ecarezone.android.patient.ChatActivity;
 import com.ecarezone.android.patient.MainActivity;
+import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.VideoActivity;
 import com.ecarezone.android.patient.config.Constants;
@@ -114,9 +115,10 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
         if (doctor != null) {
             setDoctorPresenceIcon(doctor.status);
-            if (doctor.status.equalsIgnoreCase("1")) {
+            if(doctor.status.equalsIgnoreCase("1")) {
                 doctorStatusText.setText(R.string.doctor_available);
-            } else {
+            }
+            else{
                 doctorStatusText.setText(R.string.doctor_busy);
             }
             doctorStatusText.setVisibility(View.VISIBLE);
@@ -130,8 +132,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         String imageUrl = doctor.avatarUrl;
 
         if (imageUrl != null && imageUrl.trim().length() > 8) {
-            int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
-            ;
+            int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);;
             Picasso.with(mActivity)
                     .load(imageUrl).resize(dp, dp)
                     .centerCrop().placeholder(R.drawable.news_other)
@@ -145,7 +146,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         if (v == null) return;
 
         viewId = v.getId();
-        if (isNetworkAvailable(mActivity)) {
+        if(NetworkCheck.isNetworkAvailable(mActivity)) {
             switch (viewId) {
                 case R.id.btn_doctor_chat_id:
                     chatButtonClicked();
@@ -166,49 +167,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         } else {
             Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
         }
-        switch (viewId) {
-            case R.id.btn_doctor_chat_id:
-                if (isNetworkAvailable(mActivity)) {
-                    chatButtonClicked();
-                } else {
-                    Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case R.id.btn_doctor_video_id:
-                if (isNetworkAvailable(mActivity)) {
-                    callVideoButtonClicked();
-                } else {
-                    Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case R.id.btn_doctor_voice_id:
-                if (isNetworkAvailable(mActivity)) {
-                    callButtonClicked();
-                } else {
-                    Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case R.id.button_appointment:
-                if (isNetworkAvailable(mActivity)) {
-                    createAppointment();
-                } else {
-                    Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case R.id.add_doctor_button:
-                if (isNetworkAvailable(mActivity)) {
-                    sendAddDoctorRequest();
-                } else {
-                    Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
-                }
-                break;
-        }
-    }
-
-    public boolean isNetworkAvailable(final Context context) {
-        final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
-    }
+     }
 
     private void callVideoButtonClicked() {
         if (PermissionUtil.isPermissionRequired() && PermissionUtil.getAllpermissionRequired(mActivity, PermissionUtil.SINCH_PERMISSIONS).length > 0) {
@@ -332,7 +291,10 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             Log.d(TAG, "AddDoctorResponse Status " + addDoctorResponse.status.code);
             progressDialog.dismiss();
             if (addDoctorResponse.status.code.equals(HTTP_STATUS_OK)) {
-                AddDoctorRequestDialog addDoctorRequestDialog = new AddDoctorRequestDialog(doctorName);
+                AddDoctorRequestDialog addDoctorRequestDialog = new AddDoctorRequestDialog();
+                Bundle bndl = new Bundle();
+                bndl.putString("doctor_name", doctorName);
+                addDoctorRequestDialog.setArguments(bndl);
                 FragmentManager fragmentManager = getActivity().getFragmentManager();
                 addDoctorRequestDialog.show(fragmentManager, "AddDoctorRequestSuccessFragment");
             } else {

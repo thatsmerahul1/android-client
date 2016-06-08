@@ -1,9 +1,11 @@
 package com.ecarezone.android.patient.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ecarezone.android.patient.R;
@@ -44,9 +48,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy_HH-mm-ss");
     private File direct;
 
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mChatUser, mChatText, mChartTime;
         public ImageView mChartImage;
+        public ImageView mFullImage;
         public ProgressBar mProgressBar;
 
         public ViewHolder(View v) {
@@ -106,7 +112,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Chat chat = mMessages.get(position);
+        final Chat chat = mMessages.get(position);
          String name = null;
         String senderUserId;
         if (chat.getChatType().equals(ChatDbApi.CHAT_OUTGOING)) {
@@ -128,12 +134,31 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                         .config(Bitmap.Config.RGB_565).fit()
                         .centerCrop()
                         .into(holder.mChartImage);
+                holder.mChartImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.parse("file://" + chat.getDeviceImagePath()),"image/*");
+                        mContext.startActivity(intent);
+                     }
+                });
             } else if (chat.getDiscImageFile() != null) {
                 Picasso.with(mContext)
                         .load(chat.getDiscImageFile())
                         .config(Bitmap.Config.RGB_565).fit()
                         .centerCrop()
                         .into(holder.mChartImage);
+
+                holder.mChartImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.parse("file://" + chat.getDeviceImagePath()),"image/*");
+                        mContext.startActivity(intent);
+                    }
+                });
             } else {
                 new ImageUploadDiscTask(holder).execute(chat);
             }
@@ -178,6 +203,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                             }
                         });
             }
+            final String finalImagePath = imagePath;
+            holder.mChartImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.parse("file://" + finalImagePath), "image/*");
+                    mContext.startActivity(intent);
+                }
+            });
         } else {
             holder.mChatText.setText(chat.getMessageText());
             holder.mChatText.setVisibility(View.VISIBLE);
@@ -254,7 +289,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                             holder.mProgressBar.setVisibility(View.VISIBLE);
                         }
                     });
-
             new ImageUploadTask(holder, chat).execute(file);
         }
     }
