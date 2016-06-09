@@ -123,7 +123,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             }
             doctorStatusText.setVisibility(View.VISIBLE);
             doctorNameView.setText("Dr. " + doctor.name);
-            doctorSpecialist.setText(doctor.doctorCategory);
+            doctorSpecialist.setText(doctor.category);
         }
         doctorId = doctor.doctorId;
         doctorName = doctor.name;

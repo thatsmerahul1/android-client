@@ -65,6 +65,7 @@ public class Doctor implements Parcelable, Serializable {
         this.doctorDescription = in.readString();
         this.status = in.readString();
         this.doctorCategory = in.readString();
+        this.category = in.readString();
         this.doctorGender = in.readString();
         this.doctorCountry = in.readString();
         this.doctorLanguage = in.readString();
@@ -84,6 +85,7 @@ public class Doctor implements Parcelable, Serializable {
         dest.writeString(doctorDescription);
         dest.writeString(status);
         dest.writeString(doctorCategory);
+        dest.writeString(category);
         dest.writeString(doctorGender);
         dest.writeString(doctorCountry);
         dest.writeString(doctorLanguage);
