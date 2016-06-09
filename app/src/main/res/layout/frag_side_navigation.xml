@@ -67,7 +67,7 @@
                     android:background="@drawable/navigation_item_color_selector" />
 
                 <CheckBox
-                    android:id="@id/check_box_indicator_home"
+                    android:id="@+id/check_box_indicator_home"
                     android:layout_width="2dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -79,21 +79,21 @@
                     android:minHeight="56dp" />
 
                 <ImageView
-                    android:id="@id/image_view_item_icon_home"
+                    android:id="@+id/image_view_item_icon_home"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_toRightOf="@id/check_box_indicator_home"
+                    android:layout_toRightOf="@+id/check_box_indicator_home"
                     android:scaleType="fitXY" />
 
                 <TextView
-                    android:id="@id/text_view_content_title_home"
+                    android:id="@+id/text_view_content_title_home"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/image_view_item_icon_home"
+                    android:layout_toRightOf="@+id/image_view_item_icon_home"
                     android:gravity="center_vertical"
                     android:singleLine="false"
                     android:textColor="@android:color/white"
@@ -121,7 +121,7 @@
                     android:background="@drawable/navigation_item_color_selector" />
 
                 <CheckBox
-                    android:id="@id/check_box_indicator_news"
+                    android:id="@+id/check_box_indicator_news"
                     android:layout_width="2dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -133,21 +133,21 @@
                     android:minHeight="56dp" />
 
                 <ImageView
-                    android:id="@id/image_view_item_icon_news"
+                    android:id="@+id/image_view_item_icon_news"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_toRightOf="@id/check_box_indicator_news"
+                    android:layout_toRightOf="@+id/check_box_indicator_news"
                     android:scaleType="fitXY" />
 
                 <TextView
-                    android:id="@id/text_view_content_title_news"
+                    android:id="@+id/text_view_content_title_news"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/image_view_item_icon_news"
+                    android:layout_toRightOf="@+id/image_view_item_icon_news"
                     android:gravity="center_vertical"
                     android:singleLine="false"
                     android:textColor="@android:color/white"
@@ -175,7 +175,7 @@
                      android:background="@drawable/navigation_item_color_selector" />
 
                  <CheckBox
-                     android:id="@id/check_box_indicator_health"
+                     android:id="@+id/check_box_indicator_health"
                      android:layout_width="2dp"
                      android:layout_height="wrap_content"
                      android:layout_alignParentLeft="true"
@@ -187,21 +187,21 @@
                      android:minHeight="56dp" />
 
                  <ImageView
-                     android:id="@id/image_view_item_icon_health"
+                     android:id="@+id/image_view_item_icon_health"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:layout_centerVertical="true"
                      android:layout_marginLeft="8dp"
                      android:layout_marginRight="8dp"
-                     android:layout_toRightOf="@id/check_box_indicator_health"
+                     android:layout_toRightOf="@+id/check_box_indicator_health"
                      android:scaleType="fitXY" />
 
                  <TextView
-                     android:id="@id/text_view_content_title_health"
+                     android:id="@+id/text_view_content_title_health"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:layout_centerVertical="true"
-                     android:layout_toRightOf="@id/image_view_item_icon_health"
+                     android:layout_toRightOf="@+id/image_view_item_icon_health"
                      android:gravity="center_vertical"
                      android:singleLine="false"
                      android:textColor="@android:color/white"
@@ -229,7 +229,7 @@
                     android:background="@drawable/navigation_item_color_selector" />
 
                 <CheckBox
-                    android:id="@id/check_box_indicator_doctors"
+                    android:id="@+id/check_box_indicator_doctors"
                     android:layout_width="2dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -241,21 +241,21 @@
                     android:minHeight="56dp" />
 
                 <ImageView
-                    android:id="@id/image_view_item_icon_doctors"
+                    android:id="@+id/image_view_item_icon_doctors"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_toRightOf="@id/check_box_indicator_doctors"
+                    android:layout_toRightOf="@+id/check_box_indicator_doctors"
                     android:scaleType="fitXY" />
 
                 <TextView
-                    android:id="@id/text_view_content_title_doctors"
+                    android:id="@+id/text_view_content_title_doctors"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/image_view_item_icon_doctors"
+                    android:layout_toRightOf="@+id/image_view_item_icon_doctors"
                     android:gravity="center_vertical"
                     android:singleLine="false"
                     android:textColor="@android:color/white"
@@ -283,7 +283,7 @@
                     android:background="@drawable/navigation_item_color_selector" />
 
                 <CheckBox
-                    android:id="@id/check_box_indicator_medication"
+                    android:id="@+id/check_box_indicator_medication"
                     android:layout_width="2dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -295,21 +295,21 @@
                     android:minHeight="56dp" />
 
                 <ImageView
-                    android:id="@id/image_view_item_icon_medication"
+                    android:id="@+id/image_view_item_icon_medication"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_toRightOf="@id/check_box_indicator_medication"
+                    android:layout_toRightOf="@+id/check_box_indicator_medication"
                     android:scaleType="fitXY" />
 
                 <TextView
-                    android:id="@id/text_view_content_title_medication"
+                    android:id="@+id/text_view_content_title_medication"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/image_view_item_icon_medication"
+                    android:layout_toRightOf="@+id/image_view_item_icon_medication"
                     android:gravity="center_vertical"
                     android:singleLine="false"
                     android:textColor="@android:color/white"
@@ -338,7 +338,7 @@
                     android:background="@drawable/navigation_item_color_selector" />
 
                 <CheckBox
-                    android:id="@id/check_box_indicator_plan"
+                    android:id="@+id/check_box_indicator_plan"
                     android:layout_width="2dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -350,21 +350,21 @@
                     android:minHeight="56dp" />
 
                 <ImageView
-                    android:id="@id/image_view_item_icon_plan"
+                    android:id="@+id/image_view_item_icon_plan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_toRightOf="@id/check_box_indicator_plan"
+                    android:layout_toRightOf="@+id/check_box_indicator_plan"
                     android:scaleType="fitXY" />
 
                 <TextView
-                    android:id="@id/text_view_content_title_plan"
+                    android:id="@+id/text_view_content_title_plan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/image_view_item_icon_plan"
+                    android:layout_toRightOf="@+id/image_view_item_icon_plan"
                     android:gravity="center_vertical"
                     android:singleLine="false"
                     android:textColor="@android:color/white"
@@ -400,7 +400,7 @@
                     android:background="@drawable/navigation_item_color_selector" />
 
                 <CheckBox
-                    android:id="@id/check_box_indicator_settings"
+                    android:id="@+id/check_box_indicator_settings"
                     android:layout_width="2dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -412,21 +412,21 @@
                     android:minHeight="56dp" />
 
                 <ImageView
-                    android:id="@id/image_view_item_icon_settings"
+                    android:id="@+id/image_view_item_icon_settings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_toRightOf="@id/check_box_indicator_settings"
+                    android:layout_toRightOf="@+id/check_box_indicator_settings"
                     android:scaleType="fitXY" />
 
                 <TextView
-                    android:id="@id/text_view_content_title_settings"
+                    android:id="@+id/text_view_content_title_settings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/image_view_item_icon_settings"
+                    android:layout_toRightOf="@+id/image_view_item_icon_settings"
                     android:gravity="center_vertical"
                     android:singleLine="false"
                     android:textColor="@android:color/white"
@@ -453,7 +453,7 @@
                     android:background="@drawable/navigation_item_color_selector" />
 
                 <CheckBox
-                    android:id="@id/check_box_indicator_logout"
+                    android:id="@+id/check_box_indicator_logout"
                     android:layout_width="2dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -465,21 +465,21 @@
                     android:minHeight="56dp" />
 
                 <ImageView
-                    android:id="@id/image_view_item_icon_logout"
+                    android:id="@+id/image_view_item_icon_logout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_toRightOf="@id/check_box_indicator_logout"
+                    android:layout_toRightOf="@+id/check_box_indicator_logout"
                     android:scaleType="fitXY" />
 
                 <TextView
-                    android:id="@id/text_view_content_title_logout"
+                    android:id="@+id/text_view_content_title_logout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/image_view_item_icon_logout"
+                    android:layout_toRightOf="@+id/image_view_item_icon_logout"
                     android:gravity="center_vertical"
                     android:singleLine="false"
                     android:textColor="@android:color/white"

@@ -83,6 +83,7 @@ public class DoctorsAdapter extends BaseAdapter {
                     .error(R.drawable.news_other)
                     .into(holder.avatar);
         }
+
         if(doctor.doctorCategory == null){
             holder.doctorType.setText(doctor.category);
         }
