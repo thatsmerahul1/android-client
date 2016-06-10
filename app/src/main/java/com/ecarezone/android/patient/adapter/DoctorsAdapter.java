@@ -166,9 +166,9 @@ public class DoctorsAdapter extends BaseAdapter {
 
     private void setDoctorPresence(ViewHolder holder, String status) {
         if(status != null) {
-            if (status.equalsIgnoreCase("available")) {
+            if (status.equalsIgnoreCase("1")) {
                 holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_green));
-            } else if (status.equalsIgnoreCase("busy")) {
+            } else if (status.equalsIgnoreCase("0")) {
                 holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_red));
             }
         }
