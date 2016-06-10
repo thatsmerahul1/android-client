@@ -102,7 +102,7 @@ public class VideoFragment extends EcareZoneBaseFragment implements View.OnClick
 
         }
 
-        DoctorProfileDbApi profileDbApi = new DoctorProfileDbApi(mActivity);
+        DoctorProfileDbApi profileDbApi = DoctorProfileDbApi.getInstance(mActivity);
         Doctor tempProfiles;
         String email = inComingvideoArguments.getString("INCOMING_CALL_USER");
         tempProfiles = profileDbApi.getProfile(email);

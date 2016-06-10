@@ -93,7 +93,7 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
 
         }
         //to get user name and image
-        DoctorProfileDbApi profileDbApi = new DoctorProfileDbApi(mActivity);
+        DoctorProfileDbApi profileDbApi = DoctorProfileDbApi.getInstance(mActivity);
         String email = incomingCallArguments.getString("email");
         Doctor tempProfiles;
         int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);

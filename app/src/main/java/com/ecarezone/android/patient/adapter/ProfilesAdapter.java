@@ -136,7 +136,7 @@ public class ProfilesAdapter extends BaseAdapter {
     @Override
     public void notifyDataSetChanged() {
         // This is to refresh the data & UI after a profile is created/updated/deleted.
-        ProfileDbApi profileDbApi = new ProfileDbApi(mContext);
+        ProfileDbApi profileDbApi = ProfileDbApi.getInstance(mContext);
         UserProfile[] tempProfiles = profileDbApi.getProfiles(LoginInfo.userId.toString());
         if (tempProfiles != null) {
             mProfiles = new ArrayList<UserProfile>(Arrays.asList(tempProfiles));

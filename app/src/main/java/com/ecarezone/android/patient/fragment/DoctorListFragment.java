@@ -203,7 +203,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                 Doctor doctor = null;
                 while (iter.hasNext()) {
                     doctor = iter.next();
-                    DoctorProfileDbApi doctorProfileDbApi = new DoctorProfileDbApi(getActivity());
+                    DoctorProfileDbApi doctorProfileDbApi = DoctorProfileDbApi.getInstance(getActivity());
                     Doctor id = doctorProfileDbApi.getProfile(doctor.emailId);
                     if (id == null || doctor.doctorId != id.doctorId) {
                         doctorProfileDbApi.saveProfile(doctor.doctorId, doctor);

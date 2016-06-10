@@ -106,7 +106,7 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
 
                 break;
             case R.id.button_finish_profile_ok:
-                ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
+                ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
                 UserProfile profile = profileDbApi.getMyProfile();
                 String profileId = profile.profileId;
                 startActivityForResult(new Intent(getApplicationContext(), ProfileDetailsActivity.class)
@@ -140,7 +140,7 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
+            ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
             return profileDbApi.isMyProfileComplete();
         }
 

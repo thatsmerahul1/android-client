@@ -273,7 +273,7 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
 
                     // Make server call & get the user information & save it internally in db.
 
-                    ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
+                    ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
                     profileDbApi.deleteProfiles(LoginInfo.userId.toString());
                     profileDbApi.saveMultipleProfiles(LoginInfo.userId.toString(), response.data.userProfiles);
 

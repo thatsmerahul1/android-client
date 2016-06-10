@@ -1,6 +1,7 @@
 package com.ecarezone.android.patient.model.database;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.config.LoginInfo;
@@ -20,11 +21,20 @@ import java.util.List;
 public class ProfileDbApi {
 
     private static DbHelper mDbHelper;
-    private Context mContext;
+    private static Context mContext;
+    private static ProfileDbApi mProfileDbApi;
 
-    public ProfileDbApi(Context context) {
+    private ProfileDbApi() {
+    }
+
+    public static ProfileDbApi getInstance(Context context) {
         mContext = context;
-        mDbHelper = new DbHelper(context);
+        if (mDbHelper == null || mProfileDbApi == null) {
+            mDbHelper = new DbHelper(context);
+            mProfileDbApi = new ProfileDbApi();
+        }
+        return mProfileDbApi;
+
     }
 
     /* checks whether the user has any profiles. */
@@ -139,6 +149,24 @@ public class ProfileDbApi {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /* Retrieve all the profiles associated with particular user */
+    public int getProfileIdUsingEmail(String email) {
+        UserProfile[] profiles = new UserProfile[0];
+        try {
+            Dao<UserProfile, Integer> userProfileDao = mDbHelper.getProfileDao();
+            QueryBuilder<UserProfile, Integer> queryBuilder = userProfileDao.queryBuilder();
+            List<UserProfile> userProfilesList = queryBuilder.where()
+                    .eq(DbContract.Profiles.COLUMN_NAME_EMAIL, email)
+                    .query();
+           if(userProfilesList!=null && userProfilesList.size() > 0){
+               return Integer.parseInt(userProfilesList.get(0).userId);
+           }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     /* deletes a particular profile */

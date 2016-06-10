@@ -10,19 +10,28 @@ import com.j256.ormlite.stmt.UpdateBuilder;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 20109804 on 5/18/2016.
  */
 public class DoctorProfileDbApi {
     private static DbHelper mDbHelper;
-    private Context mContext;
+    private static Context mContext;
+    private static DoctorProfileDbApi mDoctorProfileDbApi;
 
-    public DoctorProfileDbApi(Context context) {
-        mContext = context;
-        mDbHelper = new DbHelper(context);
+
+    public DoctorProfileDbApi() {
     }
+    public static DoctorProfileDbApi getInstance(Context context) {
+        mContext = context;
+        if (mDbHelper == null || mDoctorProfileDbApi == null) {
+            mDbHelper = new DbHelper(context);
+            mDoctorProfileDbApi = new DoctorProfileDbApi();
+        }
+        return mDoctorProfileDbApi;
 
+    }
     public static boolean saveProfile(Long doctorId, Doctor doctorProfile) {
         try {
             Dao<Doctor, Integer> userProfileDao = mDbHelper.getDoctorsProfileDao();
@@ -77,7 +86,22 @@ public class DoctorProfileDbApi {
         }
         return null;
     }
-
+    public int getProfileIdUsingEmail(String emailId) {
+        Doctor[] profiles = new Doctor[0];
+        try {
+            Dao<Doctor, Integer> userProfileDao = mDbHelper.getDoctorsProfileDao();
+            QueryBuilder<Doctor, Integer> queryBuilder = userProfileDao.queryBuilder();
+            List<Doctor> userProfilesList = queryBuilder.where()
+                    .eq(DbContract.DoctorProfiles.COLUMN_NAME_EMAIL, emailId)
+                    .query();
+            if(userProfilesList!=null && userProfilesList.size() > 0){
+                return Integer.parseInt(String.valueOf(userProfilesList.get(0).doctorId));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
     private boolean areAllFieldsFilled(Doctor userProfile) {
         try {
             if (userProfile.emailId.length() < 2) {

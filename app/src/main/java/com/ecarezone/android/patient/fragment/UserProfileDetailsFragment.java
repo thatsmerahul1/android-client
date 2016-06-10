@@ -123,7 +123,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         mWeightEditText = (EditText) view.findViewById(R.id.weight);
         mErrorText = (TextView) view.findViewById(R.id.txtErrorMsg);
 
-        ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
+        ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
 
         String myProfileText = getResources().getString(R.string.profile_mine);
         if (!mActivity.getIntent().getBooleanExtra(ProfileDetailsActivity.IS_NEW_PROFILE, false)) {
@@ -562,7 +562,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
 
                 UserProfile profile = createUserProfileFromResponse(response);
 
-                ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
+                ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
                 profileDbApi.saveProfile(LoginInfo.userId.toString(), profile, response.profileId);
 
                 getActivity().setResult(getActivity().RESULT_OK, null);
@@ -584,7 +584,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             if (response != null && response.profileId != null && Integer.parseInt(response.profileId) > 0) {
                 UserProfile profile = createUserProfileFromResponse(response);
 
-                ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
+                ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
                 profileDbApi.updateProfile(LoginInfo.userId.toString(), profile, mProfile.profileId);
 
                 getActivity().setResult(getActivity().RESULT_OK, null);
@@ -605,7 +605,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         public void onRequestSuccess(BaseResponse response) {
             if (response != null && response.status != null && response.status.code == 200) {
                 // Code 200 is for successful deletion of profile.
-                ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
+                ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
                 profileDbApi.deleteProfile(LoginInfo.userId.toString(), mProfile.profileId);
                 getActivity().setResult(getActivity().RESULT_OK, null);
                 getActivity().finish();

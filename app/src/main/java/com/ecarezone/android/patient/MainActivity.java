@@ -84,7 +84,7 @@ public class MainActivity extends EcareZoneBaseActivity {
 
             @Override
             protected Boolean doInBackground(Void... params) {
-                ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
+                ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
                 boolean hasProfiles = profileDbApi.hasProfile(LoginInfo.userId.toString());
                 return hasProfiles;
             }
