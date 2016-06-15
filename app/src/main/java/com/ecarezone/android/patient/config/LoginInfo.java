@@ -8,4 +8,5 @@ public class LoginInfo {
     public static String hashedPassword;
     public static String role;
     public static Long userId;
+    public static int recommandedDoctorId;
 }

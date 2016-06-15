@@ -137,6 +137,7 @@
     <string name="doctor_type2">General practitioner</string>
     <string name="doctor_available">Available</string>
     <string name="doctor_busy">Busy</string>
+    <string name="doctor_idle">Idle</string>
     <string name="doctor_search">Search</string>
     <string name="doctor_search_hint_text">Search doctors</string>
     <string name="doctor_add_my_care_team">ADD TO MY CARE-TEAM</string>

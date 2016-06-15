@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import com.ecarezone.android.patient.model.Doctor;
 import com.ecarezone.android.patient.model.database.ChatDbApi;
 import com.ecarezone.android.patient.utils.ImageUtil;
 import com.squareup.picasso.Picasso;
+
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -85,12 +88,11 @@ public class DoctorsAdapter extends BaseAdapter {
         }
 
         if(doctor.doctorCategory == null){
-            holder.doctorType.setText(doctor.category);
+            holder.doctorType.setText(WordUtils.capitalize(doctor.category));
         }
         else {
-            holder.doctorType.setText(doctor.doctorCategory);
+            holder.doctorType.setText(WordUtils.capitalize(doctor.doctorCategory));
         }
-
         String count = String.valueOf(ChatDbApi.getInstance(activity).getUnReadChatCountByUserId(doctor.emailId));
         if(!count.equalsIgnoreCase("0")){
             holder.chatCount.setText(count);
@@ -100,10 +102,12 @@ public class DoctorsAdapter extends BaseAdapter {
         }
 
         if(doctor.status != null) {
-            if (doctor.status.equalsIgnoreCase("1")) {
+            if (doctor.status.equalsIgnoreCase("0")) {
+                holder.doctorAvailability.setText(R.string.doctor_busy);
+            } else if (doctor.status.equalsIgnoreCase("1")){
                 holder.doctorAvailability.setText(R.string.doctor_available);
             } else {
-                holder.doctorAvailability.setText(R.string.doctor_busy);
+                holder.doctorAvailability.setText(R.string.doctor_idle);
             }
         }
         setDoctorPresence(holder, doctor.status);
@@ -170,6 +174,8 @@ public class DoctorsAdapter extends BaseAdapter {
                 holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_green));
             } else if (status.equalsIgnoreCase("0")) {
                 holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_red));
+            } else {
+                holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_amber));
             }
         }
     }

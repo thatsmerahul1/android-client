@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.fragment.ChatFragment;
 import com.ecarezone.android.patient.utils.SinchUtil;
+import com.ecarezone.android.patient.utils.Util;
 
 /**
  * Created by L&T Technology Services.
@@ -94,6 +95,18 @@ public class ChatActivity extends EcareZoneBaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        chatFragment.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        chatFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Util.changeStatus(true, this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Util.changeStatus(false, this);
     }
 }

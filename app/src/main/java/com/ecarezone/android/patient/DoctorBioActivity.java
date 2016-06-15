@@ -19,6 +19,7 @@ import com.ecarezone.android.patient.model.Doctor;
 import com.ecarezone.android.patient.model.rest.AddDoctorRequest;
 import com.ecarezone.android.patient.model.rest.AddDoctorResponse;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
+import com.ecarezone.android.patient.utils.Util;
 import com.google.android.gms.internal.bn;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -147,5 +148,18 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
             }
 
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Util.changeStatus(true, this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Util.changeStatus(false, this);
+        Util.changeStatus(false, this);
     }
 }

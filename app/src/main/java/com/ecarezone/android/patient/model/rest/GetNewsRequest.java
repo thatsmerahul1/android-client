@@ -16,6 +16,6 @@ public class GetNewsRequest extends RetrofitSpiceRequest<GetNewsResponse, EcareZ
     public GetNewsResponse loadDataFromNetwork() throws Exception {
         //TODO, once patient-clients has news info, remove passing static userId, and enable variable userId call.
         //return getService().getNews(LoginInfo.userId);
-        return getService().getNews(Long.parseLong("26"));
+        return getService().getNews(Long.parseLong("26")); //LoginInfo.userId
     }
 }

@@ -246,7 +246,7 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
             //updating the latest user data in to usertable
             userTable = new UserTable(getActivity());
             userTable.updateUserData(user.userId, user.email, mEditTextPassword.getEditableText().toString(), user.language
-                    , Integer.toString(1), user.country);
+                    , Integer.toString(1), user.country,user.recommandedDoctorId );
             if (loginResponse.status.code == 200) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override

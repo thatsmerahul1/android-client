@@ -38,7 +38,7 @@ public class UserTable {
     }
 
     /* save the user data to db */
-    public boolean saveUserData(String userId, String email, String password, String language, String role, String country) {
+    public boolean saveUserData(String userId, String email, String password, String language, String role, String country, int recommandeddoctorId) {
         try {
             Dao<User, Integer> userDao = mDbHelper.getUserDao();
 
@@ -49,6 +49,8 @@ public class UserTable {
             user.role = role;
             user.country = country;
             user.userId = userId;
+            user.recommandedDoctorId = recommandeddoctorId;
+
 
             return userDao.create(user) > 0;
         } catch (SQLException e) {
@@ -58,7 +60,7 @@ public class UserTable {
     }
 
     /* Update user data to db */
-    public boolean updateUserData(String userId, String email, String password, String language, String role, String country) {
+    public boolean updateUserData(String userId, String email, String password, String language, String role, String country, int recommandeddoctorId ) {
         try {
             Dao<User, Integer> userDao = mDbHelper.getUserDao();
             UpdateBuilder<User, Integer> updateBuilder = userDao.updateBuilder();
@@ -69,6 +71,7 @@ public class UserTable {
             updateBuilder.updateColumnValue(DbContract.Users.COLUMN_NAME_EMAIL, email);
             updateBuilder.updateColumnValue(DbContract.Users.COLUMN_NAME_PASSWORD, password);
             updateBuilder.updateColumnValue(DbContract.Users.COLUMN_NAME_LANGUAGE, language);
+            updateBuilder.updateColumnValue(DbContract.Users.COLUMN_NAME_RECOMMANDED_DOCTOR_ID, recommandeddoctorId);
             updateBuilder.updateColumnValue(DbContract.Users.COLUMN_NAME_ROLE, role);
             updateBuilder.updateColumnValue(DbContract.Users.COLUMN_NAME_COUNTRY, country);
 

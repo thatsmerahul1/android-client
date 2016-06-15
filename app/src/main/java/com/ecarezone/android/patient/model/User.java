@@ -18,4 +18,6 @@ public class User {
     public String language;
     @DatabaseField
     public String role;
+    @DatabaseField
+    public int recommandedDoctorId;
 }

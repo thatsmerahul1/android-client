@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import com.ecarezone.android.patient.fragment.NewsCategoriesFragment;
 import com.ecarezone.android.patient.fragment.NewsListFragment;
+import com.ecarezone.android.patient.utils.Util;
 
 /**
  * Created by CHAO WEI on 5/31/2015.
@@ -54,5 +55,17 @@ public class NewsListActivity extends EcareZoneBaseActivity{
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Util.changeStatus(true, this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Util.changeStatus(false, this);
     }
 }

@@ -20,6 +20,8 @@ public final class DbContract {
         public static final String COLUMN_NAME_ROLE = "role";
         public static final String COLUMN_NAME_COUNTRY = "country";
         public static final String COLUMN_NAME_LANGUAGE = "language";
+        public static final String COLUMN_NAME_RECOMMANDED_DOCTOR_ID = "recommandedDoctorId";
+
     }
 
     /* Inner class that defines the Profiles table contents */

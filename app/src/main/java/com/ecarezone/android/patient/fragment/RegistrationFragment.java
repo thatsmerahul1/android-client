@@ -372,10 +372,10 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                      */
                     if (userTable.userExists(Long.toString(data.userId))) {
                         userTable.updateUserData(Long.toString(data.userId), data.settings.email, hashedPassword, data.settings.language
-                                , Integer.toString(0), data.settings.country);
+                                , Integer.toString(0), data.settings.country,data.recommandedDoctorId);
                     } else {
                         userTable.saveUserData(Long.toString(data.userId), data.settings.email, hashedPassword, data.settings.language
-                                , Integer.toString(0), data.settings.country);
+                                , Integer.toString(0), data.settings.country, data.recommandedDoctorId);
                     }
                     /*
                        Saving UserId and Login status into shared preference
@@ -463,10 +463,10 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                      */
                     if (userTable.userExists(Long.toString(data.userId))) {
                         userTable.updateUserData(Long.toString(data.userId), data.settings.email, hashedPassword, data.settings.language
-                                , Integer.toString(1), data.settings.country);
+                                , Integer.toString(1), data.settings.country, data.recommandedDoctorId);
                     } else {
                         userTable.saveUserData(Long.toString(data.userId), data.settings.email, hashedPassword, data.settings.language
-                                , Integer.toString(1), data.settings.country);
+                                , Integer.toString(1), data.settings.country,data.recommandedDoctorId);
                     }
                     String username = LoginInfo.userName;
                     String password = LoginInfo.hashedPassword;

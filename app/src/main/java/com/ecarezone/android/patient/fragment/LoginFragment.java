@@ -265,6 +265,8 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
                 LoginInfo.userId = data.userId;
                 LoginInfo.hashedPassword = hashedPassword;
                 LoginInfo.role = String.valueOf(1);
+                LoginInfo.recommandedDoctorId = data.recommandedDoctorId;
+
 
                 if (activity != null) {
                     Log.d(TAG, "Profiles Size" + response.data.userProfiles.length +
@@ -284,10 +286,10 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
                      */
                     if (userTable.userExists(Long.toString(data.userId))) {
                         userTable.updateUserData(Long.toString(data.userId), data.settings.email, hashedPassword, data.settings.language
-                                , Integer.toString(1), data.settings.country);
+                                , Integer.toString(1), data.settings.country, data.recommandedDoctorId);
                     } else {
                         userTable.saveUserData(Long.toString(data.userId), data.settings.email, hashedPassword, data.settings.language
-                                , Integer.toString(1), data.settings.country);
+                                , Integer.toString(1), data.settings.country, data.recommandedDoctorId);
                     }
                     /*
                        Saving UserId and Login status into shared preference

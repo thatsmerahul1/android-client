@@ -38,6 +38,8 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import java.util.Date;
 import java.util.List;
 
@@ -115,15 +117,16 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
         if (doctor != null) {
             setDoctorPresenceIcon(doctor.status);
-            if(doctor.status.equalsIgnoreCase("1")) {
-                doctorStatusText.setText(R.string.doctor_available);
-            }
-            else{
+            if(doctor.status.equalsIgnoreCase("0")) {
                 doctorStatusText.setText(R.string.doctor_busy);
+            } else if (doctor.status.equalsIgnoreCase("1")){
+                doctorStatusText.setText(R.string.doctor_available);
+            } else{
+                doctorStatusText.setText(R.string.doctor_idle);
             }
             doctorStatusText.setVisibility(View.VISIBLE);
             doctorNameView.setText("Dr. " + doctor.name);
-            doctorSpecialist.setText(doctor.category);
+            doctorSpecialist.setText(WordUtils.capitalize(doctor.category));
         }
         doctorId = doctor.doctorId;
         doctorName = doctor.name;
@@ -218,6 +221,10 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             doctorStatusIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.circle_red));
             doctorVideo.setEnabled(false);
             doctorVoice.setEnabled(false);
+        } else if(status.equalsIgnoreCase(Constants.IDLE_TEXT) || status.equalsIgnoreCase("2")) {
+            doctorStatusIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.circle_amber));
+            doctorVideo.setEnabled(true);
+            doctorVoice.setEnabled(true);
         }
     }
 

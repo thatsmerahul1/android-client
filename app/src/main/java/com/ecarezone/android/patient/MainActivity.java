@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -24,6 +26,11 @@ import com.ecarezone.android.patient.fragment.SettingsFragment;
 import com.ecarezone.android.patient.fragment.UserProfileFragment;
 import com.ecarezone.android.patient.fragment.WelcomeFragment;
 import com.ecarezone.android.patient.model.database.ProfileDbApi;
+import com.ecarezone.android.patient.model.rest.ChangeStatusRequest;
+import com.ecarezone.android.patient.model.rest.base.BaseResponse;
+import com.ecarezone.android.patient.utils.Util;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 /**
  * Created by CHAO WEI on 5/3/2015.
@@ -37,6 +44,9 @@ public class MainActivity extends EcareZoneBaseActivity {
     private ActionBar mActionBar = null;
     private boolean isBackStackRequired;
     private boolean isWelcomeMainRequired;
+    int status =1;
+
+    public static final long DISCONNECT_TIMEOUT = 15000; // 1 min = 1 * 60 * 1000 ms
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,9 +110,15 @@ public class MainActivity extends EcareZoneBaseActivity {
                 super.onPostExecute(aBoolean);
             }
         }.execute();
-
+        disconnectHandler.post(disconnectCallback);
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Util.changeStatus(true, this);
+    }
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -213,4 +229,57 @@ public class MainActivity extends EcareZoneBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    private Handler disconnectHandler = new Handler() {
+        public void handleMessage(Message msg) {
+        }
+    };
+
+    private Runnable disconnectCallback = new Runnable() {
+        @Override
+        public void run() {
+            // Perform any required operation on disconnect
+            Log.d(TAG, "status" + "status update called");
+            stopDisconnectTimer();
+        }
+    };
+
+    public void stopDisconnectTimer() {
+        disconnectHandler.removeCallbacks(disconnectCallback);
+//        if(DoctorApplication.nameValuePair)
+
+        if (!PatientApplication.nameValuePair.get(Constants.STATUS_CHANGE)) {
+            status = 2;
+        } else {
+            status =1;
+        }
+        if (PatientApplication.lastAvailablityStaus != status) {
+            ChangeStatusRequest request = new ChangeStatusRequest(status, LoginInfo.hashedPassword,
+                    LoginInfo.userName, Integer.toString(1));
+            getSpiceManager().execute(request, new DoUpdatePasswordRequestListener());
+            Log.d(TAG, "statuschange " + "changed");
+        }
+        PatientApplication.lastAvailablityStaus = status ;
+        Log.d(TAG, "statuschangelastAvailablityStaus " + status);
+        disconnectHandler.postDelayed(disconnectCallback, DISCONNECT_TIMEOUT);
+    }
+    public final class DoUpdatePasswordRequestListener implements RequestListener<BaseResponse> {
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+//            progressDialog.dismiss();
+        }
+
+        @Override
+        public void onRequestSuccess(final BaseResponse baseResponse) {
+            Log.d(TAG, "statuschange " + "changed");
+
+//            DoctorApplication.lastAvailablityStaus = status ;
+        }
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Util.changeStatus(false, this);
+    }
+
 }

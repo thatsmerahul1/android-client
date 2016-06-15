@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,17 +19,28 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ecarezone.android.patient.DoctorActivity;
+import com.ecarezone.android.patient.DoctorBioActivity;
 import com.ecarezone.android.patient.EcareZoneBaseActivity;
 import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.ProfileDetailsActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.config.Constants;
+import com.ecarezone.android.patient.config.LoginInfo;
+import com.ecarezone.android.patient.model.Doctor;
 import com.ecarezone.android.patient.model.UserProfile;
 import com.ecarezone.android.patient.model.database.ChatDbApi;
 import com.ecarezone.android.patient.model.database.ProfileDbApi;
+import com.ecarezone.android.patient.model.rest.Data;
+import com.ecarezone.android.patient.model.rest.GetDoctorRequest;
+import com.ecarezone.android.patient.model.rest.GetDoctorResponse;
 import com.ecarezone.android.patient.utils.SinchUtil;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.apache.commons.lang3.math.NumberUtils;
+
+import java.io.Serializable;
 
 /**
  * Created by CHAO WEI on 5/12/2015.
@@ -102,7 +114,9 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
                 break;
             case R.id.viewDoctorProfile:
                 // TODO call the doctor profile activity.
-                ((MainActivity) getActivity()).onNavigationChanged(R.layout.frag_doctor_list, null);
+//                ((MainActivity) getActivity()).onNavigationChanged(R.layout.frag_doctor_list, null);
+                GetDoctorRequest request = new GetDoctorRequest();
+                getSpiceManager().execute(request, new RecommondedDoctor());
 
                 break;
             case R.id.button_finish_profile_ok:
@@ -116,6 +130,35 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
         }
     }
 
+
+    public final class RecommondedDoctor implements RequestListener<GetDoctorResponse> {
+
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+//            progressDialog.dismiss();
+
+        }
+
+        @Override
+        public void onRequestSuccess(final GetDoctorResponse response) {
+
+//            Log.d(TAG, "Status Code " + response.status.code);
+            if (response.status != null) {
+                if (response.status.code == 200) {
+                    final Activity activity = getActivity();
+
+                    Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorBioActivity.class);
+                    Doctor doctor = response.data;
+                    Bundle data = new Bundle();
+                    data.putParcelable(Constants.DOCTOR_DETAIL, doctor);
+
+                    showDoctorIntent.putExtra(Constants.DOCTOR_BIO_DETAIL, data);
+                    activity.startActivity(showDoctorIntent);
+                }
+            }
+
+        }
+    }
     @Override
     public void onChange(int noOfUnreadMessage) {
 //        updateUnreadMessageCount(noOfUnreadMessage);

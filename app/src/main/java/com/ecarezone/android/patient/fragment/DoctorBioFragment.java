@@ -14,6 +14,8 @@ import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.model.Doctor;
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 /**
  * Created by L&T Technology Services on 22-02-2016.
  */
@@ -56,7 +58,7 @@ public class DoctorBioFragment extends EcareZoneBaseFragment {
                     .error(R.drawable.news_other)
                     .into(doctorBioImage);
         }
-        doctorBioCategoryView.setText(doctor.doctorCategory);
+        doctorBioCategoryView.setText(WordUtils.capitalize(doctor.doctorCategory));
         doctorDescriptionView.setText(doctor.doctorDescription);
 
         return view;

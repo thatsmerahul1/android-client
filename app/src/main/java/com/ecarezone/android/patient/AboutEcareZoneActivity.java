@@ -11,6 +11,8 @@ import android.widget.ActionMenuView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import com.ecarezone.android.patient.utils.Util;
+
 /**
  * Created by L&T Technology Services on 2/29/2016.
  */
@@ -50,5 +52,16 @@ public class AboutEcareZoneActivity extends EcareZoneBaseActivity {
             }
 
         });
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Util.changeStatus(true,this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Util.changeStatus(false, this);
     }
 }

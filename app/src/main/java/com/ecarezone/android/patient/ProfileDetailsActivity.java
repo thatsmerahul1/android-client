@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ecarezone.android.patient.fragment.UserProfileDetailsFragment;
+import com.ecarezone.android.patient.utils.Util;
 
 /**
  * Created by CHAO WEI on 5/31/2015.
@@ -74,5 +75,17 @@ public class ProfileDetailsActivity extends EcareZoneBaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         userProfileDetailsFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Util.changeStatus(true, this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Util.changeStatus(false, this);
     }
 }

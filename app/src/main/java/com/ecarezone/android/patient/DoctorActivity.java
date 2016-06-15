@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.fragment.DoctorFragment;
+import com.ecarezone.android.patient.utils.Util;
 
 /**
  * Created by CHAO WEI on 6/1/2015.
@@ -89,5 +90,17 @@ public class DoctorActivity extends EcareZoneBaseActivity {
     public void onBackPressed() {
         finish();
         overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Util.changeStatus(true, this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Util.changeStatus(false, this);
     }
 }

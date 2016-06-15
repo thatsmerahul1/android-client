@@ -3,6 +3,7 @@ package com.ecarezone.android.patient.service;
 import com.ecarezone.android.patient.model.rest.AddDoctorRequest;
 import com.ecarezone.android.patient.model.rest.AddDoctorResponse;
 import com.ecarezone.android.patient.model.rest.BookAppointmentRequest;
+import com.ecarezone.android.patient.model.rest.ChangeStatusRequest;
 import com.ecarezone.android.patient.model.rest.CreateProfileRequest;
 import com.ecarezone.android.patient.model.rest.CreateProfileResponse;
 import com.ecarezone.android.patient.model.rest.DeleteProfileRequest;
@@ -68,8 +69,8 @@ public interface EcareZoneApi {
     @POST("/doctors/search")
     SearchDoctorsResponse searchDoctors(@Body SearchDoctorsRequest request);
 
-    @POST("/doctors/{doctorId}")
-    GetDoctorResponse getDoctor(@Path("doctorId") Long doctorId, @Body BaseRequest request);
+    @GET("/doctors/{doctorid}")
+    GetDoctorResponse getRecDoctor(@Path("doctorid") int doctorid);
 
     @GET("/users/{userId}/doctors")
     SearchDoctorsResponse getDoctors(@Path("userId") Long userId);
@@ -101,6 +102,8 @@ public interface EcareZoneApi {
     BaseResponse bookAppointment(@Path("userId") Long userId,
                                  @Path("doctorId") Long doctorId, @Body BookAppointmentRequest request);
 
+    @POST("/changeStatus")
+    BaseResponse changeStatus(@Body ChangeStatusRequest request);
 }
 
 /**

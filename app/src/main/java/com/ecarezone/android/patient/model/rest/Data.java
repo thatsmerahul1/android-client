@@ -12,7 +12,7 @@ public class Data implements Serializable {
     @Expose
     public Long userId;
     @Expose
-    public Integer recommandedDoctorId;
+    public int recommandedDoctorId;
     @Expose
     public Settings settings;
     @Expose
