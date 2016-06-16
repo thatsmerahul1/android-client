@@ -147,6 +147,11 @@
             android:name=".UpdatePasswordActivity"
             android:label="@string/title_activity_update_password"
             android:theme="@style/AppTheme"></activity>
+
+        <activity
+            android:name=".view.SingleNewsItem"
+            android:label="@string/title_activity_news"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

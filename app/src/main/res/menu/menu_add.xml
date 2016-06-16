@@ -6,7 +6,7 @@
         android:id="@+id/action_add"
         android:enabled="true"
         app:showAsAction="always"
-        android:icon="@android:drawable/ic_menu_add"
+        android:icon="@drawable/add"
         android:title="@string/settings_action_check"/>
 
 </menu>

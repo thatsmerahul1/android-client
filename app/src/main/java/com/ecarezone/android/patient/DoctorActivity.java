@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ecarezone.android.patient.config.Constants;
+import com.ecarezone.android.patient.fragment.DoctorBioFragment;
 import com.ecarezone.android.patient.fragment.DoctorFragment;
 import com.ecarezone.android.patient.utils.Util;
 
@@ -37,7 +38,7 @@ public class DoctorActivity extends EcareZoneBaseActivity {
         mToolBar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
-            mToolBar.setNavigationIcon(R.drawable.ic_action_menu);
+            mToolBar.setNavigationIcon(R.drawable.back_);
             mToolBar.setOnMenuItemClickListener(
                     new Toolbar.OnMenuItemClickListener() {
                         @Override

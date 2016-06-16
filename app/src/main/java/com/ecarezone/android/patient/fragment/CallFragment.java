@@ -112,8 +112,8 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
             }
         } else {
             tempProfiles = profileDbApi.getProfile(incomingCallArguments.getString("INCOMING_CALL_USER"));
-            inComingVideoCallRemoteUser.setText(tempProfiles.name);
             if (tempProfiles != null) {
+                inComingVideoCallRemoteUser.setText(tempProfiles.name);
                 String imageUrl = tempProfiles.avatarUrl;
                 if (imageUrl != null && imageUrl.trim().length() > 8) {
                     Picasso.with(mActivity)

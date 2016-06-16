@@ -63,11 +63,11 @@ public class NewsListAdapter extends BaseAdapter {
             newsListItem.title.setText(item.newsTitle);
             newsListItem.description.setText(item.newsAbstract);
 
-            newsListItem.image.setImageURI(Uri.parse(item.newsLink));
-            Picasso.with(mContext)
-                    .load(item.newsLink)
-                    .fit()
-                    .into(newsListItem.image);
+//            newsListItem.image.setImageURI(Uri.parse(item.newsLink));
+//            Picasso.with(mContext)
+//                    .load(item.newsLink)
+//                    .fit()
+//                    .into(newsListItem.image);
         }
 
         return convertView;
@@ -77,12 +77,12 @@ public class NewsListAdapter extends BaseAdapter {
     static class NewsListItem {
         final TextView title;
         final TextView description;
-        final ImageView image;
+//        final ImageView image;
 
         NewsListItem(final View view) {
             title = (TextView) view.findViewById(R.id.title);
             description = (TextView) view.findViewById(R.id.description);
-            image = (ImageView)view.findViewById(R.id.news_image_link);
+//            image = (ImageView)view.findViewById(R.id.news_image_link);
         }
     }
 }

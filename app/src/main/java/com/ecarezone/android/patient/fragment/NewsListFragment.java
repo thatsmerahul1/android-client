@@ -1,5 +1,6 @@
 package com.ecarezone.android.patient.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.adapter.NewsListAdapter;
 import com.ecarezone.android.patient.fragment.dialog.NewsWebviewDialogFragment;
 import com.ecarezone.android.patient.model.News;
+import com.ecarezone.android.patient.view.SingleNewsItem;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,7 @@ public class NewsListFragment extends EcareZoneBaseFragment implements AdapterVi
 
     public static String NEWS_TITLE = "news_title";
     public static String NEWS_LINK = "news_link";
+    public static String NEWS_DESCRIPTION = "description";
 
     public ArrayList<News> mNews;
     public static int REQUEST_SHOW_NEWS_IN_WEB_VIEW = 100;
@@ -37,7 +40,7 @@ public class NewsListFragment extends EcareZoneBaseFragment implements AdapterVi
         String categoryName = bundle.getString(NewsCategoriesFragment.NEWS_CATEGORY_NAME);
 
         listView.setAdapter(new NewsListAdapter(getApplicationContext(), mNews));
-//        listView.setOnItemClickListener(this);
+        listView.setOnItemClickListener(this);
 
         ((NewsListActivity) getActivity()).getSupportActionBar()
                 .setTitle(categoryName);
@@ -56,12 +59,17 @@ public class NewsListFragment extends EcareZoneBaseFragment implements AdapterVi
         Bundle bundle = new Bundle();
         bundle.putString(NEWS_TITLE, news.newsTitle);
         bundle.putString(NEWS_LINK, news.newsLink);
+        bundle.putString(NEWS_DESCRIPTION, news.newsAbstract);
 
-        NewsWebviewDialogFragment webviewDialogFragment = new NewsWebviewDialogFragment();
-        webviewDialogFragment.setTargetFragment(this, REQUEST_SHOW_NEWS_IN_WEB_VIEW);
-        webviewDialogFragment.setArguments(bundle);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        webviewDialogFragment.show(fragmentManager, "NewsDialogFragment");
+        Intent intent = new Intent(getActivity(), SingleNewsItem.class);
+        intent.putExtra("bundle", bundle);
+        startActivity(intent);
+//        NewsWebviewDialogFragment webviewDialogFragment = new NewsWebviewDialogFragment();
+//        webviewDialogFragment.setTargetFragment(this, REQUEST_SHOW_NEWS_IN_WEB_VIEW);
+//        webviewDialogFragment.setArguments(bundle);
+//
+//        FragmentManager fragmentManager = getFragmentManager();
+//        webviewDialogFragment.show(fragmentManager, "NewsDialogFragment");
     }
 }

@@ -37,6 +37,7 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
     private String doctorName;
     private ProgressDialog progressDialog;
     private boolean isDocAlreadyAddded;
+    private boolean fromInfo;
 
     @Override
     protected String getCallerName() {
@@ -59,7 +60,7 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
 
-            mToolBar.setNavigationIcon(R.drawable.ic_action_menu);
+            mToolBar.setNavigationIcon(R.drawable.back_);
             if (!isDocAlreadyAddded) {
                 mToolBar.setOnMenuItemClickListener(
                         new Toolbar.OnMenuItemClickListener() {
@@ -93,6 +94,7 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
         getMenuInflater().inflate(R.menu.menu_add, menu);
         if(isDocAlreadyAddded){
             menu.findItem(R.id.action_add).setVisible(false);
+
         }
         return true;
     }
@@ -114,6 +116,7 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
             changeFragment(R.id.screen_container, new DoctorBioFragment(),
                     DoctorBioFragment.class.getSimpleName(), args);
         }
+
     }
 
     private void sendAddDoctorRequest() {
@@ -123,6 +126,8 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
                 new AddDoctorRequest(doctorId, doctorName, LoginInfo.userName, LoginInfo.hashedPassword, Constants.API_KEY, Constants.deviceUnique);
         getSpiceManager().execute(request, new AddDoctorTaskRequestListener());
     }
+
+
 
     public final class AddDoctorTaskRequestListener implements RequestListener<AddDoctorResponse> {
 

@@ -202,6 +202,8 @@
     <string name="new_password">New Password</string>
     <string name="retype_password">Confirm New Password</string>
     <string name="title_activity_update_password">UpdatePasswordActivity</string>
+    <string name="title_activity_news"></string>
     <string name="password_mismatch">New password and confirm password fields do not match</string>
+
 
 </resources>

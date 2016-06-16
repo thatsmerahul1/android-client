@@ -418,21 +418,25 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:src="@drawable/account_settings"
                     android:layout_toRightOf="@+id/check_box_indicator_settings"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    />
 
                 <TextView
                     android:id="@+id/text_view_content_title_settings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/image_view_item_icon_settings"
-                    android:gravity="center_vertical"
+                     android:gravity="center_vertical"
                     android:singleLine="false"
                     android:textColor="@android:color/white"
                     android:textIsSelectable="false"
                     android:textSize="18sp"
-                    tools:ignore="UnusedAttribute" />
+                    tools:ignore="UnusedAttribute"
+                    android:drawableLeft="@drawable/account_settings"
+                    android:drawablePadding="4dip"
+                    />
             </com.ecarezone.android.patient.app.widget.NavigationItem>
 
             <com.ecarezone.android.patient.app.widget.NavigationItem
@@ -479,13 +483,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/image_view_item_icon_logout"
-                    android:gravity="center_vertical"
+                     android:gravity="center_vertical"
                     android:singleLine="false"
                     android:textColor="@android:color/white"
                     android:textIsSelectable="false"
                     android:textSize="18sp"
-                    tools:ignore="UnusedAttribute" />
+                    tools:ignore="UnusedAttribute"
+                    android:drawableLeft="@drawable/logo_out"
+                    android:drawablePadding="4dip"
+                    />
             </com.ecarezone.android.patient.app.widget.NavigationItem>
 
         </LinearLayout>
