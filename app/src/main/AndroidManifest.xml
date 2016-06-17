@@ -59,10 +59,10 @@
         <activity
             android:name=".RegistrationActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
-            android:windowSoftInputMode="adjustNothing"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".AppointmentActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
@@ -100,7 +100,7 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/TransparentCompat"></activity>
+            android:theme="@style/TransparentCompat" />
         <activity
             android:name=".SearchActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
@@ -129,7 +129,7 @@
         <service
             android:name=".service.RoboEcareSpiceServices"
             android:exported="false" />
-        <service android:name=".service.SinchService"></service>
+        <service android:name=".service.SinchService" />
 
         <receiver
             android:name=".gcm.GcmBroadcastReceiver"
@@ -146,12 +146,16 @@
         <activity
             android:name=".UpdatePasswordActivity"
             android:label="@string/title_activity_update_password"
-            android:theme="@style/AppTheme"></activity>
-
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".view.SingleNewsItem"
             android:label="@string/title_activity_news"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+
+        <receiver
+            android:name=".utils.AppointmentAlarmReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>

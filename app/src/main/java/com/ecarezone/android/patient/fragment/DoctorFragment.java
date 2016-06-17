@@ -3,10 +3,13 @@ package com.ecarezone.android.patient.fragment;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 
@@ -30,15 +33,15 @@ import com.ecarezone.android.patient.fragment.dialog.AddDoctorRequestDialog;
 import com.ecarezone.android.patient.model.Appointment;
 import com.ecarezone.android.patient.model.Doctor;
 import com.ecarezone.android.patient.model.database.AppointmentDbApi;
+import com.ecarezone.android.patient.model.database.ChatDbApi;
 import com.ecarezone.android.patient.model.rest.AddDoctorRequest;
 import com.ecarezone.android.patient.model.rest.AddDoctorResponse;
 import com.ecarezone.android.patient.utils.PermissionUtil;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
+import com.google.gson.annotations.Expose;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.squareup.picasso.Picasso;
-
-import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -65,6 +68,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     private Long doctorId;
     private String doctorName;
     private Doctor doctor;
+    private TextView unreadChatCount;
 
     private Activity mActivity;
     private int viewId;
@@ -90,6 +94,9 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         doctor = doctorDetailData.getParcelable(Constants.DOCTOR_DETAIL);
         showAddDoctorOption = doctorDetailData.getBoolean(DoctorListFragment.ADD_DOCTOR_DISABLE_CHECK, false);
         getAllComponent(view, doctor);
+        IntentFilter intentFilter = new IntentFilter("send");
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(message, intentFilter);
+        updateChatCount();
         return view;
     }
 
@@ -105,6 +112,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         addDoctorButton = (Button) view.findViewById(R.id.add_doctor_button);
         buttonAppointment = (Button) view.findViewById(R.id.button_appointment);
 
+        unreadChatCount = (TextView) view.findViewById(R.id.chat_count);
+
         doctorChat.setOnClickListener(this);
         doctorVideo.setOnClickListener(this);
         doctorVoice.setOnClickListener(this);
@@ -117,16 +126,15 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
         if (doctor != null) {
             setDoctorPresenceIcon(doctor.status);
-            if(doctor.status.equalsIgnoreCase("0")) {
-                doctorStatusText.setText(R.string.doctor_busy);
-            } else if (doctor.status.equalsIgnoreCase("1")){
+            if(doctor.status.equalsIgnoreCase("1")) {
                 doctorStatusText.setText(R.string.doctor_available);
-            } else{
-                doctorStatusText.setText(R.string.doctor_idle);
+            }
+            else{
+                doctorStatusText.setText(R.string.doctor_busy);
             }
             doctorStatusText.setVisibility(View.VISIBLE);
             doctorNameView.setText("Dr. " + doctor.name);
-            doctorSpecialist.setText(WordUtils.capitalize(doctor.category));
+            doctorSpecialist.setText(doctor.category);
         }
         doctorId = doctor.doctorId;
         doctorName = doctor.name;
@@ -170,7 +178,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         } else {
             Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
         }
-     }
+    }
 
     private void callVideoButtonClicked() {
         if (PermissionUtil.isPermissionRequired() && PermissionUtil.getAllpermissionRequired(mActivity, PermissionUtil.SINCH_PERMISSIONS).length > 0) {
@@ -187,6 +195,9 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         if (PermissionUtil.isPermissionRequired() && PermissionUtil.getAllpermissionRequired(mActivity, PermissionUtil.SINCH_PERMISSIONS).length > 0) {
             PermissionUtil.setAllPermission(mActivity, PermissionUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS, PermissionUtil.SINCH_PERMISSIONS);
         } else {
+
+//            check if  call can be made..
+
             Intent callScreen = new Intent(mActivity, CallActivity.class);
             callScreen.putExtra(Constants.EXTRA_NAME, doctor.name);
             callScreen.putExtra(Constants.EXTRA_EMAIL, doctor.emailId);
@@ -209,6 +220,27 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         mActivity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }
 
+    public void updateChatCount() {
+
+        if(unreadChatCount != null && doctor != null){
+            try {
+                Thread.sleep(500);
+            }
+            catch (Exception e){}
+            ChatDbApi chatDbApi = ChatDbApi.getInstance(getActivity());
+            int unreadCount = chatDbApi.getUnReadChatCountByUserId(doctor.emailId);
+            if(unreadCount > 0) {
+                unreadChatCount.setText(String.valueOf(unreadCount));
+                unreadChatCount.setVisibility(View.VISIBLE);
+            }
+            else{
+                unreadChatCount.setText(String.valueOf(0));
+                unreadChatCount.setVisibility(View.GONE);
+            }
+        }
+
+    }
+
     /*
         Doctor Status status updating
      */
@@ -221,10 +253,6 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             doctorStatusIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.circle_red));
             doctorVideo.setEnabled(false);
             doctorVoice.setEnabled(false);
-        } else if(status.equalsIgnoreCase(Constants.IDLE_TEXT) || status.equalsIgnoreCase("2")) {
-            doctorStatusIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.circle_amber));
-            doctorVideo.setEnabled(true);
-            doctorVoice.setEnabled(true);
         }
     }
 
@@ -309,4 +337,14 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             }
         }
     }
+
+    /*Incoming chat message receiver*/
+    BroadcastReceiver message = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equalsIgnoreCase("send")) {
+                updateChatCount();
+            }
+        }
+    };
 }

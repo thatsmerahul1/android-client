@@ -27,48 +27,97 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/text_black_color_selector" />
 
-        <EditText
-            android:id="@+id/edit_text_registration_username"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:drawableRight="@drawable/arrow_right"
-            android:hint="@string/registration_username"
-            android:inputType="textEmailAddress"
-            android:paddingRight="10dp" />
+            android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_email"
+                android:textColor="@color/ecarezone_green_dark_2" />
 
-        <EditText
-            android:id="@+id/edit_text_registration_password"
+            <EditText
+                android:id="@+id/edit_text_registration_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/arrow_right"
+                android:hint="@string/registration_username"
+                android:inputType="textEmailAddress"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:drawableRight="@drawable/arrow_right"
-            android:hint="@string/login_password"
-            android:inputType="textPassword"
-            android:paddingRight="10dp" />
+            android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_password"
+                android:textColor="@color/ecarezone_green_dark_2" />
 
-        <EditText
-            android:id="@+id/country_spinner"
+            <EditText
+                android:id="@+id/edit_text_registration_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/arrow_right"
+                android:hint="@string/login_password"
+                android:inputType="textPassword"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:focusable="false"
-            android:hint="@string/settings_country"
+            android:orientation="vertical">
 
-            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/registration_country"
+                android:textColor="@color/ecarezone_green_dark_2" />
 
-        <EditText
-            android:id="@+id/spinner_language"
+            <EditText
+                android:id="@+id/country_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:focusable="false"
+                android:hint="@string/settings_country"
+                android:paddingLeft="20dp"
+
+                />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:focusable="false"
+            android:orientation="vertical">
 
-            android:hint="@string/settings_language"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/language"
+                android:textColor="@color/ecarezone_green_dark_2" />
 
-            />
+            <EditText
+                android:id="@+id/spinner_language"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:focusable="false"
+                android:hint="@string/settings_language" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/button_register"
