@@ -40,6 +40,7 @@ public class DoctorBioFragment extends EcareZoneBaseFragment {
     private TextView doctorBioCategoryView;
     private ImageView doctorBioImage;
     private ProgressDialog progressDialog;
+    private Button addToMyCareTeam;
     Doctor doctor;
     @Override
     protected String getCallerName() {
@@ -55,11 +56,27 @@ public class DoctorBioFragment extends EcareZoneBaseFragment {
 
         doctorBioData = getArguments();
         doctor = doctorBioData.getParcelable(Constants.DOCTOR_DETAIL);
+        Boolean isDocAlreadyAddded = doctorBioData.getBoolean(Constants.DOCTOR_ALEADY_ADDED);
         Log.i(TAG, "doctor in BIO = " + doctor);
         doctorDescriptionView = (TextView) view.findViewById(R.id.doctor_description);
         doctorBioNameView = (TextView) view.findViewById(R.id.doctor_bio_name_id);
         doctorBioCategoryView = (TextView) view.findViewById(R.id.doctor_bio_specialist_id);
         doctorBioImage = (ImageView) view.findViewById(R.id.doctor_bio_profile_pic_id);
+        addToMyCareTeam = (Button)view.findViewById(R.id.add_to_my_care);
+        if(isDocAlreadyAddded) {
+            addToMyCareTeam.setVisibility(View.GONE);
+            doctorBioCategoryView.setText(WordUtils.capitalize(doctor.category));
+        } else {
+            doctorBioCategoryView.setText(WordUtils.capitalize(doctor.doctorCategory));
+            addToMyCareTeam.setVisibility(View.VISIBLE);
+            addToMyCareTeam.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sendAddDoctorRequest();
+                }
+            });
+        }
+
         doctorBioNameView.setText("Dr. " + doctor.name);
 
         String imageUrl = doctor.avatarUrl;
@@ -73,10 +90,45 @@ public class DoctorBioFragment extends EcareZoneBaseFragment {
                     .error(R.drawable.news_other)
                     .into(doctorBioImage);
         }
-        doctorBioCategoryView.setText(WordUtils.capitalize(doctor.doctorCategory));
         doctorDescriptionView.setText(doctor.doctorDescription);
 
         return view;
     }
+
+
+    private void sendAddDoctorRequest() {
+        Log.d(TAG, "SendAddDoctorRequest");
+        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Adding Doctor......");
+        AddDoctorRequest request =
+                new AddDoctorRequest(doctor.doctorId, doctor.name, LoginInfo.userName, LoginInfo.hashedPassword, Constants.API_KEY, Constants.deviceUnique);
+        getSpiceManager().execute(request, new AddDoctorTaskRequestListener());
+    }
+
+    public final class AddDoctorTaskRequestListener implements RequestListener<AddDoctorResponse> {
+
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            progressDialog.dismiss();
+        }
+
+        @Override
+        public void onRequestSuccess(AddDoctorResponse addDoctorResponse) {
+            progressDialog.dismiss();
+            Log.d(TAG, "ResponseCode " + addDoctorResponse.status.code);
+
+            if (addDoctorResponse.status.code == HTTP_STATUS_OK) {
+                Toast.makeText(getActivity(), addDoctorResponse.status.message, Toast.LENGTH_LONG).show();
+//                AddDoctorRequestDialog addDoctorRequestDialog = new AddDoctorRequestDialog();
+//                Bundle bndl = new Bundle();
+//                bndl.putString("doctor_name", doctor.name);
+//                addDoctorRequestDialog.setArguments(bndl);
+//                addDoctorRequestDialog.show();
+            } else {
+                Toast.makeText(getActivity(), addDoctorResponse.status.message, Toast.LENGTH_LONG).show();
+            }
+
+        }
+    }
+
   
 }

@@ -67,7 +67,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="20dp"
-        android:background="@color/ecarezone_gray" />
+        android:background="@color/ecarezone_light_gray" />
 
     <TextView
         android:layout_width="match_parent"

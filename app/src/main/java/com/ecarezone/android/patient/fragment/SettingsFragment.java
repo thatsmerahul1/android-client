@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -53,9 +54,13 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
     private EditText mEditTextPassword = null;
     private CheckBox mCheckBoxTerms = null;
     private TextView mTextViewAbout = null;
+    private TextView ecare_account = null;
+    private TextView ecare_account_email = null;
     public static final Integer COUNTRY_RESULT = 100;
     public static final Integer LANGUAGE_RESULT = 101;
     private User user;
+    ImageView arrow_down_for_country;
+    ImageView arrow_down_for_language;
     private UserTable userTable;
 
     @Override
@@ -74,7 +79,10 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         mButtonRegister = view.findViewById(R.id.button_register);
         mButtonRegister.setOnClickListener(this);
         mButtonRegister.setVisibility(View.GONE);
-
+        arrow_down_for_country = (ImageView)view.findViewById(R.id.arrow_down);
+        arrow_down_for_language = (ImageView)view.findViewById(R.id.arrow_down2);
+        arrow_down_for_country.setImageResource(R.drawable.black_arrow);
+        arrow_down_for_language.setImageResource(R.drawable.black_arrow);
         mEditTextUsername = (EditText) view.findViewById(R.id.edit_text_registration_username);
         mEditTextUsername.setEnabled(false);
         mEditTextPassword = (EditText) view.findViewById(R.id.edit_text_registration_password);
@@ -98,6 +106,19 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         mTextViewAbout = (TextView) view.findViewById(R.id.textview_registration_about);
         mTextViewAbout.setVisibility(View.VISIBLE);
         mTextViewAbout.setOnClickListener(this);
+        ecare_account = (TextView)view.findViewById(R.id.ecare_account);
+        ecare_account_email = (TextView)view.findViewById(R.id.ecare_account_email);
+        ecare_account.setVisibility(View.VISIBLE);
+        ecare_account_email.setVisibility(View.VISIBLE);
+        ecare_account_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setType("text/plain");
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"Customersupport@Ecarezone.com"});
+                startActivity(emailIntent);
+            }
+        });
         updateUserData();
         //Enabling the option menu use
         setHasOptionsMenu(true);

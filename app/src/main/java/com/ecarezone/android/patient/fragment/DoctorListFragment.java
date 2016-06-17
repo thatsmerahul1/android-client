@@ -307,26 +307,27 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                     recommendedDoctorAdapter = new DoctorsAdapter(getActivity(), recommendedDoctorList);
                     recommendedDoctorListView.setAdapter(recommendedDoctorAdapter);
                     recommendedDoctorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                                         @Override
-                                                                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                                             Log.i(TAG, "position = " + position);
-                                                                             Bundle data = new Bundle();
-                                                                             data.putParcelable(Constants.DOCTOR_DETAIL, recommendedDoctorList.get(position));
-                                                                             final Activity activity = getActivity();
-                                                                             if (activity != null) {
-                                                                                 Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorBioActivity.class);
+                         @Override
+                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                             Log.i(TAG, "position = " + position);
+                             Bundle data = new Bundle();
+                             data.putParcelable(Constants.DOCTOR_DETAIL, recommendedDoctorList.get(position));
 
-                                                                                 if (checkDocotorExist(position)) {
-                                                                                     data.putBoolean(ADD_DOCTOR_DISABLE_CHECK, true);
-                                                                                 } else {
-                                                                                     data.putBoolean(ADD_DOCTOR_DISABLE_CHECK, false);
-                                                                                 }
-                                                                                 showDoctorIntent.putExtra(Constants.DOCTOR_BIO_DETAIL, data);
-                                                                                 activity.startActivity(showDoctorIntent);
-                                                                                 activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                                                                             }
-                                                                         }
-                                                                     }
+                             final Activity activity = getActivity();
+                             if (activity != null) {
+                                 Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorBioActivity.class);
+
+                                 if (checkDocotorExist(position)) {
+                                     data.putBoolean(ADD_DOCTOR_DISABLE_CHECK, true);
+                                 } else {
+                                     data.putBoolean(ADD_DOCTOR_DISABLE_CHECK, false);
+                                 }
+                                 showDoctorIntent.putExtra(Constants.DOCTOR_BIO_DETAIL, data);
+                                 activity.startActivity(showDoctorIntent);
+                                 activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                             }
+                         }
+                     }
 
                     );
 

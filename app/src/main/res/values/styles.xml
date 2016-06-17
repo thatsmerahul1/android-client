@@ -7,6 +7,7 @@
         <item name="windowNoTitle">true</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="navigationIcon">@drawable/back_</item>
+        <item name="android:alertDialogStyle">@style/Theme_Sphinx_Dialog_Alert</item>
     </style>
 
     <style name="ToolBarStyle" parent="">
@@ -24,7 +25,11 @@
         <item name="color">@android:color/holo_blue_light</item>
     </style>
 
+    <style name="Theme_Sphinx_Dialog_Alert" parent="@android:style/Theme.Holo.Dialog">
 
+        <item name="android:textColorPrimary">@android:color/holo_orange_light</item>
+
+    </style>
     <!--custom component-->
     <style name="Button" parent="android:Widget.Button">
         <item name="android:paddingBottom">12dp</item>

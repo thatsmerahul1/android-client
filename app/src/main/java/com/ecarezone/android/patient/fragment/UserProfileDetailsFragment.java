@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.drawable.ColorDrawable;
 import android.media.ExifInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +33,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -476,7 +480,71 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     }
 
     private void showPhotoSelectOptionsDialog() {
-        new AlertDialog.Builder(getActivity())
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        dialog.setContentView(R.layout.custom_dialog_for_profile_image);
+        WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        int width = display.getWidth();
+        int dp = getActivity().getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
+
+        dialog.show();
+        dialog.getWindow().setLayout(width-dp,LinearLayout.LayoutParams.WRAP_CONTENT);
+        Button takePhoto = (Button) dialog.findViewById(R.id.takePhoto);
+        takePhoto.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        takePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    if (PermissionUtil.isPermissionRequired()
+                            && PermissionUtil.getAllpermissionRequired(getActivity(),
+                            PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS).length > 0) {
+
+                        PermissionUtil.setAllPermission(getActivity(),
+                                PermissionUtil.REQUEST_CODE_ASK_CAPTURE_PHOTO_PERMISSIONS,
+                                PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS);
+                    } else {
+                        // already have all permissions
+
+                        mSelectedPhotoPath = ImageUtil.dispatchTakePictureIntent(getActivity(),false, null);
+                    }
+                dialog.dismiss();
+            }
+
+        });
+
+        Button choosePhoto = (Button) dialog.findViewById(R.id.choosePhoto);
+        choosePhoto.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        choosePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (PermissionUtil.isPermissionRequired()
+                        && PermissionUtil.getAllpermissionRequired(getActivity(),
+                        PermissionUtil.WRITE_EXTERNAL_STORAGE_PERMISSIONS).length > 0) {
+
+                    PermissionUtil.setAllPermission(getActivity(),
+                            PermissionUtil.REQUEST_CODE_ASK_WRITE_EXTERNAL_STORAGE_PERMISSIONS,
+                            PermissionUtil.WRITE_EXTERNAL_STORAGE_PERMISSIONS);
+                } else {
+                    // already have all permissions
+                    dispatchSelectFromGalleryIntent();
+                }
+                dialog.dismiss();
+            }
+        });
+
+
+        Button declineButton = (Button) dialog.findViewById(R.id.okButton);
+        declineButton.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        declineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+        /*new AlertDialog.Builder(getActivity())
                 .setItems(R.array.photo_options, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -509,8 +577,9 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                     }
                 })
                 .setNegativeButton(R.string.cancel, null)
-                .show();
+                .show();*/
     }
+
 
     private void showGenderSelectorDialog() {
         new AlertDialog.Builder(getActivity())

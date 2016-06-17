@@ -112,7 +112,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         buttonAppointment.setOnClickListener(this);
 
         if (!showAddDoctorOption) {
-            addDoctorButton.setVisibility(View.GONE);
+//            addDoctorButton.setVisibility(View.GONE);
+            addDoctorButton.setEnabled(false);
         }
 
         if (doctor != null) {

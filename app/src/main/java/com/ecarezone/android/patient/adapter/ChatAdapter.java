@@ -57,7 +57,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
         public ViewHolder(View v) {
             super(v);
-            mChatUser = (TextView) v.findViewById(R.id.chatUser);
+//            mChatUser = (TextView) v.findViewById(R.id.chatUser);
             mChatText = (TextView) v.findViewById(R.id.chatText);
             mChartTime = (TextView) v.findViewById(R.id.chatTime);
             mChartImage = (ImageView) v.findViewById(R.id.chatImage);
@@ -218,7 +218,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.mChatText.setVisibility(View.VISIBLE);
             holder.mChartImage.setVisibility(View.GONE);
         }
-        holder.mChatUser.setText(name);
+//        holder.mChatUser.setText(name);
         holder.mChartTime.setText(mFormatter.format(chat.getTimeStamp()));
     }
 

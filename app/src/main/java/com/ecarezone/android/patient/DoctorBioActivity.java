@@ -30,7 +30,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 public class DoctorBioActivity extends EcareZoneBaseActivity {
 
     private static final String TAG = DoctorBioActivity.class.getSimpleName();
-    private ActionBar mActionBar = null;
+     private ActionBar mActionBar = null;
     private Toolbar mToolBar = null;
     private static final int HTTP_STATUS_OK = 200;
     private Long doctorId;
@@ -56,7 +56,7 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
         mToolBar = (Toolbar) findViewById(R.id.toolbar_actionbar);
 
         isDocAlreadyAddded = bundle.getBoolean(Constants.DOCTOR_ALEADY_ADDED, false);
-
+//        setIsDoctorAlreadyAdded(isDocAlreadyAddded);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
 
@@ -108,6 +108,13 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+//    public void setIsDoctorAlreadyAdded(boolean isDocAlreadyAddded) {
+//        this.isDocAlreadyAddded = isDocAlreadyAddded;
+//    }
+//    public static boolean getIsDoctorAlreadyAdded() {
+//        return isDocAlreadyAddded;
+//
+//    }
     @Override
     public void onNavigationChanged(int fragmentLayoutResId, Bundle args) {
         if (fragmentLayoutResId < 0) return;
