@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecarezone.android.patient.MainActivity;
+import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
@@ -201,7 +202,11 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                 Toast.makeText(v.getContext(), R.string.error_password_less_than_registration, Toast.LENGTH_LONG).show();
             } else {
                 mButtonRegister.setEnabled(false);
-                doRegistration(username, password, (String) mSpinnerCountry.getTag(), (String) mSpinnerLanguage.getTag());
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                    doRegistration(username, password, (String) mSpinnerCountry.getTag(), (String) mSpinnerLanguage.getTag());
+                } else {
+                    Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+                }
             }
         } else if (viewId == R.id.country_spinner) {
             createRegestrationDialog(Constants.COUNTRY);

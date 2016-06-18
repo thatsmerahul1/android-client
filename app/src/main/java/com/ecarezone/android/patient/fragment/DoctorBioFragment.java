@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecarezone.android.patient.DoctorBioActivity;
+import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
@@ -72,7 +73,11 @@ public class DoctorBioFragment extends EcareZoneBaseFragment {
             addToMyCareTeam.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sendAddDoctorRequest();
+                    if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                        sendAddDoctorRequest();
+                    } else {
+                        Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         }
@@ -117,16 +122,15 @@ public class DoctorBioFragment extends EcareZoneBaseFragment {
             Log.d(TAG, "ResponseCode " + addDoctorResponse.status.code);
 
             if (addDoctorResponse.status.code == HTTP_STATUS_OK) {
-                Toast.makeText(getActivity(), addDoctorResponse.status.message, Toast.LENGTH_LONG).show();
-//                AddDoctorRequestDialog addDoctorRequestDialog = new AddDoctorRequestDialog();
-//                Bundle bndl = new Bundle();
-//                bndl.putString("doctor_name", doctor.name);
-//                addDoctorRequestDialog.setArguments(bndl);
-//                addDoctorRequestDialog.show();
+                AddDoctorRequestDialog addDoctorRequestDialog = new AddDoctorRequestDialog();
+                Bundle bndl = new Bundle();
+                bndl.putString("doctor_name", doctor.name);
+                addDoctorRequestDialog.setArguments(bndl);
+                FragmentManager fragmentManager = getActivity().getFragmentManager();
+                addDoctorRequestDialog.show(fragmentManager, "AddDoctorRequestSuccessFragment");
             } else {
                 Toast.makeText(getActivity(), addDoctorResponse.status.message, Toast.LENGTH_LONG).show();
             }
-
         }
     }
 
