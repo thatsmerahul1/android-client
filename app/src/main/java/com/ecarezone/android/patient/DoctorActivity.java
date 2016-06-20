@@ -45,7 +45,7 @@ public class DoctorActivity extends EcareZoneBaseActivity {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             // Handle menu item click event
-                            if (item.getItemId() == R.id.info) {
+                            if (item.getItemId() == R.id.action_info) {
                                 Log.i(TAG, "Menu = " + item.getTitle() + ", " + item.getItemId());
                                 Intent showDoctorBioIntent = new Intent(DoctorActivity.this, DoctorBioActivity.class);
                                 showDoctorBioIntent.putExtra(Constants.DOCTOR_BIO_DETAIL, data);
