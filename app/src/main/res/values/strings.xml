@@ -126,8 +126,7 @@
         <item>fi</item>
     </string-array>
 
-    <string name="language">Language:</string>
-    <string name="language_english">English</string>
+     <string name="language_english">English</string>
     <string name="language_local_english">en</string>
 
 
