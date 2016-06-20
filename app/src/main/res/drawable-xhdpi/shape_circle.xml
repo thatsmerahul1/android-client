@@ -6,7 +6,7 @@
     <stroke
 
         android:width="2dp"
-        android:color="@color/text_black_color_selector" />
+        android:color="@color/ecarezone_blue_dark" />
     <!-- add radious for rounded shape-->
     <size
         android:width="20dp"

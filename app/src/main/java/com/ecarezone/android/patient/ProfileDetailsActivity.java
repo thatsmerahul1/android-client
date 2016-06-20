@@ -7,7 +7,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.fragment.UserProfileDetailsFragment;
+import com.ecarezone.android.patient.model.UserProfile;
+import com.ecarezone.android.patient.model.database.ProfileDbApi;
 import com.ecarezone.android.patient.utils.Util;
 
 /**
@@ -33,13 +36,14 @@ public class ProfileDetailsActivity extends EcareZoneBaseActivity {
         setContentView(R.layout.act_profile);
         onNavigationChanged(R.layout.frag_user_profle_details, null);
 
+
         mToolBar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         setSupportActionBar(mToolBar);
         mActionBar = getSupportActionBar();
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
         addSupportOnBackStackChangedListener(this);
-    }
+     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,6 +74,7 @@ public class ProfileDetailsActivity extends EcareZoneBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         userProfileDetailsFragment.onActivityResult(requestCode, resultCode, data);
+
     }
 
     @Override

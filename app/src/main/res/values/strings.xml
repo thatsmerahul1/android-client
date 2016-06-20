@@ -205,6 +205,8 @@
     <string name="title_activity_update_password">UpdatePasswordActivity</string>
     <string name="title_activity_news"></string>
     <string name="password_mismatch">New password and confirm password fields do not match</string>
+    <string name="registration_email">Your email</string>
+    <string name="language">Language:</string>
 
 
 </resources>

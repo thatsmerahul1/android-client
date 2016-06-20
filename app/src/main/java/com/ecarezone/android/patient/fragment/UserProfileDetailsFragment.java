@@ -116,7 +116,6 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         if (mToolBar != null) {
             mToolBar.setOnMenuItemClickListener(this);
         }
-
         /* Whenever profile name is changed, check the name length to enable or disable the save button in action bar. */
         profileNameET = (EditText) view.findViewById(R.id.profileName);
         profileNameET.addTextChangedListener(this);
@@ -129,29 +128,34 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         mErrorText = (TextView) view.findViewById(R.id.txtErrorMsg);
 
         ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
+        Button deleteProfileBtn = (Button) view.findViewById(R.id.deleteProfileBtn);
 
-//        String myProfileText = getResources().getString(R.string.profile_mine);
+        String myProfileText = getResources().getString(R.string.profile_mine);
         if (!mActivity.getIntent().getBooleanExtra(ProfileDetailsActivity.IS_NEW_PROFILE, false)) {
             // Profile exists. Retrieve from DB and display the profile details
             String profileId = mActivity.getIntent().getStringExtra(ProfileDetailsActivity.PROFILE_ID);
             if (profileId != null) {
                 mProfile = profileDbApi.getProfile(LoginInfo.userId.toString(), profileId);
             }
+//            deleteProfileBtn.setEnabled(false);
         } else if (!profileDbApi.hasProfile(LoginInfo.userId.toString())) {
             // No profiles found. make this as "My profile"
-//            profileNameET.setText(myProfileText);
-//            profileNameET.setEnabled(false);
+//            profileDbApi.getMyProfile();
+            profileNameET.setText(myProfileText);
+            profileNameET.setEnabled(false);
+//            deleteProfileBtn.setEnabled(false);
+
         }
 
-        Button deleteProfileBtn = (Button) view.findViewById(R.id.deleteProfileBtn);
 
         if (mProfile != null) {
             setProfileValuesToFormFields(mProfile);
             deleteProfileBtn.setOnClickListener(this);
-            if (mProfile.profileName != null /*&& mProfile.profileName.equals(myProfileText)*/) {
+            if (mProfile.profileName != null  && mProfile.profileName.equals(myProfileText)) {
                 // For "My profile" disable delete button & the profile name field
-//                profileNameET.setEnabled(false);
-//                deleteProfileBtn.setEnabled(false);
+                profileNameET.setEnabled(false);
+                deleteProfileBtn.setEnabled(false);
+                mToolBar.setTitle(mProfile.profileName);
             }
         } else {
             // This is creating new profile. So, disabling the delete profile button

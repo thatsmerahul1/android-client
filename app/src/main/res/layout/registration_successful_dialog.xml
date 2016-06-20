@@ -5,12 +5,15 @@
     android:padding="40dp"
     android:orientation="vertical"
     android:weightSum="1">
-
     <ImageView
         android:id="@+id/add_doctor_success_check"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_action_check_normal"/>
+        android:src="@drawable/save"
+        android:background="@drawable/shape_circle"
+        />
+
 
     <TextView
         android:id="@+id/add_doctor_success_text"

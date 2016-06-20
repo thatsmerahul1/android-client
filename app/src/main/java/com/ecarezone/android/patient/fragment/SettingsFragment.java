@@ -60,6 +60,12 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
     ImageView arrow_down_for_country;
     ImageView arrow_down_for_language;
     private UserTable userTable;
+    ImageView arrow_right_for_username;
+    ImageView arrow_right_for_password;
+    private TextView password = null;
+    private TextView country = null;
+    private TextView language = null;
+    private TextView email = null;
 
     @Override
     protected String getCallerName() {
@@ -77,10 +83,26 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         mButtonRegister = view.findViewById(R.id.button_register);
         mButtonRegister.setOnClickListener(this);
         mButtonRegister.setVisibility(View.GONE);
+
         arrow_down_for_country = (ImageView)view.findViewById(R.id.arrow_down);
         arrow_down_for_language = (ImageView)view.findViewById(R.id.arrow_down2);
         arrow_down_for_country.setImageResource(R.drawable.black_arrow);
         arrow_down_for_language.setImageResource(R.drawable.black_arrow);
+        arrow_right_for_username = (ImageView)view.findViewById(R.id.arrow_right);
+        arrow_right_for_password = (ImageView)view.findViewById(R.id.arrow_right_for_password);
+        arrow_right_for_username.setVisibility(View.VISIBLE);
+        arrow_right_for_password.setVisibility(View.VISIBLE);
+
+        email = (TextView)view.findViewById(R.id.email);
+        password = (TextView)view.findViewById(R.id.password);
+        country = (TextView)view.findViewById(R.id.country);
+        language = (TextView)view.findViewById(R.id.language);
+
+        email.setVisibility(View.VISIBLE);
+        password.setVisibility(View.VISIBLE);
+        country.setVisibility(View.VISIBLE);
+        language.setVisibility(View.VISIBLE);
+
         mEditTextUsername = (EditText) view.findViewById(R.id.edit_text_registration_username);
         mEditTextUsername.setEnabled(false);
         mEditTextPassword = (EditText) view.findViewById(R.id.edit_text_registration_password);
