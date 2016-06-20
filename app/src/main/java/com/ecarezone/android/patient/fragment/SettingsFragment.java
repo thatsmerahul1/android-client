@@ -15,13 +15,12 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecarezone.android.patient.AboutEcareZoneActivity;
-import com.ecarezone.android.patient.ChatActivity;
 import com.ecarezone.android.patient.MainActivity;
+import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.UpdatePasswordActivity;
 import com.ecarezone.android.patient.config.Constants;
@@ -53,9 +52,13 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
     private EditText mEditTextPassword = null;
     private CheckBox mCheckBoxTerms = null;
     private TextView mTextViewAbout = null;
+    private TextView ecare_account = null;
+    private TextView ecare_account_email = null;
     public static final Integer COUNTRY_RESULT = 100;
     public static final Integer LANGUAGE_RESULT = 101;
     private User user;
+    ImageView arrow_down_for_country;
+    ImageView arrow_down_for_language;
     private UserTable userTable;
 
     @Override
@@ -74,7 +77,10 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         mButtonRegister = view.findViewById(R.id.button_register);
         mButtonRegister.setOnClickListener(this);
         mButtonRegister.setVisibility(View.GONE);
-
+        arrow_down_for_country = (ImageView)view.findViewById(R.id.arrow_down);
+        arrow_down_for_language = (ImageView)view.findViewById(R.id.arrow_down2);
+        arrow_down_for_country.setImageResource(R.drawable.black_arrow);
+        arrow_down_for_language.setImageResource(R.drawable.black_arrow);
         mEditTextUsername = (EditText) view.findViewById(R.id.edit_text_registration_username);
         mEditTextUsername.setEnabled(false);
         mEditTextPassword = (EditText) view.findViewById(R.id.edit_text_registration_password);
@@ -98,6 +104,20 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         mTextViewAbout = (TextView) view.findViewById(R.id.textview_registration_about);
         mTextViewAbout.setVisibility(View.VISIBLE);
         mTextViewAbout.setOnClickListener(this);
+        ecare_account = (TextView)view.findViewById(R.id.ecare_account);
+        ecare_account_email = (TextView)view.findViewById(R.id.ecare_account_email);
+        ecare_account.setVisibility(View.VISIBLE);
+        ecare_account_email.setVisibility(View.VISIBLE);
+        ecare_account_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setType("text/plain");
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"Customersupport@Ecarezone.com"});
+                emailIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(emailIntent);
+            }
+        });
         updateUserData();
         //Enabling the option menu use
         setHasOptionsMenu(true);
@@ -145,7 +165,11 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         } else if (viewId == R.id.spinner_language) {
             createRegestrationDialog(Constants.LANGUAGE);
         } else if (viewId == R.id.textview_registration_about) {
-            getActivity().startActivity(new Intent(getActivity(), AboutEcareZoneActivity.class));
+            if(NetworkCheck.isNetworkAvailable(getActivity())){
+                getActivity().startActivity(new Intent(getActivity(), AboutEcareZoneActivity.class));
+            } else {
+                Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+            }
         } else if(viewId == R.id.edit_text_registration_password)
         {
             Log.d("Naga","Updating Password ");
@@ -215,8 +239,11 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
             final String username = mEditTextUsername.getEditableText().toString();
             final String password = mEditTextPassword.getEditableText().toString();
 
-            doSettingsUpdate(username, password, (String) mSpinnerCountry.getTag(), (String) mSpinnerLanguage.getTag());
-
+            if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                doSettingsUpdate(username, password, (String) mSpinnerCountry.getTag(), (String) mSpinnerLanguage.getTag());
+            } else {
+                Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

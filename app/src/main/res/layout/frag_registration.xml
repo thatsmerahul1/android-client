@@ -27,97 +27,71 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/text_black_color_selector" />
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/edit_text_registration_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:orientation="vertical">
+            android:drawableRight="@drawable/arrow_right"
+            android:hint="@string/registration_username"
+            android:inputType="textEmailAddress"
+            android:paddingRight="10dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/settings_email"
-                android:textColor="@color/ecarezone_green_dark_2" />
 
-            <EditText
-                android:id="@+id/edit_text_registration_username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableRight="@drawable/arrow_right"
-                android:hint="@string/registration_username"
-                android:inputType="textEmailAddress"
-                android:paddingLeft="20dp"
-                android:paddingRight="10dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <EditText
+            android:id="@+id/edit_text_registration_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:orientation="vertical">
+            android:drawableRight="@drawable/arrow_right"
+            android:hint="@string/login_password"
+            android:inputType="textPassword"
+            android:paddingRight="10dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/settings_password"
-                android:textColor="@color/ecarezone_green_dark_2" />
-
-            <EditText
-                android:id="@+id/edit_text_registration_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableRight="@drawable/arrow_right"
-                android:hint="@string/login_password"
-                android:inputType="textPassword"
-                android:paddingLeft="20dp"
-                android:paddingRight="10dp" />
-        </LinearLayout>
-
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/registration_country"
-                android:textColor="@color/ecarezone_green_dark_2" />
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/country_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="20dp"
                 android:focusable="false"
                 android:hint="@string/settings_country"
-                android:paddingLeft="20dp"
 
                 />
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical">
-
-            <TextView
+            <ImageView
+                android:id="@+id/arrow_down"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/language"
-                android:textColor="@color/ecarezone_green_dark_2" />
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/arrow_spinner" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/spinner_language"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="20dp"
                 android:focusable="false"
-                android:hint="@string/settings_language" />
-        </LinearLayout>
+
+                android:hint="@string/settings_language"
+                />
+            <ImageView
+                android:id="@+id/arrow_down2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/arrow_spinner" />
+        </FrameLayout>
 
         <Button
             android:id="@+id/button_register"
@@ -136,6 +110,22 @@
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
             android:text="@string/registration_agreement" />
+
+        <TextView
+            android:id="@+id/ecare_account"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/email_to"
+            android:gravity="center"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/ecare_account_email"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/email_id"
+            android:gravity="center"
+            android:textColor="@color/ecarezone_blue_dark"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/textview_registration_about"

@@ -13,7 +13,7 @@
         android:background="@drawable/incoming_message_bg"
         >
 
-        <TextView
+      <!--  <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12dp"
@@ -21,7 +21,7 @@
             android:layout_gravity="top"
             android:text="hi"
             />
-
+-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

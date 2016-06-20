@@ -13,8 +13,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.ecarezone.android.patient.MainActivity;
+import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.NewsListActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.adapter.NewsCategoriesAdapter;
@@ -58,8 +60,12 @@ public class NewsCategoriesFragment extends EcareZoneBaseFragment implements Gri
         mProgressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
                 getActivity().getString(R.string.progress_dialog_loading));
 
-        GetNewsRequest getNewsRequest = new GetNewsRequest();
-        getSpiceManager().execute(getNewsRequest, "news", DurationInMillis.ONE_MINUTE, new NewsRequestListener());
+        if(NetworkCheck.isNetworkAvailable(getActivity())) {
+            GetNewsRequest getNewsRequest = new GetNewsRequest();
+            getSpiceManager().execute(getNewsRequest, "news", DurationInMillis.ONE_MINUTE, new NewsRequestListener());
+        } else {
+            Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

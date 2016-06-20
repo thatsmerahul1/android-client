@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.drawable.ColorDrawable;
 import android.media.ExifInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,9 +33,11 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.ProfileDetailsActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.config.Constants;
@@ -125,7 +130,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
 
         ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
 
-        String myProfileText = getResources().getString(R.string.profile_mine);
+//        String myProfileText = getResources().getString(R.string.profile_mine);
         if (!mActivity.getIntent().getBooleanExtra(ProfileDetailsActivity.IS_NEW_PROFILE, false)) {
             // Profile exists. Retrieve from DB and display the profile details
             String profileId = mActivity.getIntent().getStringExtra(ProfileDetailsActivity.PROFILE_ID);
@@ -134,8 +139,8 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             }
         } else if (!profileDbApi.hasProfile(LoginInfo.userId.toString())) {
             // No profiles found. make this as "My profile"
-            profileNameET.setText(myProfileText);
-            profileNameET.setEnabled(false);
+//            profileNameET.setText(myProfileText);
+//            profileNameET.setEnabled(false);
         }
 
         Button deleteProfileBtn = (Button) view.findViewById(R.id.deleteProfileBtn);
@@ -143,10 +148,10 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         if (mProfile != null) {
             setProfileValuesToFormFields(mProfile);
             deleteProfileBtn.setOnClickListener(this);
-            if (mProfile.profileName != null && mProfile.profileName.equals(myProfileText)) {
+            if (mProfile.profileName != null /*&& mProfile.profileName.equals(myProfileText)*/) {
                 // For "My profile" disable delete button & the profile name field
-                profileNameET.setEnabled(false);
-                deleteProfileBtn.setEnabled(false);
+//                profileNameET.setEnabled(false);
+//                deleteProfileBtn.setEnabled(false);
             }
         } else {
             // This is creating new profile. So, disabling the delete profile button
@@ -234,7 +239,11 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             }
 
             if (!isError) {
-                saveProfile();
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                    saveProfile();
+                } else {
+                    Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+                }
             }
         }
         return true;
@@ -467,7 +476,11 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
                 break;
             case R.id.deleteProfileBtn:
-                deleteProfile();
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                    deleteProfile();
+                } else {
+                    Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+                }
                 break;
             case R.id.gender:
                 showGenderSelectorDialog();
@@ -476,7 +489,71 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     }
 
     private void showPhotoSelectOptionsDialog() {
-        new AlertDialog.Builder(getActivity())
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        dialog.setContentView(R.layout.custom_dialog_for_profile_image);
+        WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        int width = display.getWidth();
+        int dp = getActivity().getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
+
+        dialog.show();
+        dialog.getWindow().setLayout(width-dp,LinearLayout.LayoutParams.WRAP_CONTENT);
+        Button takePhoto = (Button) dialog.findViewById(R.id.takePhoto);
+        takePhoto.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        takePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    if (PermissionUtil.isPermissionRequired()
+                            && PermissionUtil.getAllpermissionRequired(getActivity(),
+                            PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS).length > 0) {
+
+                        PermissionUtil.setAllPermission(getActivity(),
+                                PermissionUtil.REQUEST_CODE_ASK_CAPTURE_PHOTO_PERMISSIONS,
+                                PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS);
+                    } else {
+                        // already have all permissions
+
+                        mSelectedPhotoPath = ImageUtil.dispatchTakePictureIntent(getActivity(),false, null);
+                    }
+                dialog.dismiss();
+            }
+
+        });
+
+        Button choosePhoto = (Button) dialog.findViewById(R.id.choosePhoto);
+        choosePhoto.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        choosePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (PermissionUtil.isPermissionRequired()
+                        && PermissionUtil.getAllpermissionRequired(getActivity(),
+                        PermissionUtil.WRITE_EXTERNAL_STORAGE_PERMISSIONS).length > 0) {
+
+                    PermissionUtil.setAllPermission(getActivity(),
+                            PermissionUtil.REQUEST_CODE_ASK_WRITE_EXTERNAL_STORAGE_PERMISSIONS,
+                            PermissionUtil.WRITE_EXTERNAL_STORAGE_PERMISSIONS);
+                } else {
+                    // already have all permissions
+                    dispatchSelectFromGalleryIntent();
+                }
+                dialog.dismiss();
+            }
+        });
+
+
+        Button declineButton = (Button) dialog.findViewById(R.id.okButton);
+        declineButton.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        declineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+        /*new AlertDialog.Builder(getActivity())
                 .setItems(R.array.photo_options, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -509,8 +586,9 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                     }
                 })
                 .setNegativeButton(R.string.cancel, null)
-                .show();
+                .show();*/
     }
+
 
     private void showGenderSelectorDialog() {
         new AlertDialog.Builder(getActivity())

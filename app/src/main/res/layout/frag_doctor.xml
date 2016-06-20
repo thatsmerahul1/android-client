@@ -92,7 +92,8 @@
                 android:elevation="0dp"
                 android:padding="15dp"
                 android:text="@string/doctor_add_my_care_team"
-                android:visibility="visible" />
+                android:visibility="visible"
+                />
 
 
         </LinearLayout>

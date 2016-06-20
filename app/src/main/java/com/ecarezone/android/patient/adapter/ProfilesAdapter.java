@@ -115,6 +115,7 @@ public class ProfilesAdapter extends BaseAdapter {
                 profileLayout.setBackgroundResource(R.drawable.blue_to_white_rectangle_layout_selector);
             }
         }
+//        profileItem.title.setText();
         return convertView;
     }
 

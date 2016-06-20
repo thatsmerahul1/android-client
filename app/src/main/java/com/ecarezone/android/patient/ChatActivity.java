@@ -35,7 +35,7 @@ public class ChatActivity extends EcareZoneBaseActivity {
         mToolBar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
-            mToolBar.setNavigationIcon(R.drawable.ic_action_menu);
+            mToolBar.setNavigationIcon(R.drawable.back_);
         }
         mActionBar = getSupportActionBar();
         mActionBar.setHomeButtonEnabled(true);

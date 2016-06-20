@@ -23,6 +23,7 @@ import com.ecarezone.android.patient.DoctorActivity;
 import com.ecarezone.android.patient.DoctorBioActivity;
 import com.ecarezone.android.patient.EcareZoneBaseActivity;
 import com.ecarezone.android.patient.MainActivity;
+import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.ProfileDetailsActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.config.Constants;
@@ -115,9 +116,12 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
             case R.id.viewDoctorProfile:
                 // TODO call the doctor profile activity.
 //                ((MainActivity) getActivity()).onNavigationChanged(R.layout.frag_doctor_list, null);
-                GetDoctorRequest request = new GetDoctorRequest();
-                getSpiceManager().execute(request, new RecommondedDoctor());
-
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                    GetDoctorRequest request = new GetDoctorRequest();
+                    getSpiceManager().execute(request, new RecommondedDoctor());
+                } else {
+                    Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+                }
                 break;
             case R.id.button_finish_profile_ok:
                 ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());

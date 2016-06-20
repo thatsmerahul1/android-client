@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.ecarezone.android.patient.DoctorActivity;
 import com.ecarezone.android.patient.DoctorBioActivity;
 import com.ecarezone.android.patient.MainActivity;
+import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.SearchActivity;
 import com.ecarezone.android.patient.adapter.DoctorsAdapter;
@@ -37,9 +38,11 @@ import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.Doctor;
 import com.ecarezone.android.patient.model.database.ChatDbApi;
 import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
+import com.ecarezone.android.patient.model.rest.GetNewsRequest;
 import com.ecarezone.android.patient.model.rest.SearchDoctorsRequest;
 import com.ecarezone.android.patient.model.rest.SearchDoctorsResponse;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
+import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -103,7 +106,11 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String queryString) {
-                performDoctorSearch(queryString);
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                    performDoctorSearch(queryString);
+                } else {
+                    Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+                }
                 return false;
             }
 
@@ -152,8 +159,13 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(message,
                 new IntentFilter("send"));
-        populateMyCareDoctorList();
-        populateRecommendedDoctorList();
+        if(NetworkCheck.isNetworkAvailable(getActivity())) {
+            populateMyCareDoctorList();
+            populateRecommendedDoctorList();
+        } else {
+            Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     @Override
@@ -308,26 +320,27 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                     recommendedDoctorAdapter = new DoctorsAdapter(getActivity(), recommendedDoctorList);
                     recommendedDoctorListView.setAdapter(recommendedDoctorAdapter);
                     recommendedDoctorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                                         @Override
-                                                                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                                             Log.i(TAG, "position = " + position);
-                                                                             Bundle data = new Bundle();
-                                                                             data.putParcelable(Constants.DOCTOR_DETAIL, recommendedDoctorList.get(position));
-                                                                             final Activity activity = getActivity();
-                                                                             if (activity != null) {
-                                                                                 Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorBioActivity.class);
+                         @Override
+                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                             Log.i(TAG, "position = " + position);
+                             Bundle data = new Bundle();
+                             data.putParcelable(Constants.DOCTOR_DETAIL, recommendedDoctorList.get(position));
 
-                                                                                 if (checkDocotorExist(position)) {
-                                                                                     data.putBoolean(ADD_DOCTOR_DISABLE_CHECK, true);
-                                                                                 } else {
-                                                                                     data.putBoolean(ADD_DOCTOR_DISABLE_CHECK, false);
-                                                                                 }
-                                                                                 showDoctorIntent.putExtra(Constants.DOCTOR_BIO_DETAIL, data);
-                                                                                 activity.startActivity(showDoctorIntent);
-                                                                                 activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                                                                             }
-                                                                         }
-                                                                     }
+                             final Activity activity = getActivity();
+                             if (activity != null) {
+                                 Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorBioActivity.class);
+
+                                 if (checkDocotorExist(position)) {
+                                     data.putBoolean(ADD_DOCTOR_DISABLE_CHECK, true);
+                                 } else {
+                                     data.putBoolean(ADD_DOCTOR_DISABLE_CHECK, false);
+                                 }
+                                 showDoctorIntent.putExtra(Constants.DOCTOR_BIO_DETAIL, data);
+                                 activity.startActivity(showDoctorIntent);
+                                 activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                             }
+                         }
+                     }
 
                     );
 

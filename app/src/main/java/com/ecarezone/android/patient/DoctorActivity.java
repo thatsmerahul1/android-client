@@ -49,6 +49,8 @@ public class DoctorActivity extends EcareZoneBaseActivity {
                                 Log.i(TAG, "Menu = " + item.getTitle() + ", " + item.getItemId());
                                 Intent showDoctorBioIntent = new Intent(DoctorActivity.this, DoctorBioActivity.class);
                                 showDoctorBioIntent.putExtra(Constants.DOCTOR_BIO_DETAIL, data);
+                                showDoctorBioIntent.putExtra(Constants.DOCTOR_ALEADY_ADDED, true);
+
                                 startActivity(showDoctorBioIntent);
                             }
                             return true;

@@ -38,6 +38,7 @@ public class SingleNewsItem extends EcareZoneBaseActivity {
         setSupportActionBar(mToolBar);
         mActionBar = getSupportActionBar();
         mActionBar.setHomeButtonEnabled(true);
+        mActionBar.setElevation(20);
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
         Bundle data = getIntent().getBundleExtra("bundle");

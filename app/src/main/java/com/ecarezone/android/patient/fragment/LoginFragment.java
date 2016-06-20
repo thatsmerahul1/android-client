@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecarezone.android.patient.MainActivity;
+import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
@@ -184,7 +185,11 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
                 Toast.makeText(v.getContext(), R.string.error_user_login, Toast.LENGTH_LONG).show();
                 return;
             } else {
-                doLogin(username, password);
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                    doLogin(username, password);
+                } else {
+                    Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+                }
             }
 
         } else if (viewId == R.id.button_create_account) {
