@@ -86,10 +86,11 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         super.onCreate(savedInstanceState);
         try {
             setHasOptionsMenu(true);
+            ((MainActivity) getActivity()).getSupportActionBar()
+                    .setTitle(getResources().getString(R.string.main_side_menu_doctors));
         } catch (Exception e) {
         }
-        ((MainActivity) getActivity()).getSupportActionBar()
-                .setTitle(getResources().getString(R.string.main_side_menu_doctors));
+
         pullDBFromdevice();
     }
 
@@ -434,10 +435,10 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
     BroadcastReceiver message = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(mycareDoctorAdapter != null) {
+            if (mycareDoctorAdapter != null) {
                 mycareDoctorAdapter.notifyDataSetChanged();
             }
-            if(recommendedDoctorAdapter != null) {
+            if (recommendedDoctorAdapter != null) {
                 recommendedDoctorAdapter.notifyDataSetChanged();
             }
         }

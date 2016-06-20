@@ -69,7 +69,7 @@ public class SplashScreenFragment extends EcareZoneBaseFragment implements Sinch
                         String userId = perPreferences.getString(Constants.USER_ID, null);
                         userTable = new UserTable(getApplicationContext());
                         User user = userTable.getUserData(userId);
-                        if (is_login) { // the current user is still in login status
+                        if (is_login && user != null) { // the current user is still in login status
                             LoginInfo.userId = Long.parseLong(userId);
                             LoginInfo.userName = user.email;
                             LoginInfo.hashedPassword = user.password;
@@ -107,7 +107,7 @@ public class SplashScreenFragment extends EcareZoneBaseFragment implements Sinch
 
     @Override
     public void onStarted() {
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             try {
                 Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
                 startActivity(intent);

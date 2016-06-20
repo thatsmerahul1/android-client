@@ -87,6 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
+                android:textStyle="bold"
                 android:layout_marginTop="10dp"
                 android:elevation="0dp"
                 android:padding="15dp"
@@ -101,8 +102,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="10dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -112,17 +113,36 @@
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/btn_doctor_chat_id"
-                    style="?android:attr/borderlessButtonStyle"
+                <FrameLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:drawablePadding="5dp"
-                    android:drawableTop="@drawable/btn_chat_selector"
-                    android:text="@string/doctor_details_chat"
-                    android:textAllCaps="false" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <Button
+                        android:id="@+id/btn_doctor_chat_id"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:drawablePadding="5dp"
+                        android:drawableTop="@drawable/btn_chat_selector"
+                        android:text="@string/doctor_details_chat"
+                        android:textAllCaps="false" />
+                    <TextView
+                        android:id="@+id/chat_count"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/circle_red"
+                        android:gravity="center"
+                        android:layout_marginLeft="@dimen/unread_chat_circle_margin"
+                        android:layout_marginBottom="@dimen/unread_chat_circle_margin"
+                        android:layout_gravity="center"
+                        android:paddingBottom="1dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        android:visibility="visible" />
+                </FrameLayout>
 
                 <Button
                     android:id="@+id/btn_doctor_video_id"
@@ -160,6 +180,7 @@
                 android:layout_marginTop="16dp"
                 android:background="@drawable/circle_blue_complete"
                 android:minWidth="220dp"
+                android:textAppearance="?android:textAppearanceMedium"
                 android:text="@string/doctor_appointment"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white" />

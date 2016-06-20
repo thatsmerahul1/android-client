@@ -1,5 +1,8 @@
 package com.ecarezone.android.patient;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -25,12 +28,19 @@ import com.ecarezone.android.patient.fragment.PatientFragment;
 import com.ecarezone.android.patient.fragment.SettingsFragment;
 import com.ecarezone.android.patient.fragment.UserProfileFragment;
 import com.ecarezone.android.patient.fragment.WelcomeFragment;
+import com.ecarezone.android.patient.model.Appointment;
+import com.ecarezone.android.patient.model.database.AppointmentDbApi;
+import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 import com.ecarezone.android.patient.model.database.ProfileDbApi;
 import com.ecarezone.android.patient.model.rest.ChangeStatusRequest;
 import com.ecarezone.android.patient.model.rest.base.BaseResponse;
+import com.ecarezone.android.patient.utils.AppointmentAlarmReceiver;
 import com.ecarezone.android.patient.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by CHAO WEI on 5/3/2015.
@@ -44,7 +54,7 @@ public class MainActivity extends EcareZoneBaseActivity {
     private ActionBar mActionBar = null;
     private boolean isBackStackRequired;
     private boolean isWelcomeMainRequired;
-    int status =1;
+    int status = 1;
 
     public static final long DISCONNECT_TIMEOUT = 15000; // 1 min = 1 * 60 * 1000 ms
 
@@ -111,6 +121,8 @@ public class MainActivity extends EcareZoneBaseActivity {
             }
         }.execute();
         disconnectHandler.post(disconnectCallback);
+
+        updateAlarm();
     }
 
 
@@ -119,6 +131,7 @@ public class MainActivity extends EcareZoneBaseActivity {
         super.onStart();
         Util.changeStatus(true, this);
     }
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -251,7 +264,7 @@ public class MainActivity extends EcareZoneBaseActivity {
         if (!PatientApplication.nameValuePair.get(Constants.STATUS_CHANGE)) {
             status = 2;
         } else {
-            status =1;
+            status = 1;
         }
         if (PatientApplication.lastAvailablityStaus != status) {
             ChangeStatusRequest request = new ChangeStatusRequest(status, LoginInfo.hashedPassword,
@@ -259,10 +272,11 @@ public class MainActivity extends EcareZoneBaseActivity {
             getSpiceManager().execute(request, new DoUpdatePasswordRequestListener());
             Log.d(TAG, "statuschange " + "changed");
         }
-        PatientApplication.lastAvailablityStaus = status ;
+        PatientApplication.lastAvailablityStaus = status;
         Log.d(TAG, "statuschangelastAvailablityStaus " + status);
         disconnectHandler.postDelayed(disconnectCallback, DISCONNECT_TIMEOUT);
     }
+
     public final class DoUpdatePasswordRequestListener implements RequestListener<BaseResponse> {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
@@ -276,6 +290,43 @@ public class MainActivity extends EcareZoneBaseActivity {
 //            DoctorApplication.lastAvailablityStaus = status ;
         }
     }
+
+    private void updateAlarm() {
+
+        AppointmentDbApi appointmentDb = AppointmentDbApi.getInstance(this);
+        List<Appointment> appointmentList = appointmentDb.getAppointments(String.valueOf(LoginInfo.userId), false);
+
+        DoctorProfileDbApi dpi = DoctorProfileDbApi.getInstance(this);
+
+        if (appointmentList.size() > 0) {
+
+            for(int i = 0 ; i < appointmentList.size() ; i++) {
+
+                Appointment app = appointmentList.get(i);
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+                Intent appointmentIntent = new Intent(this, AppointmentAlarmReceiver.class);
+                appointmentIntent.putExtra("doctor_name", "");
+                appointmentIntent.putExtra("appointment_type", app.getCallType());
+                appointmentIntent.putExtra("docId", app.getDoctorId());
+                PendingIntent pendingUpdateIntent = PendingIntent.getService(this, 0, appointmentIntent, 0);
+
+                // Cancel alarms
+                try {
+                    alarmManager.cancel(pendingUpdateIntent);
+                } catch (Exception e) {
+                    Log.e(TAG, "AlarmManager update was not canceled. " + e.toString());
+                }
+
+//                Calendar cal = Calendar.getInstance();
+//                cal.setTimeInMillis(app.getTimeStamp().getTime());
+                alarmManager.set(AlarmManager.RTC_WAKEUP, app.getTimeStamp().getTime(), pendingUpdateIntent);
+            }
+
+        }
+
+    }
+
     @Override
     protected void onStop() {
         super.onStop();

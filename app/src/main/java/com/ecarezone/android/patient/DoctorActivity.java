@@ -22,6 +22,7 @@ public class DoctorActivity extends EcareZoneBaseActivity {
     private ActionBar mActionBar = null;
     private Toolbar mToolBar = null;
     private Bundle data;
+    private DoctorFragment mDoctorFragment;
 
     @Override
     protected String getCallerName() {
@@ -84,8 +85,18 @@ public class DoctorActivity extends EcareZoneBaseActivity {
         if (fragmentLayoutResId < 0) return;
 
         if (fragmentLayoutResId == R.layout.frag_doctor) {
-            changeFragment(R.id.screen_container, new DoctorFragment(),
+            mDoctorFragment = new DoctorFragment();
+            changeFragment(R.id.screen_container, mDoctorFragment,
                     DoctorFragment.class.getSimpleName(), args);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Util.changeStatus(true, this);
+        if(mDoctorFragment != null) {
+            mDoctorFragment.updateChatCount();
         }
     }
 
@@ -96,14 +107,10 @@ public class DoctorActivity extends EcareZoneBaseActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Util.changeStatus(true, this);
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
         Util.changeStatus(false, this);
     }
+
+
 }

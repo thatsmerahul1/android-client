@@ -84,6 +84,7 @@
     <string name="progress_dialog_requesting">Requesting</string>
 
     <!-- Settings -->
+    <string name="country">Country:</string>
     <string name="settings_email">Email:</string>
     <string name="settings_password">Password:</string>
     <string name="settings_country">Choose your country</string>
@@ -125,8 +126,10 @@
         <item>fi</item>
     </string-array>
 
+    <string name="language">Language:</string>
     <string name="language_english">English</string>
     <string name="language_local_english">en</string>
+
 
     <!-- doctor -->
     <string name="doctor_my_doctors">My doctors</string>

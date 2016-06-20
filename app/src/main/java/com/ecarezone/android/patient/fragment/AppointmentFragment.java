@@ -126,6 +126,8 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
 
 //        String ampmStr = mcurrentDate.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
         String timeStr = mcurrentDate.get(Calendar.HOUR)+":"+ mcurrentDate.get(Calendar.MINUTE);
+        selectedTimeHr = mcurrentDate.get(Calendar.HOUR);
+        selectedTimeMin = mcurrentDate.get(Calendar.MINUTE);
         txtAppointmentTime.setText(timeStr);
     }
 

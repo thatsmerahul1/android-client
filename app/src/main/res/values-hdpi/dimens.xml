@@ -10,4 +10,5 @@
 
     <dimen name="thumbnail_square_size">80dp</dimen>
     <dimen name="logo_top_margin">80dp</dimen>
+    <dimen name="unread_chat_circle_margin">34dp</dimen>
 </resources>
