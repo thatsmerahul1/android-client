@@ -288,6 +288,8 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                 ArrayList<Doctor> doctorList = (ArrayList<Doctor>) searchDoctorsResponse.data;
                 Bundle data = new Bundle();
                 data.putParcelableArrayList(Constants.DOCTOR_LIST, doctorList);
+                data.putBoolean(Constants.DOCTOR_ALEADY_ADDED, false);
+
                 final Activity activity = getActivity();
                 if (activity != null) {
                     Intent searchIntent = new Intent(activity.getApplicationContext(), SearchActivity.class);

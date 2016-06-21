@@ -150,7 +150,7 @@
 
                 <Button
                     android:id="@+id/button_welcome_not_now"
-                    style="@style/EcareZoneGreenButton"
+                    style="@style/EcareZoneGreenBorderButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
@@ -159,7 +159,7 @@
 
                 <Button
                     android:id="@+id/button_finish_profile_ok"
-                    style="@style/EcareZoneGreenButton"
+                    style="@style/EcareZoneGreenBorderButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"

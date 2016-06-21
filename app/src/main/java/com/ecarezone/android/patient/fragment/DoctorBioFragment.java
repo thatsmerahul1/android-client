@@ -64,11 +64,14 @@ public class DoctorBioFragment extends EcareZoneBaseFragment {
         doctorBioCategoryView = (TextView) view.findViewById(R.id.doctor_bio_specialist_id);
         doctorBioImage = (ImageView) view.findViewById(R.id.doctor_bio_profile_pic_id);
         addToMyCareTeam = (Button)view.findViewById(R.id.add_to_my_care);
-        if(isDocAlreadyAddded) {
-            addToMyCareTeam.setVisibility(View.GONE);
+        if(doctor.category != null ) {
             doctorBioCategoryView.setText(WordUtils.capitalize(doctor.category));
-        } else {
+        } else if(doctor.doctorCategory !=null ){
             doctorBioCategoryView.setText(WordUtils.capitalize(doctor.doctorCategory));
+        }
+        if(isDocAlreadyAddded){
+            addToMyCareTeam.setVisibility(View.GONE);
+        } else {
             addToMyCareTeam.setVisibility(View.VISIBLE);
             addToMyCareTeam.setOnClickListener(new View.OnClickListener() {
                 @Override

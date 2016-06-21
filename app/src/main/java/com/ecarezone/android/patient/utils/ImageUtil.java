@@ -218,7 +218,8 @@ public class ImageUtil {
         File file = new File(imagePath);
         try {
             saveBitmapToFile(scaledBitmap, file);
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
         return file;

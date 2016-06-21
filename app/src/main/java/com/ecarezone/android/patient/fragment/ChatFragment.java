@@ -77,8 +77,8 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.frag_chat, container, false);
         getAllComponent(view);
-        ((ChatActivity) getActivity()).getSupportActionBar()
-                .setTitle(getResources().getText(R.string.doctor_details_chat));
+//        ((ChatActivity) getActivity()).getSupportActionBar()
+//                .setTitle(getResources().getText(R.string.doctor_details_chat));
         return view;
     }
 
@@ -112,6 +112,8 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
                 WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         recipient = getArguments().getString(Constants.EXTRA_EMAIL);
         chatAdapter.getChatHistory(recipient);
+        ((ChatActivity) getActivity()).getSupportActionBar()
+                .setTitle(recipientName);
     }
 
     @Override
