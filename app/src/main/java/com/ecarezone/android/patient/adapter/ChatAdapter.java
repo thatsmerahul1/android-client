@@ -137,6 +137,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 holder.mChartImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Log.i("Onimageclick: ", "Onimageclick1");
+
                         Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_VIEW);
                         intent.setDataAndType(Uri.parse("file://" + chat.getDeviceImagePath()),"image/*");
@@ -153,6 +155,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 holder.mChartImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Log.i("Onimageclick: ", "Onimageclick2");
+
                         Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_VIEW);
                         intent.setDataAndType(Uri.parse("file://" + chat.getDeviceImagePath()),"image/*");
@@ -202,11 +206,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                                 holder.mProgressBar.setVisibility(View.VISIBLE);
                             }
                         });
+
             }
             final String finalImagePath = imagePath;
             holder.mChartImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.i("Onimageclick: ", "Onimageclick3");
+
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_VIEW);
                     intent.setDataAndType(Uri.parse("file://" + finalImagePath), "image/*");
@@ -289,7 +296,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                             holder.mProgressBar.setVisibility(View.VISIBLE);
                         }
                     });
+
             new ImageUploadTask(holder, chat).execute(file);
+
         }
     }
 }
