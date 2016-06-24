@@ -1,6 +1,7 @@
 package com.ecarezone.android.patient;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +31,9 @@ public class ChatActivity extends EcareZoneBaseActivity {
         chatFragment = new ChatFragment();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_chat);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.ecarezone_green_dark));
+        }
         Bundle data = getIntent().getExtras();
         onNavigationChanged(R.layout.frag_chat, ((data == null) ? null : data));
         mToolBar = (Toolbar) findViewById(R.id.toolbar_actionbar);

@@ -56,7 +56,7 @@ public class MainActivity extends EcareZoneBaseActivity {
     private boolean isWelcomeMainRequired;
     int status = 1;
 
-    public static final long DISCONNECT_TIMEOUT = 15000; // 1 min = 1 * 60 * 1000 ms
+    public static final long DISCONNECT_TIMEOUT = 60000; // 1 min = 1 * 60 * 1000 ms
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
