@@ -33,10 +33,12 @@ public class DoctorsAdapter extends BaseAdapter {
     private Activity activity;
     private ArrayList<Doctor> doctorList;
     private static LayoutInflater inflater;
+    private ChatDbApi chatDbApi;
 
     public DoctorsAdapter(Activity activity, ArrayList<Doctor> doctorList) {
         this.activity = activity;
         this.doctorList = doctorList;
+        chatDbApi = ChatDbApi.getInstance(activity);
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -93,11 +95,16 @@ public class DoctorsAdapter extends BaseAdapter {
         else {
             holder.doctorType.setText(WordUtils.capitalize(doctor.doctorCategory));
         }
-        String count = String.valueOf(ChatDbApi.getInstance(activity).getUnReadChatCountByUserId(doctor.emailId));
-        if(!count.equalsIgnoreCase("0")){
-            holder.chatCount.setText(count);
-            holder.chatCount.setVisibility(View.VISIBLE);
-        } else {
+        if(doctor.emailId != null) {
+            String count = String.valueOf(chatDbApi.getUnReadChatCountByUserId(doctor.emailId));
+            if (!count.equalsIgnoreCase("0")) {
+                holder.chatCount.setText(count);
+                holder.chatCount.setVisibility(View.VISIBLE);
+            } else {
+                holder.chatCount.setVisibility(View.GONE);
+            }
+        }
+        else{
             holder.chatCount.setVisibility(View.GONE);
         }
 

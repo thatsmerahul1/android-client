@@ -6,7 +6,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.ecarezone.android.patient.fragment.AppointmentFragment;
+import com.ecarezone.android.patient.model.Appointment;
 import com.ecarezone.android.patient.utils.Util;
+
+import java.util.Objects;
 
 /**
  * Created by L&T Technology Services.
@@ -16,6 +19,7 @@ public class AppointmentActivity extends EcareZoneBaseActivity {
     private Toolbar mToolBar = null;
     private ActionBar mActionBar;
     private long doctorId;
+    private Appointment currentAppointment;
 
     @Override
     protected String getCallerName() {
@@ -28,6 +32,7 @@ public class AppointmentActivity extends EcareZoneBaseActivity {
 
         if (fragmentLayoutResId == R.layout.frag_appointment) {
             args.putLong("doctorId", doctorId);
+            args.putSerializable("currentAppointment", currentAppointment);
             changeFragment(R.id.screen_container, new AppointmentFragment(),
                     AppointmentFragment.class.getSimpleName(), args);
         }
@@ -39,11 +44,17 @@ public class AppointmentActivity extends EcareZoneBaseActivity {
         setContentView(R.layout.act_appointment);
         Bundle data = getIntent().getExtras();
         doctorId = getIntent().getLongExtra("doctorId", -1);
+
+        Object obj = getIntent().getSerializableExtra("currentAppointment");
+        if(obj != null) {
+            this.currentAppointment = (Appointment)obj;
+        }
+
         onNavigationChanged(R.layout.frag_appointment, ((data == null) ? null : data));
         mToolBar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
-            mToolBar.setNavigationIcon(R.drawable.ic_action_menu);
+            mToolBar.setNavigationIcon(R.drawable.back_);
         }
         mActionBar = getSupportActionBar();
         mActionBar.setHomeButtonEnabled(true);

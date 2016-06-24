@@ -54,6 +54,8 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.sinch.android.rtc.SinchError;
 
+import java.util.Objects;
+
 
 /**
  * Created by CHAO WEI on 5/1/2015.
@@ -192,6 +194,16 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         if (viewId == R.id.button_register) {
             final String username = mEditTextUsername.getEditableText().toString();
             final String password = mEditTextPassword.getEditableText().toString();
+
+            Object mSpinnerCountryTag = mSpinnerCountry.getTag();
+            if(mSpinnerCountryTag == null){
+                mSpinnerCountry.setTag(mSpinnerCountry.getText().toString());
+            }
+
+            Object mSpinnerLanguageTag = mSpinnerLanguage.getTag();
+            if(mSpinnerLanguageTag == null){
+                mSpinnerLanguage.setTag(mSpinnerLanguage.getText().toString());
+            }
             //Client side validation for username and password
             /*if (TextUtils.isEmpty(username)
                     || (!android.util.Patterns.EMAIL_ADDRESS.matcher(username.trim()).matches())
@@ -521,8 +533,6 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         //English selected as a default language
         mSpinnerLanguage.setText(R.string.language_english);
         mSpinnerLanguage.setTag(getResources().getString(R.string.language_local_english));
-
-
     }
 
 }

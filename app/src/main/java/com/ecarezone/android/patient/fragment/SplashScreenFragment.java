@@ -88,7 +88,7 @@ public class SplashScreenFragment extends EcareZoneBaseFragment implements Sinch
                                 LoginInfo.userName = user.email;
                             }
                             activity.startActivity(new Intent(activity.getApplicationContext(), RegistrationActivity.class));
-//                            activity.finish();
+                            activity.finish();
                         }
                     }
                 }

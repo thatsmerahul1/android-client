@@ -59,11 +59,11 @@ public final class DbContract {
     public static abstract class Appointments implements BaseColumns {
         public static final String TABLE_NAME = "Appointment";
 
-        public static final String COLUMN_NAME_APPOINTMENT_ID = "appointmentId";
+        public static final String COLUMN_NAME_APPOINTMENT_ID = "id";
         public static final String COLUMN_NAME_DATE_TIME = "dateTime";
         public static final String COLUMN_NAME_CALL_TYPE = "callType";
         public static final String COLUMN_NAME_DOCTOR_ID = "doctorId";
-        public static final String COLUMN_NAME_USER_ID = "userId";
+        public static final String COLUMN_NAME_PATIENT_ID = "patientId";
         public static final String COLUMN_NAME_IS_CONFIRMED = "isConfirmed";
     }
 }

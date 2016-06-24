@@ -11,11 +11,11 @@ import java.util.Date;
 /**
  * Created by 10603675 on 25-05-2016.
  */
-public class Appointment implements Serializable {
+public class Appointment implements Serializable, Comparable<Appointment> {
 
     @Expose
     @DatabaseField(canBeNull = false)
-    private String appointmentId;
+    private long id;
 
     @Expose
     @DatabaseField(canBeNull = true)
@@ -27,20 +27,19 @@ public class Appointment implements Serializable {
 
     @Expose
     @DatabaseField(canBeNull = true)
-    private String userId;
+    private String patientId;
 
     @Expose
-    @DatabaseField(canBeNull = true, dataType = DataType.DATE_STRING,
-            format = "yyyy-MM-dd HH:mm:ss")
-    private Date dateTime;
+    @DatabaseField(canBeNull = true)
+    private String dateTime;
 
     @Expose
-    @DatabaseField(canBeNull = true, dataType = DataType.BOOLEAN)
-    private boolean isConfirmed;
+    @DatabaseField(canBeNull = true)
+    private int isConfirmed;
 
 
     private boolean isAppointmentPresent;
-
+    private long dateTimeInLong = 0;
 
     public Appointment() {
 
@@ -54,20 +53,20 @@ public class Appointment implements Serializable {
         this.isAppointmentPresent = isAppointmentPresent;
     }
 
-    public Date getTimeStamp() {
+    public String getTimeStamp() {
         return dateTime;
     }
 
-    public void setTimeStamp(Date timeStamp) {
+    public void setTimeStamp(String timeStamp) {
         this.dateTime = timeStamp;
     }
 
-    public String getAppointmentId() {
-        return appointmentId;
+    public long getAppointmentId() {
+        return id;
     }
 
-    public void setAppointmentId(String appointmentId) {
-        this.appointmentId = appointmentId;
+    public void setAppointmentId(long appointmentId) {
+        this.id = appointmentId;
     }
 
     public String getCallType() {
@@ -86,20 +85,39 @@ public class Appointment implements Serializable {
         this.doctorId = doctorId;
     }
 
-    public String getUserIdId() {
-        return userId;
+    public String getpatientId() {
+        return patientId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setpatientId(String patientId) {
+        this.patientId = patientId;
     }
 
-    public String isConfirmed() {
+    public int isConfirmed() {
         return isConfirmed();
     }
 
-    public void setConfirmed(boolean isConfirmed) {
+    public void setConfirmed(int isConfirmed) {
         this.isConfirmed = isConfirmed;
     }
 
+    public long getDateTimeInLong() {
+        return dateTimeInLong;
+    }
+
+    public void setDateTimeInLong(long dateTimeInLong) {
+        this.dateTimeInLong = dateTimeInLong;
+    }
+
+    @Override
+    public int compareTo(Appointment another) {
+        if (dateTimeInLong < another.dateTimeInLong) {
+            return -1;
+        } else if (dateTimeInLong == another.dateTimeInLong) {
+            return 0;
+        } else {
+            return 1;
+        }
+
+    }
 }

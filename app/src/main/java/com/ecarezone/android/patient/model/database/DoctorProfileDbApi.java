@@ -62,11 +62,13 @@ public class DoctorProfileDbApi {
             updateBuilder.updateColumnValue(DbContract.DoctorProfiles.COLUMN_NAME_EMAIL, doctorProfile.emailId);
             updateBuilder.updateColumnValue(DbContract.DoctorProfiles.COLUMN_NAME_STATUS, doctorProfile.status);
             updateBuilder.updateColumnValue(DbContract.DoctorProfiles.COLUMN_NAME_AVATAR_URL, doctorProfile.avatarUrl);
-            updateBuilder.updateColumnValue(DbContract.DoctorProfiles.COLUMN_NAME_DOCTOR_CATEGORY, doctorProfile.doctorCategory);
+            updateBuilder.updateColumnValue(DbContract.DoctorProfiles.COLUMN_NAME_DOCTOR_CATEGORY, doctorProfile.category);
             updateBuilder.updateColumnValue(DbContract.DoctorProfiles.COLUMN_NAME_DOCTOR_DESCRIPTION, doctorProfile.doctorDescription);
 
-            updateBuilder.update();
-            return true;
+            int updatedRowCount = updateBuilder.update();
+            if(updatedRowCount > 0) {
+                return true;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -87,7 +89,7 @@ public class DoctorProfileDbApi {
         return null;
     }
     public int getProfileIdUsingEmail(String emailId) {
-        Doctor[] profiles = new Doctor[0];
+//        Doctor[] profiles = new Doctor[0];
         try {
             Dao<Doctor, Integer> userProfileDao = mDbHelper.getDoctorsProfileDao();
             QueryBuilder<Doctor, Integer> queryBuilder = userProfileDao.queryBuilder();

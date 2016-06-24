@@ -10,6 +10,15 @@
         <item name="android:alertDialogStyle">@style/Theme_Sphinx_Dialog_Alert</item>
     </style>
 
+    <style name="AppThemeBlueNavigation" parent="Theme.AppCompat.Light">
+        <item name="windowActionBar">false</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="navigationIcon">@drawable/back_</item>
+        <item name="android:alertDialogStyle">@style/Theme_Sphinx_Dialog_Alert</item>
+    </style>
+
     <style name="ToolBarStyle" parent="">
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="theme">@style/ThemeOverlay.ECareZone.ActionBar</item>
