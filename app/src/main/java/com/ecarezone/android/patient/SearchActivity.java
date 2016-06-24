@@ -30,7 +30,7 @@ public class SearchActivity extends EcareZoneBaseActivity {
         mToolBar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
-            mToolBar.setNavigationIcon(R.drawable.ic_action_menu);
+            mToolBar.setNavigationIcon(R.drawable.back_);
             mToolBar.setOnMenuItemClickListener(
                     new Toolbar.OnMenuItemClickListener() {
                         @Override

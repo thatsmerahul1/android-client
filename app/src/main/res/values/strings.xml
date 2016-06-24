@@ -66,8 +66,8 @@
     <string name="profile_details_address">Address</string>
     <string name="profile_details_birth">Date of Birth</string>
     <string name="profile_details_ethnicity">Ethnicity</string>
-    <string name="profile_details_height">Height</string>
-    <string name="profile_details_weight">Weight</string>
+    <string name="profile_details_height">Height (cm)</string>
+    <string name="profile_details_weight">Weight (Kg)</string>
     <string name="profile_details_profile_name">Profile Name</string>
     <string name="profile_details_hint">-</string>
     <string name="profile_details_delete_profile">Delete Profile</string>
@@ -127,8 +127,10 @@
         <item>fi</item>
     </string-array>
 
-     <string name="language_english">English</string>
+    <string name="language_english">English</string>
+    <string name="country_code">China</string>
     <string name="language_local_english">en</string>
+    <string name="country_code_local">CN</string>
 
 
     <!-- doctor -->
