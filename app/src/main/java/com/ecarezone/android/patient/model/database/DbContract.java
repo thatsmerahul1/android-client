@@ -41,6 +41,7 @@ public final class DbContract {
         public static final String COLUMN_NAME_GENDER = "gender";
         public static final String COLUMN_NAME_AVATAR_URL = "avatarUrl";
         public static final String COLUMN_NAME_IS_COMPLETE = "isComplete";
+        public static final String COLUMN_NAME_IS_MYPROFILE = "isMyProfile";
     }
     /*Inner class that defines doctors profile table content*/
     public static abstract class DoctorProfiles implements BaseColumns {

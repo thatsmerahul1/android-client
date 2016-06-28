@@ -117,6 +117,23 @@ public class ProfileDbApi {
         }
         return false;
     }
+    public boolean updateIsMyProfile(String userId, boolean isMyProfile, String  profileId) {
+        try {
+            Dao<UserProfile, Integer> userProfileDao = mDbHelper.getProfileDao();
+            UpdateBuilder<UserProfile, Integer> updateBuilder = userProfileDao.updateBuilder();
+            updateBuilder.where()
+                    .eq(DbContract.Profiles.COLUMN_NAME_USER_ID, userId)
+                    .and()
+                    .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_ID, profileId);
+            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_IS_MYPROFILE, isMyProfile);
+
+            updateBuilder.update();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     /* retrieve the details of a particular profile */
     public UserProfile getProfile(String userId, String profileId) {
