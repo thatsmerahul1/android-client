@@ -105,7 +105,7 @@ public class SinchService extends Service {
     private void createClient(String userName) {
 
         SharedPreferences perPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
-        if(! perPreferences.getBoolean(Constants.IS_LOGIN, true)){
+        if (!perPreferences.getBoolean(Constants.IS_LOGIN, true)) {
             return;
         }
 
@@ -131,7 +131,8 @@ public class SinchService extends Service {
     /* stop sinch client*/
     private void stop() {
         if (mSinchClient != null) {
-            mSinchClient.stopListeningOnActiveConnection();;
+            mSinchClient.stopListeningOnActiveConnection();
+            ;
             mSinchClient.removeSinchClientListener(mSinchClientListener);
 //            mSinchClient.unregisterManagedPush();
 //            mSinchClient.unregisterPushNotificationData();;
@@ -418,21 +419,24 @@ public class SinchService extends Service {
         DoctorProfileDbApi profileDbApi = DoctorProfileDbApi.getInstance(this);
         Doctor tempProfiles;
         tempProfiles = profileDbApi.getProfile(message.getSenderId());
-        Log.i("tempProfiles.name", "tempProfiles.name: " + tempProfiles.name);
+        String name = message.getSenderId();
+        if (tempProfiles != null) {
+            Log.i("tempProfiles.name", "tempProfiles.name: " + tempProfiles.name);
+            name = tempProfiles.name;
+        }
 
 
         NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(this)
-                .setContentTitle("Message from " + tempProfiles.name)
+                .setContentTitle("Message from " + name)
                 .setContentText("You've received new messages.")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setDefaults(Notification.DEFAULT_SOUND)
                 .setColor(Color.BLUE)
                 .setAutoCancel(true);
 
-        if(! notificationCount.containsKey(message.getSenderId())){
+        if (!notificationCount.containsKey(message.getSenderId())) {
             notificationCount.put(message.getSenderId(), 1);
-        }
-        else{
+        } else {
             Integer messageCount = notificationCount.get(message.getSenderId());
             notificationCount.put(message.getSenderId(), ++messageCount);
         }
@@ -444,7 +448,7 @@ public class SinchService extends Service {
         profileDbApi.getProfileIdUsingEmail(message.getSenderId());
 
         resultIntent = new Intent(this, ChatActivity.class);
-        resultIntent.putExtra(Constants.EXTRA_EMAIL,message.getSenderId());
+        resultIntent.putExtra(Constants.EXTRA_EMAIL, message.getSenderId());
         if (resultIntent != null) {
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                     resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);

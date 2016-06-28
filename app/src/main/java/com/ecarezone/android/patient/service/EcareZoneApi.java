@@ -1,13 +1,17 @@
 package com.ecarezone.android.patient.service;
 
+import com.ecarezone.android.patient.model.AppointmentResponse;
 import com.ecarezone.android.patient.model.rest.AddDoctorRequest;
 import com.ecarezone.android.patient.model.rest.AddDoctorResponse;
 import com.ecarezone.android.patient.model.rest.BookAppointmentRequest;
+import com.ecarezone.android.patient.model.rest.BookAppointmentResponse;
 import com.ecarezone.android.patient.model.rest.ChangeStatusRequest;
 import com.ecarezone.android.patient.model.rest.CreateProfileRequest;
 import com.ecarezone.android.patient.model.rest.CreateProfileResponse;
+import com.ecarezone.android.patient.model.rest.DeleteAppointmentRequest;
 import com.ecarezone.android.patient.model.rest.DeleteProfileRequest;
 import com.ecarezone.android.patient.model.rest.ForgetPassRequest;
+import com.ecarezone.android.patient.model.rest.GetAllAppointmentResponse;
 import com.ecarezone.android.patient.model.rest.GetDoctorResponse;
 import com.ecarezone.android.patient.model.rest.GetNewsResponse;
 import com.ecarezone.android.patient.model.rest.LoginRequest;
@@ -20,6 +24,7 @@ import com.ecarezone.android.patient.model.rest.SignupRequest;
 import com.ecarezone.android.patient.model.rest.UpdatePasswordRequest;
 import com.ecarezone.android.patient.model.rest.UpdateProfileRequest;
 import com.ecarezone.android.patient.model.rest.UploadImageResponse;
+import com.ecarezone.android.patient.model.rest.ValidateAppointmentRequest;
 import com.ecarezone.android.patient.model.rest.base.BaseRequest;
 import com.ecarezone.android.patient.model.rest.base.BaseResponse;
 
@@ -99,8 +104,17 @@ public interface EcareZoneApi {
     SearchDoctorsResponse getRecommendedDoctors();
 
     @POST("/bookappointment/users/{userId}/doctors/{doctorId}")
-    BaseResponse bookAppointment(@Path("userId") Long userId,
+    BookAppointmentResponse bookAppointment(@Path("userId") Long userId,
                                  @Path("doctorId") Long doctorId, @Body BookAppointmentRequest request);
+
+    @POST("/validateappointment/users/{appointmentId}")
+    BaseResponse validateAppointment(@Path("appointmentId") long appointmentId, @Body ValidateAppointmentRequest request);
+
+    @GET("/appointments/users/{userId}")
+    GetAllAppointmentResponse getAllAppointments(@Path("userId") long userId);
+
+    @DELETE("/deleteappointment/users/{appointmentId}")
+    BaseResponse deleteAppointment(@Path("appointmentId") long appointmentId, @Body DeleteAppointmentRequest request);
 
     @POST("/changeStatus")
     BaseResponse changeStatus(@Body ChangeStatusRequest request);

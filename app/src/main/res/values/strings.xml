@@ -2,6 +2,8 @@
     <string name="app_name">eCareZone Patient</string>
     <string name="vserion_info">Alpha 01 by eCareZone. 2015</string>
 
+    <string name="alert">Alert</string>
+
     <!--login-->
     <string name="login_username">Username</string>
     <string name="login_password">Password</string>
@@ -22,6 +24,15 @@
     <string name="and">and</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="error_user_name">Please enter a valid email address as user name</string>
+    <string name="sorry">Sorry</string>
+    <string name="is_not_available_right_now">is not available right now,\nplease book a time.</string>
+    <string name="your">Your</string>
+    <string name="appointment_with">appointment with</string>
+    <string name="has_been_booked">has been booked.</string>
+    <string name="time_to_call">Time to call</string>
+    <string name="change_date_n_time">Change date&amp;time</string>
+    <string name="calcel_appointment">Cancel appointment</string>
+    
 
     <string name="thanks_for_registration">Thanks for creating eCareZone \n account, your future health will \n be under our care!</string>
     <string name="start_to_use">Start to use the service</string>
@@ -155,6 +166,12 @@
     <string name="doctor_appointment">Make an appointment</string>
     <string name="doctor_appointment_header">Appointment</string>
     <string name="invalid_date">Please enter valid date</string>
+    <string name="no_slots_open">There is a conflict with the requested appointment. Please try another slot</string>
+    <string name="book">Book</string>
+    <string name="thirty_mins">30 min</string>
+    <string name="appointment_deleted">Appointment successfully cancelled</string>
+    <string name="appointment_cannot_be_set">Appointment date cannot be set for a past time/date.</string>
+
 
     <!-- Home -->
     <string name="home_last_news_feed">The latest news feed</string>
@@ -203,7 +220,7 @@
 
     <string name="gallery_chooser_select_picture">Choose from gallery</string>
 
-    //Update Password
+    <!--Update Password-->
     <string name="current_password">Current Password</string>
     <string name="new_password">New Password</string>
     <string name="retype_password">Confirm New Password</string>

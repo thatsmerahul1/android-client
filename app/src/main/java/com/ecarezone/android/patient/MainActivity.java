@@ -29,10 +29,15 @@ import com.ecarezone.android.patient.fragment.SettingsFragment;
 import com.ecarezone.android.patient.fragment.UserProfileFragment;
 import com.ecarezone.android.patient.fragment.WelcomeFragment;
 import com.ecarezone.android.patient.model.Appointment;
+import com.ecarezone.android.patient.model.AppointmentResponse;
 import com.ecarezone.android.patient.model.database.AppointmentDbApi;
 import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 import com.ecarezone.android.patient.model.database.ProfileDbApi;
 import com.ecarezone.android.patient.model.rest.ChangeStatusRequest;
+import com.ecarezone.android.patient.model.rest.GetAllAppointmentRequest;
+import com.ecarezone.android.patient.model.rest.GetAllAppointmentResponse;
+import com.ecarezone.android.patient.model.rest.ValidateAppointmentRequest;
+import com.ecarezone.android.patient.model.rest.base.BaseRequest;
 import com.ecarezone.android.patient.model.rest.base.BaseResponse;
 import com.ecarezone.android.patient.utils.AppointmentAlarmReceiver;
 import com.ecarezone.android.patient.utils.Util;
@@ -41,6 +46,8 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.Calendar;
 import java.util.List;
+
+import retrofit.http.Path;
 
 /**
  * Created by CHAO WEI on 5/3/2015.
@@ -105,8 +112,13 @@ public class MainActivity extends EcareZoneBaseActivity {
             @Override
             protected Boolean doInBackground(Void... params) {
                 ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
-                boolean hasProfiles = profileDbApi.hasProfile(LoginInfo.userId.toString());
-                return hasProfiles;
+                if(profileDbApi != null) {
+                    boolean hasProfiles = profileDbApi.hasProfile(LoginInfo.userId.toString());
+                    return hasProfiles;
+                }
+                else{
+                    return false;
+                }
             }
 
             @Override
@@ -121,14 +133,15 @@ public class MainActivity extends EcareZoneBaseActivity {
             }
         }.execute();
         disconnectHandler.post(disconnectCallback);
-
-        updateAlarm();
+        getAllAppointments();
+//        updateAlarm();
     }
 
 
     @Override
     protected void onStart() {
         super.onStart();
+//        validateAppointment();
         Util.changeStatus(true, this);
     }
 
@@ -300,7 +313,7 @@ public class MainActivity extends EcareZoneBaseActivity {
 
         if (appointmentList.size() > 0) {
 
-            for(int i = 0 ; i < appointmentList.size() ; i++) {
+            for (int i = 0; i < appointmentList.size(); i++) {
 
                 Appointment app = appointmentList.get(i);
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -320,11 +333,94 @@ public class MainActivity extends EcareZoneBaseActivity {
 
 //                Calendar cal = Calendar.getInstance();
 //                cal.setTimeInMillis(app.getTimeStamp().getTime());
-                alarmManager.set(AlarmManager.RTC_WAKEUP, app.getTimeStamp().getTime(), pendingUpdateIntent);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, Util.getTimeInLongFormat(app.getTimeStamp()), pendingUpdateIntent);
             }
 
         }
 
+    }
+
+    /********************FETCH ALL APPOINTMENTS**********************/
+    private void getAllAppointments(){
+
+        GetAllAppointmentRequest request = new GetAllAppointmentRequest(LoginInfo.userId);
+        getSpiceManager().execute(request, new GetAllAppointmentRequestListener());
+
+    }
+
+    private class GetAllAppointmentRequestListener implements RequestListener<GetAllAppointmentResponse>{
+
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+
+        }
+
+        @Override
+        public void onRequestSuccess(GetAllAppointmentResponse baseResponse) {
+
+            if(baseResponse != null){
+                if(baseResponse.status != null){
+                    if(baseResponse.status.code == 200 &&
+                            baseResponse.status.message.equalsIgnoreCase("Retrieval of Appointments Done")){
+                        int appointmentSize = baseResponse.data.size();
+                        AppointmentDbApi appointmentDbApi = AppointmentDbApi.getInstance(getApplicationContext());
+                        for(Appointment appointment : baseResponse.data) {
+                            appointmentDbApi.updateOrInsertAppointment(appointment);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /********************
+     * VALIDATE APPOINTMENT
+     ****************/
+    private void validateAppointment() {
+
+        AppointmentDbApi appointmentDbApi = AppointmentDbApi.getInstance(getApplicationContext());
+        List<Appointment> appointmentList = appointmentDbApi.getAllPendingAppointments();
+        for (Appointment appointmentIns : appointmentList) {
+            try {
+                ValidateAppointmentRequest request =
+                        new ValidateAppointmentRequest(appointmentIns.getAppointmentId(), LoginInfo.userName, LoginInfo.hashedPassword, Constants.API_KEY, Constants.deviceUnique);
+                getSpiceManager().execute(request, new ValidateTaskRequestListener(appointmentIns.getAppointmentId()));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+        }
+    }
+
+    private class ValidateTaskRequestListener implements RequestListener<com.ecarezone.android.patient.model.rest.base.BaseResponse> {
+
+        long appointmentId;
+
+        public ValidateTaskRequestListener(long appointmentId) {
+            this.appointmentId = appointmentId;
+        }
+
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+
+        }
+
+        @Override
+        public void onRequestSuccess(BaseResponse baseResponse) {
+
+            if (baseResponse != null) {
+                if (baseResponse.toString() != null) {
+                    AppointmentDbApi appointmentDbApi = AppointmentDbApi.getInstance(getApplicationContext());
+                    if (baseResponse.toString().contains("Appointment is accepted ")) {
+//                        appointment has been accepted
+                        appointmentDbApi.updateAppointmentStatus(appointmentId, true);
+                    } else {
+//                        appointment not accepted
+                        appointmentDbApi.updateAppointmentStatus(appointmentId, false);
+                    }
+                }
+            }
+        }
     }
 
     @Override

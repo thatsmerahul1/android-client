@@ -6,6 +6,7 @@
     <color name="ecarezone_green_dark_2">#69aa0c</color>
     <color name="ecarezone_green_light">#AECE78</color>
     <color name="ecarezone_gray">#D1D3D4</color>
+    <color name="red">#FF0000</color>
     <color name="ecarezone_light_gray">#EDECEC</color>
     <color name="ecarezone_news_categories_text_view_background_white">#5FFFFFFF</color>
     <color name="ecarezone_light_gray_alpha">#6FAAAAAA</color>

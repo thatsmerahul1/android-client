@@ -1,151 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-   android:layout_width="fill_parent"
+    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:fillViewport="true"
-    >
 
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/doctor_layout"
-        android:layout_width="fill_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="30dp"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp">
 
         <TextView
+            android:id="@+id/call_type"
+            style="@style/ProfileFormTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/call_type"
-            android:textSize="18sp"
             android:text="Select the call:"
-            style="@style/ProfileFormTextViewStyle"
-            />
+            android:textSize="18sp" />
 
         <RadioGroup
-            android:layout_width="fill_parent"
             android:id="@+id/radioGroup"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/call_type"
-            android:layout_marginBottom="5dp"
-            android:layout_height="wrap_content">
+            android:layout_marginBottom="5dp">
+
             <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/radioVideo"
-                android:text="Video Call"
-                android:checked="true"/>
-            <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="VoIP Call"
+                android:checked="true"
+                android:text="Video Call" />
+
+            <RadioButton
                 android:id="@+id/radioVoip"
-                android:checked="false"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="VoIP Call" />
 
         </RadioGroup>
 
         <TextView
+            android:id="@+id/dateTimeLevel"
+            style="@style/ProfileFormTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/radioGroup"
-            android:id="@+id/dateTimeLevel"
-            android:textSize="18sp"
             android:layout_marginBottom="10dp"
-            android:text="Select date&amp;time:"
             android:layout_marginTop="10dp"
-            style="@style/ProfileFormTextViewStyle"
-            />
+            android:text="Select date&amp;time:"
+            android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/appointment_year"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/appointment_year"
             android:layout_below="@+id/dateTimeLevel"
             android:gravity="center"
+            android:padding="10dp"
             android:text="2016"
-            android:layout_marginBottom="10dp"
-            android:textStyle="bold"
-            android:textSize="18dp"
             android:textColor="@color/text_black_color_selector"
-            android:layout_marginTop="10dp"
-            />
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
         <View
+            android:id="@+id/line0"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:id="@+id/line0"
             android:layout_below="@+id/appointment_year"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
-            android:textColor="@android:color/black"
             android:background="@android:color/black"
-            />
+            android:textColor="@android:color/black" />
 
         <TextView
+            android:id="@+id/appointment_month"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/appointment_month"
             android:layout_below="@+id/line0"
             android:gravity="center"
+            android:padding="10dp"
             android:text="January"
-            android:layout_marginBottom="10dp"
-            android:textStyle="bold"
-            android:textSize="18dp"
             android:textColor="@color/text_black_color_selector"
-            android:layout_marginTop="10dp"
+            android:textSize="18dp"
+            android:textStyle="bold"
+
             />
 
         <View
+            android:id="@+id/line1"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:id="@+id/line1"
             android:layout_below="@+id/appointment_month"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
-            android:textColor="@android:color/black"
             android:background="@android:color/black"
-            />
+            android:textColor="@android:color/black" />
 
         <TextView
+            android:id="@+id/appointment_day"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="15(Today)"
             android:layout_below="@+id/line1"
-            android:id="@+id/appointment_day"
-            android:layout_marginBottom="10dp"
-            android:textStyle="bold"
-            android:textSize="18dp"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="15(Today)"
             android:textColor="@android:color/black"
-            android:layout_marginTop="10dp"
-            />
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
         <View
+            android:id="@+id/line2"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:id="@+id/line2"
             android:layout_below="@+id/appointment_day"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
-            android:background="@android:color/black"
-            />
+            android:background="@android:color/black" />
 
         <TextView
+            android:id="@+id/appointment_time"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_below="@+id/line2"
+            android:gravity="center"
+            android:padding="10dp"
             android:text="09:30(30 minute)"
-            android:id="@+id/appointment_time"
-            android:textStyle="bold"
-            android:layout_marginBottom="10dp"
-            android:textSize="18dp"
             android:textColor="@android:color/black"
-            android:layout_marginTop="10dp"
-            />
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
         <View
             android:id="@+id/view_line"
@@ -154,27 +142,29 @@
             android:layout_below="@+id/appointment_time"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
-            android:background="@android:color/black"
-            />
+            android:background="@android:color/black" />
 
         <TextView
+            android:id="@+id/txtErrorMsg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/txtErrorMsg"
-            android:layout_marginTop="15dp"
             android:layout_below="@+id/view_line"
+            android:layout_marginTop="15dp"
             android:textColor="@android:color/holo_red_light" />
 
         <Button
             android:id="@+id/button_appointment"
-            style="@style/EcareZoneBlueButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="20dp"
-            android:text="Book"
-            android:minWidth="220dp" />
+            android:layout_below="@+id/txtErrorMsg"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/circle_blue_complete"
+            android:minWidth="220dp"
+            android:text="@string/book"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white" />
 
     </RelativeLayout>
 

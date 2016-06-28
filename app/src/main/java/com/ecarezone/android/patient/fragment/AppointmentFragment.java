@@ -22,20 +22,27 @@ import com.ecarezone.android.patient.AppointmentActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
+import com.ecarezone.android.patient.fragment.dialog.EcareZoneAlertDialog;
 import com.ecarezone.android.patient.model.Appointment;
 import com.ecarezone.android.patient.model.database.AppointmentDbApi;
 import com.ecarezone.android.patient.model.rest.BookAppointmentRequest;
+import com.ecarezone.android.patient.model.rest.BookAppointmentResponse;
 import com.ecarezone.android.patient.model.rest.LoginRequest;
 import com.ecarezone.android.patient.model.rest.LoginResponse;
 import com.ecarezone.android.patient.model.rest.base.BaseResponse;
 import com.ecarezone.android.patient.utils.PasswordUtil;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
+import com.ecarezone.android.patient.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.text.DateFormat;
 import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by L&T Technology Services.
@@ -57,6 +64,8 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
     private ProgressDialog progressDialog;
     private AppointmentFragment appointmentFragment;
 
+    private Appointment mExistingAppointment;
+
     @Override
     protected String getCallerName() {
         return AppointmentFragment.class.getName().toString();
@@ -67,6 +76,10 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
         super.onAttach(activity);
         mActivity = activity;
         doctorId = getArguments().getLong("doctorId", -1);
+        Object obj = getArguments().getSerializable("currentAppointment");
+        if(obj != null) {
+            this.mExistingAppointment = (Appointment)obj;
+        }
         appointmentFragment = this;
     }
 
@@ -109,26 +122,66 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
         txtAppointmentTime = (TextView) view.findViewById(R.id.appointment_time);
         txtAppointmentTime.setOnClickListener(this);
 
-        txtErrorMsg = (TextView)view.findViewById(R.id.txtErrorMsg);
+        txtErrorMsg = (TextView) view.findViewById(R.id.txtErrorMsg);
 
         Calendar mcurrentDate = Calendar.getInstance();
+        if(mExistingAppointment != null){
+            String timeStamp = mExistingAppointment.getTimeStamp();
+            long timeStampInLong = Util.getTimeInLongFormat(timeStamp);
+            if(timeStampInLong > 0){
+                mcurrentDate.setTimeInMillis(timeStampInLong);
+            }
+        }
 
         selectedDate = mcurrentDate.get(Calendar.DATE);
         selectedMonth = mcurrentDate.get(Calendar.MONTH);
         selectedYear = mcurrentDate.get(Calendar.YEAR);
 
         String dayStr = String.valueOf(selectedDate);
-        dayStr += "(Today)";
+
+        Calendar mTodayDate = Calendar.getInstance();
+        final int day = mTodayDate.get(Calendar.DATE);
+        final int month = mTodayDate.get(Calendar.MONTH);
+        final int year = mTodayDate.get(Calendar.YEAR);
+
+        if(selectedDate == day && month == selectedMonth && year == selectedYear) {
+            dayStr += "(Today)";
+        }
+        else if (day + 1 == day && month == selectedMonth && year == selectedYear) {
+            dayStr += "(Tomorrow)";
+        }
         txtAppointmentDay.setText(dayStr);
 
         String monthString = new DateFormatSymbols().getMonths()[selectedMonth];
         txtAppointmentMonth.setText(monthString);
 
-//        String ampmStr = mcurrentDate.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
-        String timeStr = mcurrentDate.get(Calendar.HOUR)+":"+ mcurrentDate.get(Calendar.MINUTE);
-        selectedTimeHr = mcurrentDate.get(Calendar.HOUR);
+
+        selectedTimeHr = mcurrentDate.get(Calendar.HOUR_OF_DAY);
         selectedTimeMin = mcurrentDate.get(Calendar.MINUTE);
+
+        String timeStr = formattedTime(mcurrentDate);
         txtAppointmentTime.setText(timeStr);
+    }
+
+    private String formattedTime(Calendar mcurrentDate){
+//        String ampmStr = mcurrentDate.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
+        String minute = null;
+        if(mcurrentDate.get(Calendar.MINUTE) < 10){
+            minute = "0"+mcurrentDate.get(Calendar.MINUTE);
+        }
+        else{
+            minute = String.valueOf(mcurrentDate.get(Calendar.MINUTE));
+        }
+
+        String hour = null;
+        if(mcurrentDate.get(Calendar.HOUR_OF_DAY) < 10){
+            hour = "0"+mcurrentDate.get(Calendar.HOUR_OF_DAY);
+        }
+        else{
+            hour = String.valueOf(mcurrentDate.get(Calendar.HOUR_OF_DAY));
+        }
+        String timeStr = hour + ":" + minute + "("+getString(R.string.thirty_mins)+")";
+        return timeStr;
     }
 
     @Override
@@ -151,15 +204,15 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
                 calendar.set(Calendar.HOUR_OF_DAY, selectedTimeHr);
                 calendar.set(Calendar.MINUTE, selectedTimeMin);
 
-                if(calendar.getTimeInMillis() < System.currentTimeMillis()){
-                    txtErrorMsg.setText("Appointment date cannot be set for a past time/date.");
+                if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+                    txtErrorMsg.setText(R.string.appointment_cannot_be_set);
                     return;
                 }
 
                 BookAppointmentRequest request =
                         new BookAppointmentRequest(LoginInfo.userName, LoginInfo.hashedPassword, Constants.API_KEY, Constants.deviceUnique,
-                                selectedYear+"-"+selectedMonth+"-"+selectedDate+" "+selectedTimeHr+":"+selectedTimeMin,
-                                radioVideo.isChecked()?"video":"voice", doctorId);
+                                selectedYear + "-" + (selectedMonth+1) + "-" + selectedDate + " " + selectedTimeHr + ":" + selectedTimeMin,
+                                radioVideo.isChecked() ? "video" : "voice", doctorId);
                 final BaseResponse response = new BaseResponse();
                 progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Processing........");
                 getSpiceManager().execute(request, new BookAppointmentRequestListener());
@@ -175,7 +228,13 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         selectedTimeHr = selectedHour;
                         selectedTimeMin = selectedMinute;
-                        txtAppointmentTime.setText( selectedHour + ":" + selectedMinute);
+
+                        Calendar mcurrentDate = Calendar.getInstance();
+                        mcurrentDate.set(Calendar.HOUR_OF_DAY, selectedHour);
+                        mcurrentDate.set(Calendar.MINUTE, selectedMinute);
+                        String formattedDate = formattedTime(mcurrentDate);
+                        txtAppointmentTime.setText(formattedDate);
+                        txtErrorMsg.setText("");
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
@@ -183,7 +242,7 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
 
                 break;
             case R.id.appointment_year:
-                showDateTimePicker();;
+                showDateTimePicker();
                 break;
             case R.id.appointment_day:
                 showDateTimePicker();
@@ -195,7 +254,7 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
         }
     }
 
-    private void showDateTimePicker(){
+    private void showDateTimePicker() {
         Calendar mcurrentDate = Calendar.getInstance();
         final int day = mcurrentDate.get(Calendar.DATE);
         final int month = mcurrentDate.get(Calendar.MONTH);
@@ -204,19 +263,17 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
             @Override
             public void onDateSet(DatePicker view, int yearSel, int monthOfYear, int dayOfMonth) {
 
-                if(dayOfMonth < day){
+                if (dayOfMonth < day) {
                     txtErrorMsg.setText(getString(R.string.invalid_date));
                     return;
-                }
-                else{
+                } else {
                     txtErrorMsg.setText("");
                 }
 
                 String dayStr = String.valueOf(dayOfMonth);
-                if(day == dayOfMonth && monthOfYear == month && year == yearSel){
+                if (day == dayOfMonth && monthOfYear == month && year == yearSel) {
                     dayStr += "(Today)";
-                }
-                else if(day+1 == dayOfMonth && monthOfYear == month && year == yearSel){
+                } else if (day + 1 == dayOfMonth && monthOfYear == month && year == yearSel) {
                     dayStr += "(Tomorrow)";
                 }
                 txtAppointmentDay.setText(dayStr);
@@ -229,7 +286,7 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
                 selectedDate = dayOfMonth;
                 selectedMonth = monthOfYear;
                 selectedYear = yearSel;
-
+                txtErrorMsg.setText("");
             }
         }, year, month, day);
         dPicker.show();
@@ -238,44 +295,63 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
     /**
      *
      */
-    private class BookAppointmentRequestListener implements RequestListener<BaseResponse> {
+    private class BookAppointmentRequestListener implements RequestListener<BookAppointmentResponse> {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
-            if(progressDialog != null && progressDialog.isShowing()){
+            if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
             Toast.makeText(getActivity(), spiceException.getMessage(), Toast.LENGTH_LONG).show();
         }
 
         @Override
-        public void onRequestSuccess(BaseResponse baseResponse) {
-            if(progressDialog != null && progressDialog.isShowing()){
+        public void onRequestSuccess(BookAppointmentResponse baseResponse) {
+            if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.YEAR, selectedYear);
-            calendar.set(Calendar.MONTH, selectedMonth);
-            calendar.set(Calendar.DATE, selectedDate);
-            calendar.set(Calendar.HOUR_OF_DAY, selectedTimeHr);
-            calendar.set(Calendar.MINUTE, selectedTimeMin);
-
-            Appointment appointment = new Appointment();
-            appointment.setAppointmentId("a");
-            appointment.setCallType(radioVideo.isChecked()?"video":"voip");
-            appointment.setDoctorId(String.valueOf(doctorId));
-            appointment.setTimeStamp(calendar.getTime());
-            appointment.setUserId(String.valueOf(LoginInfo.userId));
-
-            AppointmentDbApi appointmentDbApi = AppointmentDbApi.getInstance(getActivity());
-            boolean isInserted = appointmentDbApi.saveAppointment(appointment);
-            if(isInserted){
-                mActivity.finish();
-                mActivity.overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+            if (baseResponse.status.code == 409) {
+                EcareZoneAlertDialog.showAlertDialog(getActivity(), "Alert",
+                        getString(R.string.no_slots_open),
+                        "OK");
+                return;
             }
-            else{
 
+            if(baseResponse.data != null) {
+//                Calendar calendar = Calendar.getInstance();
+//                Date date = null;
+////            2014-6-23 12:50
+//                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
+//                try {
+//                    date = format.parse(baseResponse.data.dateTime);
+//                    calendar.setTime(date);
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                if (date == null) {
+//                    calendar.set(Calendar.YEAR, selectedYear);
+//                    calendar.set(Calendar.MONTH, selectedMonth);
+//                    calendar.set(Calendar.DATE, selectedDate);
+//                    calendar.set(Calendar.HOUR_OF_DAY, selectedTimeHr);
+//                    calendar.set(Calendar.MINUTE, selectedTimeMin);
+//                }
+                Appointment appointment = new Appointment();
+                appointment.setAppointmentId(baseResponse.data.id);
+                appointment.setCallType(baseResponse.data.callType);
+                appointment.setDoctorId(String.valueOf(doctorId));
+//                appointment.setTimeStamp(calendar.getTimeInMillis());
+                appointment.setTimeStamp(baseResponse.data.dateTime);
+                appointment.setpatientId(String.valueOf(LoginInfo.userId));
+
+                AppointmentDbApi appointmentDbApi = AppointmentDbApi.getInstance(getActivity());
+                boolean isInserted = appointmentDbApi.saveAppointment(appointment);
+                if (isInserted) {
+                    mActivity.finish();
+                    mActivity.overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+                } else {
+
+                }
             }
         }
     }
