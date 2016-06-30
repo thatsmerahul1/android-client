@@ -77,7 +77,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     private UserProfile mProfile = null;
     private View view = null;
     private static final int REQUEST_SELECT_PICTURE = 1;
-
+    UserProfile profile;
     private ImageView profileImageButton;
     private String mSelectedPhotoPath = null;
     private String mUploadedImageUrl = null;
@@ -86,6 +86,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     private EditText mHeightEditText;
     private EditText mWeightEditText;
     private TextView mErrorText;
+    boolean isMyProfile = false;
 
     @Override
     protected String getCallerName() {
@@ -116,6 +117,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         if (mToolBar != null) {
             mToolBar.setOnMenuItemClickListener(this);
         }
+
         /* Whenever profile name is changed, check the name length to enable or disable the save button in action bar. */
         profileNameET = (EditText) view.findViewById(R.id.profileName);
         profileNameET.addTextChangedListener(this);
@@ -130,32 +132,33 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
         Button deleteProfileBtn = (Button) view.findViewById(R.id.deleteProfileBtn);
 
-        String myProfileText = getResources().getString(R.string.profile_mine);
+//        String myProfileText = getResources().getString(R.string.profile_mine);
         if (!mActivity.getIntent().getBooleanExtra(ProfileDetailsActivity.IS_NEW_PROFILE, false)) {
             // Profile exists. Retrieve from DB and display the profile details
             String profileId = mActivity.getIntent().getStringExtra(ProfileDetailsActivity.PROFILE_ID);
             if (profileId != null) {
                 mProfile = profileDbApi.getProfile(LoginInfo.userId.toString(), profileId);
             }
-//            deleteProfileBtn.setEnabled(false);
         } else if (!profileDbApi.hasProfile(LoginInfo.userId.toString())) {
             // No profiles found. make this as "My profile"
-//            profileDbApi.getMyProfile();
-            profileNameET.setText(myProfileText);
-            profileNameET.setEnabled(false);
-//            deleteProfileBtn.setEnabled(false);
-
+//            profileNameET.setText(mProfile.profileName);
+//            profileNameET.setEnabled(false);
+//            profileDbApi.updateIsMyProfile(LoginInfo.userId.toString(), profile, true);
+             isMyProfile = true;
         }
 
+//        Button deleteProfileBtn = (Button) view.findViewById(R.id.deleteProfileBtn);
 
         if (mProfile != null) {
             setProfileValuesToFormFields(mProfile);
             deleteProfileBtn.setOnClickListener(this);
-            if (mProfile.profileName != null  && mProfile.profileName.equals(myProfileText)) {
+            if (mProfile.profileName != null /*&& mProfile.profileName.equals(myProfileText)*/) {
                 // For "My profile" disable delete button & the profile name field
-                profileNameET.setEnabled(false);
+//                profileNameET.setEnabled(false);
+//                deleteProfileBtn.setEnabled(false);
+            }
+            if(mProfile.isMyProfile){
                 deleteProfileBtn.setEnabled(false);
-                mToolBar.setTitle(mProfile.profileName);
             }
         } else {
             // This is creating new profile. So, disabling the delete profile button
@@ -646,6 +649,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
 
                 ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
                 profileDbApi.saveProfile(LoginInfo.userId.toString(), profile, response.profileId);
+                profileDbApi.updateIsMyProfile(LoginInfo.userId.toString(), isMyProfile, response.profileId);
 
                 getActivity().setResult(getActivity().RESULT_OK, null);
                 getActivity().finish();
@@ -664,11 +668,16 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         @Override
         public void onRequestSuccess(CreateProfileResponse response) {
             if (response != null && response.profileId != null && Integer.parseInt(response.profileId) > 0) {
-                UserProfile profile = createUserProfileFromResponse(response);
+                profile = createUserProfileFromResponse(response);
 
                 ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
                 profileDbApi.updateProfile(LoginInfo.userId.toString(), profile, mProfile.profileId);
+//                profileDbApi.updateIsMyProfile(LoginInfo.userId.toString(), isMyProfile);
 
+//                if (!profileDbApi.hasProfile(LoginInfo.userId.toString())){
+//                    profileDbApi.updateIsMyProfile(LoginInfo.userId.toString(), true);
+//
+//                }
                 getActivity().setResult(getActivity().RESULT_OK, null);
                 getActivity().finish();
             }

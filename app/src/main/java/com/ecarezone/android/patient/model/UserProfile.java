@@ -47,6 +47,8 @@ public class UserProfile implements Serializable {
     public String birthdate;
     @DatabaseField
     public boolean isComplete;
+    @DatabaseField
+    public boolean isMyProfile;
 
     public UserProfile() {
     }
