@@ -28,6 +28,7 @@ import com.ecarezone.android.patient.fragment.PatientFragment;
 import com.ecarezone.android.patient.fragment.SettingsFragment;
 import com.ecarezone.android.patient.fragment.UserProfileFragment;
 import com.ecarezone.android.patient.fragment.WelcomeFragment;
+import com.ecarezone.android.patient.gcm.HeartBeatReceiver;
 import com.ecarezone.android.patient.model.Appointment;
 import com.ecarezone.android.patient.model.AppointmentResponse;
 import com.ecarezone.android.patient.model.database.AppointmentDbApi;
@@ -112,13 +113,17 @@ public class MainActivity extends EcareZoneBaseActivity {
             @Override
             protected Boolean doInBackground(Void... params) {
                 ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
-                if(profileDbApi != null) {
+                if (profileDbApi != null) {
                     boolean hasProfiles = profileDbApi.hasProfile(LoginInfo.userId.toString());
                     return hasProfiles;
-                }
-                else{
+                } else {
                     return false;
                 }
+            }
+
+            @Override
+            protected void onCancelled(Boolean aBoolean) {
+                super.onCancelled(aBoolean);
             }
 
             @Override
@@ -132,16 +137,35 @@ public class MainActivity extends EcareZoneBaseActivity {
                 super.onPostExecute(aBoolean);
             }
         }.execute();
-        disconnectHandler.post(disconnectCallback);
+//        disconnectHandler.post(disconnectCallback);
+
         getAllAppointments();
-//        updateAlarm();
+        setStatusAlarm();
+        Util.setAppointmentAlarm(this);
+    }
+
+    private void setStatusAlarm() {
+
+        try {
+            Calendar updateTime = Calendar.getInstance();
+            Intent intent = new Intent(this, HeartBeatReceiver.class);
+            intent.putExtra(Constants.SEND_HEART_BEAT, true);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
+                    0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager mAlarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            mAlarmManager.setInexactRepeating(AlarmManager.RTC,
+                    updateTime.getTimeInMillis(),
+                    AlarmManager.INTERVAL_FIFTEEN_MINUTES / 3, pendingIntent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
     @Override
     protected void onStart() {
         super.onStart();
-//        validateAppointment();
+        validateAppointment();
         Util.changeStatus(true, this);
     }
 
@@ -256,99 +280,65 @@ public class MainActivity extends EcareZoneBaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private Handler disconnectHandler = new Handler() {
-        public void handleMessage(Message msg) {
-        }
-    };
+//    private Handler disconnectHandler = new Handler() {
+//        public void handleMessage(Message msg) {
+//        }
+//    };
 
-    private Runnable disconnectCallback = new Runnable() {
-        @Override
-        public void run() {
-            // Perform any required operation on disconnect
-            Log.d(TAG, "status" + "status update called");
-            stopDisconnectTimer();
-        }
-    };
+//    private Runnable disconnectCallback = new Runnable() {
+//        @Override
+//        public void run() {
+//            // Perform any required operation on disconnect
+//            Log.d(TAG, "status" + "status update called");
+//            stopDisconnectTimer();
+//        }
+//    };
+//
+//    public void stopDisconnectTimer() {
+//        disconnectHandler.removeCallbacks(disconnectCallback);
+////        if(DoctorApplication.nameValuePair)
+//
+//        if (!PatientApplication.nameValuePair.get(Constants.STATUS_CHANGE)) {
+//            status = 2;
+//        } else {
+//            status = 1;
+//        }
+//        if (PatientApplication.lastAvailablityStaus != status) {
+//            ChangeStatusRequest request = new ChangeStatusRequest(status, LoginInfo.hashedPassword,
+//                    LoginInfo.userName, Integer.toString(1));
+//            getSpiceManager().execute(request, new ChangeStatusRequestListener());
+//            Log.d(TAG, "statuschange " + "changed");
+//        }
+//        PatientApplication.lastAvailablityStaus = status;
+//        Log.d(TAG, "statuschangelastAvailablityStaus " + status);
+//        disconnectHandler.postDelayed(disconnectCallback, DISCONNECT_TIMEOUT);
+//    }
+//
+//    public final class ChangeStatusRequestListener implements RequestListener<BaseResponse> {
+//        @Override
+//        public void onRequestFailure(SpiceException spiceException) {
+////            progressDialog.dismiss();
+//        }
+//
+//        @Override
+//        public void onRequestSuccess(final BaseResponse baseResponse) {
+//            Log.d(TAG, "statuschange " + "changed");
+//
+////            DoctorApplication.lastAvailablityStaus = status ;
+//        }
+//    }
 
-    public void stopDisconnectTimer() {
-        disconnectHandler.removeCallbacks(disconnectCallback);
-//        if(DoctorApplication.nameValuePair)
-
-        if (!PatientApplication.nameValuePair.get(Constants.STATUS_CHANGE)) {
-            status = 2;
-        } else {
-            status = 1;
-        }
-        if (PatientApplication.lastAvailablityStaus != status) {
-            ChangeStatusRequest request = new ChangeStatusRequest(status, LoginInfo.hashedPassword,
-                    LoginInfo.userName, Integer.toString(1));
-            getSpiceManager().execute(request, new DoUpdatePasswordRequestListener());
-            Log.d(TAG, "statuschange " + "changed");
-        }
-        PatientApplication.lastAvailablityStaus = status;
-        Log.d(TAG, "statuschangelastAvailablityStaus " + status);
-        disconnectHandler.postDelayed(disconnectCallback, DISCONNECT_TIMEOUT);
-    }
-
-    public final class DoUpdatePasswordRequestListener implements RequestListener<BaseResponse> {
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-//            progressDialog.dismiss();
-        }
-
-        @Override
-        public void onRequestSuccess(final BaseResponse baseResponse) {
-            Log.d(TAG, "statuschange " + "changed");
-
-//            DoctorApplication.lastAvailablityStaus = status ;
-        }
-    }
-
-    private void updateAlarm() {
-
-        AppointmentDbApi appointmentDb = AppointmentDbApi.getInstance(this);
-        List<Appointment> appointmentList = appointmentDb.getAppointments(String.valueOf(LoginInfo.userId), false);
-
-        DoctorProfileDbApi dpi = DoctorProfileDbApi.getInstance(this);
-
-        if (appointmentList.size() > 0) {
-
-            for (int i = 0; i < appointmentList.size(); i++) {
-
-                Appointment app = appointmentList.get(i);
-                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-                Intent appointmentIntent = new Intent(this, AppointmentAlarmReceiver.class);
-                appointmentIntent.putExtra("doctor_name", "");
-                appointmentIntent.putExtra("appointment_type", app.getCallType());
-                appointmentIntent.putExtra("docId", app.getDoctorId());
-                PendingIntent pendingUpdateIntent = PendingIntent.getService(this, 0, appointmentIntent, 0);
-
-                // Cancel alarms
-                try {
-                    alarmManager.cancel(pendingUpdateIntent);
-                } catch (Exception e) {
-                    Log.e(TAG, "AlarmManager update was not canceled. " + e.toString());
-                }
-
-//                Calendar cal = Calendar.getInstance();
-//                cal.setTimeInMillis(app.getTimeStamp().getTime());
-                alarmManager.set(AlarmManager.RTC_WAKEUP, Util.getTimeInLongFormat(app.getTimeStamp()), pendingUpdateIntent);
-            }
-
-        }
-
-    }
-
-    /********************FETCH ALL APPOINTMENTS**********************/
-    private void getAllAppointments(){
+    /********************
+     * FETCH ALL APPOINTMENTS
+     **********************/
+    private void getAllAppointments() {
 
         GetAllAppointmentRequest request = new GetAllAppointmentRequest(LoginInfo.userId);
         getSpiceManager().execute(request, new GetAllAppointmentRequestListener());
 
     }
 
-    private class GetAllAppointmentRequestListener implements RequestListener<GetAllAppointmentResponse>{
+    private class GetAllAppointmentRequestListener implements RequestListener<GetAllAppointmentResponse> {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
@@ -358,13 +348,13 @@ public class MainActivity extends EcareZoneBaseActivity {
         @Override
         public void onRequestSuccess(GetAllAppointmentResponse baseResponse) {
 
-            if(baseResponse != null){
-                if(baseResponse.status != null){
-                    if(baseResponse.status.code == 200 &&
-                            baseResponse.status.message.equalsIgnoreCase("Retrieval of Appointments Done")){
+            if (baseResponse != null) {
+                if (baseResponse.status != null) {
+                    if (baseResponse.status.code == 200 &&
+                            baseResponse.status.message.equalsIgnoreCase("Retrieval of Appointments Done")) {
                         int appointmentSize = baseResponse.data.size();
                         AppointmentDbApi appointmentDbApi = AppointmentDbApi.getInstance(getApplicationContext());
-                        for(Appointment appointment : baseResponse.data) {
+                        for (Appointment appointment : baseResponse.data) {
                             appointmentDbApi.updateOrInsertAppointment(appointment);
                         }
                     }
@@ -380,13 +370,15 @@ public class MainActivity extends EcareZoneBaseActivity {
 
         AppointmentDbApi appointmentDbApi = AppointmentDbApi.getInstance(getApplicationContext());
         List<Appointment> appointmentList = appointmentDbApi.getAllPendingAppointments();
-        for (Appointment appointmentIns : appointmentList) {
-            try {
-                ValidateAppointmentRequest request =
-                        new ValidateAppointmentRequest(appointmentIns.getAppointmentId(), LoginInfo.userName, LoginInfo.hashedPassword, Constants.API_KEY, Constants.deviceUnique);
-                getSpiceManager().execute(request, new ValidateTaskRequestListener(appointmentIns.getAppointmentId()));
-            } catch (Exception ex) {
-                ex.printStackTrace();
+        if (appointmentList != null) {
+            for (Appointment appointmentIns : appointmentList) {
+                try {
+                    ValidateAppointmentRequest request =
+                            new ValidateAppointmentRequest(appointmentIns.getAppointmentId(), LoginInfo.userName, LoginInfo.hashedPassword, Constants.API_KEY, Constants.deviceUnique);
+                    getSpiceManager().execute(request, new ValidateTaskRequestListener(appointmentIns.getAppointmentId()));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
 
         }
