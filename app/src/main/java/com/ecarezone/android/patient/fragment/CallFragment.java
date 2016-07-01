@@ -196,6 +196,7 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
             call.hangup();
         }
         mActivity.finish();
+        SinchUtil.getSinchAudioPlayer().stopRingtone();
     }
 
     @Override

@@ -50,7 +50,7 @@ public class CallActivity extends EcareZoneBaseActivity {
         addSupportOnBackStackChangedListener(this);
         mCallId = getIntent().getStringExtra(SinchService.CALL_ID);
         SinchUtil.setSinchAudioPlayer(this);
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        setVolumeControlStream(AudioManager.STREAM_RING);
         if (mCallId == null) {
             if (PermissionUtil.isPermissionRequired()
                     && PermissionUtil.getAllpermissionRequired(this, PermissionUtil.SINCH_PERMISSIONS).length > 0) {
@@ -157,8 +157,8 @@ public class CallActivity extends EcareZoneBaseActivity {
     @Override
     public void onStop() {
         super.onStop();
-        SinchUtil.getSinchAudioPlayer().stopProgressTone();
-        SinchUtil.getSinchAudioPlayer().stopRingtone();
+//        SinchUtil.getSinchAudioPlayer().stopProgressTone();
+//        SinchUtil.getSinchAudioPlayer().stopRingtone();
         Util.changeStatus(false, this);
     }
 

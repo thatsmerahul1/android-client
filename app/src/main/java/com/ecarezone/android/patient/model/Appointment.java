@@ -94,7 +94,7 @@ public class Appointment implements Serializable, Comparable<Appointment> {
     }
 
     public int isConfirmed() {
-        return isConfirmed();
+        return isConfirmed;
     }
 
     public void setConfirmed(int isConfirmed) {
