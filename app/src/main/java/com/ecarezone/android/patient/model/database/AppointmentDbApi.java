@@ -208,13 +208,15 @@ public class AppointmentDbApi {
     }
 
     /* retrieve appointments from Appointment table by patientId */
-    public List<Appointment> getAppointments(String patientId, boolean isConfirmed) {
+    public List<Appointment> getAppointments(String doctorId, int isConfirmed) {
         try {
             Dao<Appointment, Integer> appointmentDao = mDbHelper.getAppointmentDao();
             QueryBuilder<Appointment, Integer> queryBuilder = appointmentDao.queryBuilder();
 
             return queryBuilder.where()
-                    .eq(DbContract.Appointments.COLUMN_NAME_PATIENT_ID, patientId)
+//                    .eq(DbContract.Appointments.COLUMN_NAME_PATIENT_ID, patientId)
+//                    .and()
+                    .eq(DbContract.Appointments.COLUMN_NAME_DOCTOR_ID, doctorId)
                     .and()
                     .eq(DbContract.Appointments.COLUMN_NAME_IS_CONFIRMED, isConfirmed)
                     .query();
@@ -230,7 +232,7 @@ public class AppointmentDbApi {
             QueryBuilder<Appointment, Integer> queryBuilder = appointmentDao.queryBuilder();
 
             return queryBuilder.where()
-                    .eq(DbContract.Appointments.COLUMN_NAME_IS_CONFIRMED, false)
+                    .eq(DbContract.Appointments.COLUMN_NAME_IS_CONFIRMED, 0)
                     .query();
         } catch (SQLException e) {
             e.printStackTrace();

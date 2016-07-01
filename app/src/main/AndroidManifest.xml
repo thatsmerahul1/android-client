@@ -40,11 +40,11 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".SplashScreenActivty"
-            android:theme="@style/AppThemeBlueNavigation"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeBlueNavigation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -143,6 +143,7 @@
         </receiver>
 
         <service android:name=".gcm.GcmIntentService" />
+        <service android:name=".gcm.HeartbeatService" />
 
         <activity
             android:name=".UpdatePasswordActivity"
@@ -157,6 +158,9 @@
             android:name=".utils.AppointmentAlarmReceiver"
             android:enabled="true"
             android:exported="true"></receiver>
+        <receiver
+            android:name=".gcm.HeartBeatReceiver"
+            android:enabled="true" />
     </application>
 
 </manifest>

@@ -125,6 +125,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         getAllComponent(view, doctor);
         IntentFilter intentFilter = new IntentFilter("send");
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(message, intentFilter);
+
+        validateAppointment();
         updateChatCount();
         isAppointmentPresent();
         return view;
@@ -384,6 +386,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         super.onStart();
         try {
             isAppointmentPresent();
+            Util.setAppointmentAlarm(getActivity());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -397,13 +400,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
             if (appointmentsList.size() > 0) {
                 currentAppointment = appointmentsList.get(0);
-                long bool = 0;
-                try {
-                    bool = currentAppointment.getAppointmentId();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                if (bool > 0) {
+                if (currentAppointment.isConfirmed() > 0) {
 
                     long convDateTime = Util.getTimeInLongFormat(currentAppointment.getTimeStamp());
 
@@ -449,8 +446,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     }
 
     /*
-                Add Doctor request response
-         */
+        Add Doctor request response
+     */
     public final class AddDoctorTaskRequestListener implements RequestListener<AddDoctorResponse> {
 
         @Override
@@ -490,15 +487,17 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
      *******************/
     private void validateAppointment() {
 
-        List<Appointment> appointmentsList1 = appointmentDbApi.getAppointments(String.valueOf(doctor.doctorId), false);
-        for (Appointment appointmentIns : appointmentsList1) {
+        List<Appointment> appointmentsList1 = appointmentDbApi.getAppointments(String.valueOf(doctor.doctorId), 0);
+        if(appointmentsList1 != null) {
+            for (Appointment appointmentIns : appointmentsList1) {
 
-            try {
-                ValidateAppointmentRequest request =
-                        new ValidateAppointmentRequest(appointmentIns.getAppointmentId(), LoginInfo.userName, LoginInfo.hashedPassword, Constants.API_KEY, Constants.deviceUnique);
-                getSpiceManager().execute(request, new ValidateTaskRequestListener(appointmentIns.getAppointmentId()));
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                try {
+                    ValidateAppointmentRequest request =
+                            new ValidateAppointmentRequest(appointmentIns.getAppointmentId(), LoginInfo.userName, LoginInfo.hashedPassword, Constants.API_KEY, Constants.deviceUnique);
+                    getSpiceManager().execute(request, new ValidateTaskRequestListener(appointmentIns.getAppointmentId()));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }
@@ -568,7 +567,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                 progressDialog.dismiss();
             }
 
-            if(baseResponse.status.code == 200 &&
+            if(baseResponse.status.code == HTTP_STATUS_OK &&
                     baseResponse.status.message.startsWith("Appointment deleted successfully")){
                 appointmentDbApi.deleteAppointment(currentAppointment);
                 EcareZoneAlertDialog.showAlertDialog(getActivity(), getString(R.string.alert),
