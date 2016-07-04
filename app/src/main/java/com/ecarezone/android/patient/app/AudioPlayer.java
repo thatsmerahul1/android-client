@@ -28,7 +28,7 @@ public class AudioPlayer {
 
     private AudioTrack mProgressTone;
     private AudioManager audioManager;
-
+    float VOLUME = 5.0f;
     private final static int SAMPLE_RATE = 16000;
 
     public AudioPlayer(Context context) {
@@ -58,7 +58,7 @@ public class AudioPlayer {
                     return;
                 }
                 mPlayer.setLooping(true);
-                mPlayer.setVolume(15, 15);
+                mPlayer.setVolume(VOLUME, VOLUME);
                 mPlayer.start();
                 break;
         }
