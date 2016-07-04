@@ -407,7 +407,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
 
                 File currentDB = new File(currentDBPath);
 
-                String backupDBPath = "ecarezone.db";
+                String backupDBPath = "ecarezone_patient.db";
                 File backupDB = new File(sd, "/Download/" + backupDBPath);
                 if (!backupDB.exists()) {
                     backupDB.createNewFile();

@@ -345,7 +345,10 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
 
 
     private void nextScreen(Activity activity) {
-        activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));
+
+        Intent intent = new Intent(activity.getApplicationContext(), MainActivity.class);
+        intent.putExtra("from_login_screen", true);
+        activity.startActivity(intent);
         activity.finish();
     }
 

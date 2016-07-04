@@ -35,7 +35,7 @@ public class Appointment implements Serializable, Comparable<Appointment> {
 
     @Expose
     @DatabaseField(canBeNull = true)
-    private int isConfirmed;
+    private boolean isConfirmed;
 
 
     private boolean isAppointmentPresent;
@@ -93,11 +93,11 @@ public class Appointment implements Serializable, Comparable<Appointment> {
         this.patientId = patientId;
     }
 
-    public int isConfirmed() {
+    public boolean isConfirmed() {
         return isConfirmed;
     }
 
-    public void setConfirmed(int isConfirmed) {
+    public void setConfirmed(boolean isConfirmed) {
         this.isConfirmed = isConfirmed;
     }
 
