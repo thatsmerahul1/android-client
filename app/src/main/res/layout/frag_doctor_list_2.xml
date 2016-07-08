@@ -14,12 +14,41 @@
            >
 
             <LinearLayout
+                android:id="@+id/mycare_doctors_container_"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+
+                <ListView
+                    android:id="@+id/req_pending"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="@android:color/transparent"
+                    android:padding="16dp"
+                    android:dividerHeight="14dp"
+
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/doctors_divider_"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@color/common_signin_btn_dark_text_disabled"
+                android:visibility="invisible" />
+
+
+            <LinearLayout
                 android:id="@+id/mycare_doctors_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone">
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

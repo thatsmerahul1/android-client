@@ -7,9 +7,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -30,25 +27,18 @@ import com.ecarezone.android.patient.fragment.UserProfileFragment;
 import com.ecarezone.android.patient.fragment.WelcomeFragment;
 import com.ecarezone.android.patient.gcm.HeartBeatReceiver;
 import com.ecarezone.android.patient.model.Appointment;
-import com.ecarezone.android.patient.model.AppointmentResponse;
 import com.ecarezone.android.patient.model.database.AppointmentDbApi;
-import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 import com.ecarezone.android.patient.model.database.ProfileDbApi;
-import com.ecarezone.android.patient.model.rest.ChangeStatusRequest;
 import com.ecarezone.android.patient.model.rest.GetAllAppointmentRequest;
 import com.ecarezone.android.patient.model.rest.GetAllAppointmentResponse;
 import com.ecarezone.android.patient.model.rest.ValidateAppointmentRequest;
-import com.ecarezone.android.patient.model.rest.base.BaseRequest;
 import com.ecarezone.android.patient.model.rest.base.BaseResponse;
-import com.ecarezone.android.patient.utils.AppointmentAlarmReceiver;
 import com.ecarezone.android.patient.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.Calendar;
 import java.util.List;
-
-import retrofit.http.Path;
 
 /**
  * Created by CHAO WEI on 5/3/2015.

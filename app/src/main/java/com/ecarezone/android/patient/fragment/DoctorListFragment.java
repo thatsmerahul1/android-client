@@ -36,13 +36,10 @@ import com.ecarezone.android.patient.adapter.DoctorsAdapter;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.Doctor;
-import com.ecarezone.android.patient.model.database.ChatDbApi;
 import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
-import com.ecarezone.android.patient.model.rest.GetNewsRequest;
 import com.ecarezone.android.patient.model.rest.SearchDoctorsRequest;
 import com.ecarezone.android.patient.model.rest.SearchDoctorsResponse;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
-import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -64,17 +61,20 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
     private static final int HTTP_STATUS_OK = 200;
     private ListView mycareDoctorListView = null;
     private ListView recommendedDoctorListView = null;
+    private ListView reqPendingList = null;
     private ArrayList<Doctor> doctorList;
     private ArrayList<Doctor> recommendedDoctorList;
     private SearchView searchView;
     private DoctorsAdapter mycareDoctorAdapter;
     private DoctorsAdapter recommendedDoctorAdapter;
     View mycareDoctorContainer;
+    View reqPendingContainer;
     View recommendedDoctorContainer;
     View doctorsDivider;
     private ProgressDialog progressDialog;
     private boolean checkProgress;
     private float padding = 16;
+    boolean reqPending;
 
     @Override
     protected String getCallerName() {
@@ -142,15 +142,17 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         mycareDoctorListView = (ListView) view.findViewById(R.id.mycare_doctors_list);
 
         recommendedDoctorListView = (ListView) view.findViewById(R.id.recommended_doctors_list);
-
+        reqPendingList = (ListView) view.findViewById(R.id.req_pending);
         padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, getResources().getDisplayMetrics());
 
         mycareDoctorContainer = view.findViewById(R.id.mycare_doctors_container);
         recommendedDoctorContainer = view.findViewById(R.id.recommended_doctors_container);
+        reqPendingContainer = view.findViewById(R.id.mycare_doctors_container_);
         doctorsDivider = view.findViewById(R.id.doctors_divider);
         checkProgress = true;
         progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
                 getText(R.string.progress_dialog_loading).toString());
+
         return view;
     }
 
@@ -159,7 +161,18 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(message,
                 new IntentFilter("send"));
-        if(NetworkCheck.isNetworkAvailable(getActivity())) {
+        reqPending = true;
+        DoctorProfileDbApi doctorProfileDbApi = DoctorProfileDbApi.getInstance(getActivity());
+        doctorList =  doctorProfileDbApi.getPendingRequest(reqPending);
+        if(mycareDoctorAdapter == null) {
+            reqPendingContainer.setVisibility(View.VISIBLE);
+            mycareDoctorAdapter = new DoctorsAdapter(getActivity(), doctorList, reqPending);
+            reqPendingList.setAdapter(mycareDoctorAdapter);
+        }
+        else {
+            mycareDoctorAdapter.notifyDataSetChanged();
+        }
+         if(NetworkCheck.isNetworkAvailable(getActivity())) {
             populateMyCareDoctorList();
             populateRecommendedDoctorList();
         } else {
@@ -167,6 +180,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         }
 
     }
+
 
     @Override
     public void onPause() {
@@ -185,7 +199,6 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                 new SearchDoctorsRequest(null, null, null, null, null, null);
         getSpiceManager().execute(request, new RecommendeDoctorListRequestListener());
     }
-
     private void performDoctorSearch(String queryString) {
         progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
                 getText(R.string.progress_dialog_search).toString());
@@ -217,15 +230,17 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                 while (iter.hasNext()) {
                     doctor = iter.next();
                     DoctorProfileDbApi doctorProfileDbApi = DoctorProfileDbApi.getInstance(getActivity());
-                    int id = doctorProfileDbApi.getProfileIdUsingEmail(doctor.emailId);
+                    int id = doctorProfileDbApi.getByDocId(doctor.doctorId);
                     if (id == 0 || doctor.doctorId != id) {
                         doctorProfileDbApi.saveProfile(doctor.doctorId, doctor);
                     } else {
                         doctorProfileDbApi.updateProfile(String.valueOf(doctor.doctorId), doctor);
+                        doctorProfileDbApi.updatePendingReqProfile(String.valueOf(doctor.doctorId), false);
                     }
                 }
 
                 if (doctorList.size() == 0) {
+
                     mycareDoctorContainer.setVisibility(View.GONE);
                     doctorsDivider.setVisibility(View.GONE);
                     if (recommendedDoctorList != null && recommendedDoctorList.size() > 0) {
@@ -234,8 +249,12 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                         recommendedDoctorContainer.setVisibility(View.GONE);
                     }
                 } else if (doctorList.size() > 0) {
-
-                    mycareDoctorAdapter = new DoctorsAdapter(getActivity(), doctorList);
+                    if(doctor.requestPending) {
+                        reqPending = true;
+                    } else {
+                        reqPending = false;
+                    }
+                    mycareDoctorAdapter = new DoctorsAdapter(getActivity(), doctorList, reqPending);
                     mycareDoctorListView.setAdapter(mycareDoctorAdapter);
 
                     mycareDoctorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -319,7 +338,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
             if (getRecommendedDoctorsResponse.status.code == HTTP_STATUS_OK) {
                 recommendedDoctorList = (ArrayList<Doctor>) getRecommendedDoctorsResponse.data;
                 if (recommendedDoctorList.size() > 0) {
-                    recommendedDoctorAdapter = new DoctorsAdapter(getActivity(), recommendedDoctorList);
+                    recommendedDoctorAdapter = new DoctorsAdapter(getActivity(), recommendedDoctorList, false);
                     recommendedDoctorListView.setAdapter(recommendedDoctorAdapter);
                     recommendedDoctorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                          @Override
@@ -342,9 +361,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                                  activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                              }
                          }
-                     }
-
-                    );
+                    });
 
                     recommendedDoctorContainer.setVisibility(View.VISIBLE);
 
@@ -371,6 +388,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                 }
                 Utility.setListViewHeightBasedOnChildren(mycareDoctorListView, padding);
                 Utility.setListViewHeightBasedOnChildren(recommendedDoctorListView, padding);
+                Utility.setListViewHeightBasedOnChildren(reqPendingList, padding);
             } else {
                 Toast.makeText(getApplicationContext(), "Failed to get doctors: " + getRecommendedDoctorsResponse.status.message, Toast.LENGTH_LONG).show();
             }
@@ -379,7 +397,6 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
             } else {
                 progressDialog.dismiss();
             }
-
         }
     }
 
@@ -427,13 +444,6 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         }
     }
 
-//    BroadcastReceiver message = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            updateUnreadMessageCount(ChatDbApi.getInstance(context).getUnReadChatCount());
-//        }
-//    };
-
     BroadcastReceiver message = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -447,7 +457,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
     };
 
 }
-
+// to set hight of listview
 class Utility {
 
     public static void setListViewHeightBasedOnChildren(ListView listView, float padding) {

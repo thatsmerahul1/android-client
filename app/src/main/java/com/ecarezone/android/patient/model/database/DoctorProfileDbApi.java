@@ -64,6 +64,7 @@ public class DoctorProfileDbApi {
             updateBuilder.updateColumnValue(DbContract.DoctorProfiles.COLUMN_NAME_AVATAR_URL, doctorProfile.avatarUrl);
             updateBuilder.updateColumnValue(DbContract.DoctorProfiles.COLUMN_NAME_DOCTOR_CATEGORY, doctorProfile.category);
             updateBuilder.updateColumnValue(DbContract.DoctorProfiles.COLUMN_NAME_DOCTOR_DESCRIPTION, doctorProfile.doctorDescription);
+            updateBuilder.updateColumnValue(DbContract.DoctorProfiles.COLUMN_NAME_DOCTOR_REQUEST_PENDING, doctorProfile.requestPending);
 
             int updatedRowCount = updateBuilder.update();
             if(updatedRowCount > 0) {
@@ -75,6 +76,42 @@ public class DoctorProfileDbApi {
         return false;
     }
 
+    public boolean updatePendingReqProfile(String doctorId, boolean pendingReq) {
+        try {
+            Dao<Doctor, Integer> userProfileDao = mDbHelper.getDoctorsProfileDao();
+            UpdateBuilder<Doctor, Integer> updateBuilder = userProfileDao.updateBuilder();
+            updateBuilder.where()
+                    .eq(DbContract.DoctorProfiles.COLUMN_NAME_USER_ID, doctorId);
+
+             updateBuilder.updateColumnValue(DbContract.DoctorProfiles.COLUMN_NAME_DOCTOR_REQUEST_PENDING, pendingReq);
+
+            int updatedRowCount = updateBuilder.update();
+            if(updatedRowCount > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean updateCategory(String doctorId, String category) {
+        try {
+            Dao<Doctor, Integer> userProfileDao = mDbHelper.getDoctorsProfileDao();
+            UpdateBuilder<Doctor, Integer> updateBuilder = userProfileDao.updateBuilder();
+            updateBuilder.where()
+                    .eq(DbContract.DoctorProfiles.COLUMN_NAME_USER_ID, doctorId);
+
+            updateBuilder.updateColumnValue(DbContract.DoctorProfiles.COLUMN_NAME_DOCTOR_CATEGORY, category);
+
+            int updatedRowCount = updateBuilder.update();
+            if(updatedRowCount > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     /* retrieve the details of a particular profile */
     public Doctor getProfile(String userId /*String profileId*/) {
         try {
@@ -103,6 +140,33 @@ public class DoctorProfileDbApi {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public int getByDocId(long doctorId) {
+//        Doctor[] profiles = new Doctor[0];
+        try {
+            Dao<Doctor, Integer> userProfileDao = mDbHelper.getDoctorsProfileDao();
+            QueryBuilder<Doctor, Integer> queryBuilder = userProfileDao.queryBuilder();
+            List<Doctor> userProfilesList = queryBuilder.where()
+                    .eq(DbContract.DoctorProfiles.COLUMN_NAME_USER_ID, doctorId)
+                    .query();
+            if(userProfilesList!=null && userProfilesList.size() > 0){
+                return Integer.parseInt(String.valueOf(userProfilesList.get(0).doctorId));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    public ArrayList<Doctor> getPendingRequest(boolean requestPending) {
+        try {
+            Dao<Doctor, Integer> userProfileDao = mDbHelper.getDoctorsProfileDao();
+            QueryBuilder<Doctor, Integer> queryBuilder = userProfileDao.queryBuilder();
+            return (ArrayList<Doctor>) queryBuilder.where().eq(DbContract.DoctorProfiles.COLUMN_NAME_DOCTOR_REQUEST_PENDING, requestPending).query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     private boolean areAllFieldsFilled(Doctor userProfile) {
         try {

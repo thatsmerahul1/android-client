@@ -143,9 +143,7 @@ public class ProfilesAdapter extends BaseAdapter {
             mProfiles = new ArrayList<UserProfile>(Arrays.asList(tempProfiles));
             // check whether the db contains more or single profile.
             // If no profiles, add "Create your profile" item to this mProfiles list
-            if ((tempProfiles.length == 0) ||
-                    ((tempProfiles.length == 1) && (!mProfiles.get(0).profileName
-                            .equals(mContext.getResources().getString(R.string.profile_mine))))) {
+            if ((tempProfiles.length == 0)) {
                 UserProfile myProfileItem = new UserProfile();
                 myProfileItem.profileName = mContext.getResources().getString(R.string.profile_add_your_profile);
                 mProfiles.add(myProfileItem);

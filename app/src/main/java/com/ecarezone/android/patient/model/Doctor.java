@@ -41,6 +41,9 @@ public class Doctor implements Parcelable, Serializable {
     @Expose
     @DatabaseField
     public String avatarUrl;
+    @Expose
+    @DatabaseField
+    public boolean requestPending;
 
     public Doctor(){
 

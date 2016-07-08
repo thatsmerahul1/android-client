@@ -20,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,6 +41,7 @@ import android.widget.Toast;
 import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.ProfileDetailsActivity;
 import com.ecarezone.android.patient.R;
+import com.ecarezone.android.patient.adapter.ProfilesAdapter;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.UserProfile;
@@ -206,7 +208,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             );
         } catch (Exception ex) {
             ex.printStackTrace();
-            ;
+
         }
     }
 
@@ -443,7 +445,9 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 long profileId = Long.parseLong(mProfile.profileId);
                 updateProfileInServer(profileId, userProfile);
             }
+            Log.i("Save", "Inside SaveProfileAsyncTask");
             return null;
+
         }
     }
 
@@ -559,41 +563,6 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             }
         });
 
-
-        /*new AlertDialog.Builder(getActivity())
-                .setItems(R.array.photo_options, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        if (which == 1) {
-                            if (PermissionUtil.isPermissionRequired()
-                                    && PermissionUtil.getAllpermissionRequired(getActivity(),
-                                    PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS).length > 0) {
-
-                                PermissionUtil.setAllPermission(getActivity(),
-                                        PermissionUtil.REQUEST_CODE_ASK_CAPTURE_PHOTO_PERMISSIONS,
-                                        PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS);
-                            } else {
-                                // already have all permissions
-
-                                mSelectedPhotoPath = ImageUtil.dispatchTakePictureIntent(getActivity(),false, null);
-                            }
-                        } else {
-                            if (PermissionUtil.isPermissionRequired()
-                                    && PermissionUtil.getAllpermissionRequired(getActivity(),
-                                    PermissionUtil.WRITE_EXTERNAL_STORAGE_PERMISSIONS).length > 0) {
-
-                                PermissionUtil.setAllPermission(getActivity(),
-                                        PermissionUtil.REQUEST_CODE_ASK_WRITE_EXTERNAL_STORAGE_PERMISSIONS,
-                                        PermissionUtil.WRITE_EXTERNAL_STORAGE_PERMISSIONS);
-                            } else {
-                                // already have all permissions
-                                dispatchSelectFromGalleryIntent();
-                            }
-                        }
-                    }
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .show();*/
     }
 
 
@@ -644,7 +613,6 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         @Override
         public void onRequestSuccess(CreateProfileResponse response) {
             if (response != null && response.profileId != null && Integer.parseInt(response.profileId) > 0) {
-
                 UserProfile profile = createUserProfileFromResponse(response);
 
                 ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
@@ -653,8 +621,11 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
 
                 getActivity().setResult(getActivity().RESULT_OK, null);
                 getActivity().finish();
+                Log.i("Save", "Inside CreateProfileResponseListener in if");
+
             }
             dismissDialog();
+            Log.i("Save", "inside CreateProfileResponseListener");
         }
     }
 

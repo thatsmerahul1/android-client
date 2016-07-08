@@ -15,8 +15,10 @@ import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.adapter.DoctorsAdapter;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.model.Doctor;
+import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 
 /**
@@ -47,7 +49,7 @@ public class SearchFragment extends EcareZoneBaseFragment {
         data = getArguments();
         final ArrayList<Doctor> doctorList = data.getParcelableArrayList(Constants.DOCTOR_LIST);
         doctorListView = (ListView) view.findViewById(R.id.list_view_users);
-        doctorsAdapter = new DoctorsAdapter(getActivity(), doctorList);
+        doctorsAdapter = new DoctorsAdapter(getActivity(), doctorList,false);
         doctorListView.setAdapter(doctorsAdapter);
         doctorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -55,6 +57,20 @@ public class SearchFragment extends EcareZoneBaseFragment {
                 Bundle data = new Bundle();
                 data.putParcelable(Constants.DOCTOR_DETAIL, doctorList.get(position));
                 final Activity activity = getActivity();
+
+//                ListIterator<Doctor> iter = doctorList.listIterator();
+//                Doctor doctor = null;
+//                while (iter.hasNext()) {
+//                    doctor = iter.next();
+//                    DoctorProfileDbApi doctorProfileDbApi = DoctorProfileDbApi.getInstance(getActivity());
+//                    int doctorid = doctorProfileDbApi.getProfileIdUsingEmail(doctor.emailId);
+//                    if (doctorid == 0 || doctor.doctorId != doctorid) {
+//                        doctorProfileDbApi.saveProfile(doctor.doctorId, doctor);
+//                    } else {
+//                        doctorProfileDbApi.updateProfile(String.valueOf(doctor.doctorId), doctor);
+//                    }
+//                }
+
                 if (activity != null) {
                     Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorBioActivity.class);
                     showDoctorIntent.putExtra(Constants.DOCTOR_BIO_DETAIL, data);

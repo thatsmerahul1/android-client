@@ -2,14 +2,12 @@ package com.ecarezone.android.patient.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.R;
-import com.ecarezone.android.patient.config.LoginInfo;
 
 /**
  * Created by CHAO WEI on 5/1/2015.
@@ -41,8 +39,8 @@ public class WelcomeFragment extends EcareZoneBaseFragment implements View.OnCli
                 ((MainActivity) act).toggleDrawer(true);
             }
         } else if (viewId == R.id.button_welcome_ok) {
-            // open profile
-            invokeNavigationChanged(R.layout.frag_first_time_profile, null);
+            // to go to profile page
+            invokeNavigationChanged(R.layout.list_view, null);
         }
     }
 }

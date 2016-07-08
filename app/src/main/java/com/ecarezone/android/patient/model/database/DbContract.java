@@ -54,6 +54,7 @@ public final class DbContract {
         public static final String COLUMN_NAME_AVATAR_URL = "avatarUrl";
         public static final String COLUMN_NAME_DOCTOR_DESCRIPTION = "doctorDescription";
         public static final String COLUMN_NAME_DOCTOR_CATEGORY = "doctorCategory";
+        public static final String COLUMN_NAME_DOCTOR_REQUEST_PENDING = "requestPending";
     }
 
     /*Inner class that defines appointment table content*/

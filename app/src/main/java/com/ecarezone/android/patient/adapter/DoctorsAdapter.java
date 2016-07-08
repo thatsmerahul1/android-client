@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.model.Doctor;
 import com.ecarezone.android.patient.model.database.ChatDbApi;
+import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 import com.ecarezone.android.patient.utils.ImageUtil;
 import com.squareup.picasso.Picasso;
 
@@ -23,6 +24,7 @@ import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 293890 on 19-02-2016.
@@ -34,17 +36,19 @@ public class DoctorsAdapter extends BaseAdapter {
     private ArrayList<Doctor> doctorList;
     private static LayoutInflater inflater;
     private ChatDbApi chatDbApi;
+    private boolean reqPending;
 
-    public DoctorsAdapter(Activity activity, ArrayList<Doctor> doctorList) {
+    public DoctorsAdapter(Activity activity, ArrayList<Doctor> doctorList, boolean reqPending) {
         this.activity = activity;
         this.doctorList = doctorList;
         chatDbApi = ChatDbApi.getInstance(activity);
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.reqPending = reqPending;
     }
 
     @Override
     public int getCount() {
-        return doctorList.size();
+          return doctorList.size();
     }
 
     @Override
@@ -63,14 +67,19 @@ public class DoctorsAdapter extends BaseAdapter {
         ViewHolder holder;
         int dp = activity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
 
-        if (convertView == null) {
-            view = inflater.inflate(R.layout.doctor_list_item_layout, null);
-            holder = new ViewHolder();
+        if (view == null) {
+        holder = new ViewHolder();
+            if(reqPending){
+                view = inflater.inflate(R.layout.request_pending_item, null);
+            } else {
+                view = inflater.inflate(R.layout.doctor_list_item_layout, null);
+                holder.doctorPresence = view.findViewById(R.id.doctor_presence);
+                holder.chatCount = (TextView) view.findViewById(R.id.chat_count);
+            }
+
             holder.avatar = (ImageView) view.findViewById(R.id.doctor_avatar);
             holder.doctorAvailability = (TextView) view.findViewById(R.id.doctor_status);
             holder.doctorName = (TextView) view.findViewById(R.id.doctor_name);
-            holder.doctorPresence = view.findViewById(R.id.doctor_presence);
-            holder.chatCount = (TextView) view.findViewById(R.id.chat_count);
             holder.doctorType = (TextView) view.findViewById(R.id.doctor_type);
             view.setTag(holder);
         } else {
@@ -78,47 +87,68 @@ public class DoctorsAdapter extends BaseAdapter {
         }
 
         Doctor doctor = doctorList.get(position);
-        holder.doctorName.setText("Dr. " + doctor.name);
-        String imageUrl = doctor.avatarUrl;
 
-        if (imageUrl != null && imageUrl.trim().length() > 8) {
-            Picasso.with(activity)
-                    .load(imageUrl).resize(dp, dp)
-                    .centerCrop().placeholder(R.drawable.news_other)
-                    .error(R.drawable.news_other)
-                    .into(holder.avatar);
-        }
-
-        if(doctor.doctorCategory == null){
-            holder.doctorType.setText(WordUtils.capitalize(doctor.category));
-        }
-        else {
-            holder.doctorType.setText(WordUtils.capitalize(doctor.doctorCategory));
-        }
-        if(doctor.emailId != null) {
-            String count = String.valueOf(chatDbApi.getUnReadChatCountByUserId(doctor.emailId));
-            if (!count.equalsIgnoreCase("0")) {
-                holder.chatCount.setText(count);
-                holder.chatCount.setVisibility(View.VISIBLE);
-            } else {
-                holder.chatCount.setVisibility(View.GONE);
+        if(reqPending){
+            holder.doctorName.setText("Dr. " + doctor.name);
+            if(doctor.doctorCategory == null){
+                holder.doctorType.setText(WordUtils.capitalize(doctor.category));
             }
-        }
-        else{
-            holder.chatCount.setVisibility(View.GONE);
-        }
-
-        if(doctor.status != null) {
-            if (doctor.status.equalsIgnoreCase("0")) {
-                holder.doctorAvailability.setText(R.string.doctor_busy);
-            } else if (doctor.status.equalsIgnoreCase("1")){
-                holder.doctorAvailability.setText(R.string.doctor_available);
-            } else {
-                holder.doctorAvailability.setText(R.string.doctor_idle);
+            else {
+                holder.doctorType.setText(WordUtils.capitalize(doctor.doctorCategory));
             }
-        }
-        setDoctorPresence(holder, doctor.status);
+            holder.doctorAvailability.setText("Pending request");
+            String imageUrl = doctor.avatarUrl;
 
+            if (imageUrl != null && imageUrl.trim().length() > 8) {
+                Picasso.with(activity)
+                        .load(imageUrl).resize(dp, dp)
+                        .centerCrop().placeholder(R.drawable.news_other)
+                        .error(R.drawable.news_other)
+                        .into(holder.avatar);
+            }
+            notifyDataSetChanged();
+
+        } else {
+            holder.doctorName.setText("Dr. " + doctor.name);
+            String imageUrl = doctor.avatarUrl;
+
+            if (imageUrl != null && imageUrl.trim().length() > 8) {
+                Picasso.with(activity)
+                        .load(imageUrl).resize(dp, dp)
+                        .centerCrop().placeholder(R.drawable.news_other)
+                        .error(R.drawable.news_other)
+                        .into(holder.avatar);
+            }
+
+            if (doctor.doctorCategory == null) {
+                holder.doctorType.setText(WordUtils.capitalize(doctor.category));
+            } else {
+                holder.doctorType.setText(WordUtils.capitalize(doctor.doctorCategory));
+            }
+            if (doctor.emailId != null) {
+                String count = String.valueOf(chatDbApi.getUnReadChatCountByUserId(doctor.emailId));
+                if (!count.equalsIgnoreCase("0")) {
+                    holder.chatCount.setText(count);
+                    holder.chatCount.setVisibility(View.VISIBLE);
+                } else {
+                   holder.chatCount.setVisibility(View.GONE);
+                }
+            } else {
+               holder.chatCount.setVisibility(View.GONE);
+            }
+
+            if (doctor.status != null) {
+                if (doctor.status.equalsIgnoreCase("0")) {
+                    holder.doctorAvailability.setText(R.string.doctor_busy);
+                } else if (doctor.status.equalsIgnoreCase("1")) {
+                    holder.doctorAvailability.setText(R.string.doctor_available);
+                } else {
+                    holder.doctorAvailability.setText(R.string.doctor_idle);
+                }
+            }
+            setDoctorPresence(holder, doctor.status);
+        }
+        notifyDataSetChanged();
         return view;
     }
 
@@ -180,7 +210,7 @@ public class DoctorsAdapter extends BaseAdapter {
             if (status.equalsIgnoreCase("1")) {
                 holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_green));
             } else if (status.equalsIgnoreCase("0")) {
-                holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_red));
+               holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_red));
             } else {
                 holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_amber));
             }
