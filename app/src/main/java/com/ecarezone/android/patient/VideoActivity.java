@@ -169,12 +169,10 @@ public class VideoActivity extends EcareZoneBaseActivity {
         super.onStop();
         SinchUtil.getSinchAudioPlayer().stopProgressTone();
         SinchUtil.getSinchAudioPlayer().stopRingtone();
-        Util.changeStatus(false, this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Util.changeStatus(true, this);
     }
 }

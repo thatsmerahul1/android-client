@@ -14,9 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ecarezone.android.patient.R;
@@ -50,14 +48,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mChatUser, mChatText, mChartTime;
+        public TextView mChatText, mChartTime;
         public ImageView mChartImage;
-        public ImageView mFullImage;
         public ProgressBar mProgressBar;
 
         public ViewHolder(View v) {
             super(v);
-//            mChatUser = (TextView) v.findViewById(R.id.chatUser);
             mChatText = (TextView) v.findViewById(R.id.chatText);
             mChartTime = (TextView) v.findViewById(R.id.chatTime);
             mChartImage = (ImageView) v.findViewById(R.id.chatImage);
@@ -90,7 +86,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         mFormatter = new SimpleDateFormat("HH:mm");
         mContext = context;
         this.recipient = recipient;
-
+        //store incoming images sent in chat in sdcard inside eCareZone/recipient/incoming"
         direct = new File(Environment.getExternalStorageDirectory()
                 + "/eCareZone" + "/" + recipient + "/incoming");
     }
@@ -123,10 +119,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             senderUserId = chat.getChatUserId();
         }
         holder.mProgressBar.setVisibility(View.GONE);
-        Log.i("Comapring: ", "chat.getInComingImageUrl()" + chat.getInComingImageUrl());
-        Log.i("Comapring: ", "chat.getDeviceImagePath()" + chat.getDeviceImagePath());
-        if (senderUserId.equals(LoginInfo.userName) &&
-                chat.getDeviceImagePath() != null) {
+        if (senderUserId.equals(LoginInfo.userName) && chat.getDeviceImagePath() != null) {
             holder.mChartImage.setVisibility(View.VISIBLE);
             holder.mChatText.setVisibility(View.GONE);
             if (!chat.isChatSending()) {
@@ -138,8 +131,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 holder.mChartImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.i("Onimageclick: ", "Onimageclick1");
-
                         Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_VIEW);
                         intent.setDataAndType(Uri.parse("file://" + chat.getDeviceImagePath()),"image/*");
@@ -156,8 +147,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 holder.mChartImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.i("Onimageclick: ", "Onimageclick2");
-
                         Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_VIEW);
                         intent.setDataAndType(Uri.parse("file://" + chat.getDeviceImagePath()),"image/*");
@@ -168,7 +157,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 new ImageUploadDiscTask(holder).execute(chat);
             }
 
-        } else if (chat.getInComingImageUrl() != null) {
+        } else if (chat.getInComingImageUrl() != null) { //incoming images
             holder.mChartImage.setVisibility(View.VISIBLE);
             holder.mChatText.setVisibility(View.GONE);
 
@@ -177,7 +166,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 String formattedDate = dateFormat.format(chat.getTimeStamp());
                 localImgFileArr = direct.list();
                 for (String fileName : localImgFileArr) {
-                    Log.i("Comapring: ", fileName + " with " +formattedDate + ".jpg");
                     if (fileName.equalsIgnoreCase(formattedDate + ".jpg")) {
                         imagePath = direct.getAbsolutePath() + File.separator + fileName;
                         break;
@@ -211,12 +199,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
             }
             final String finalImagePath = imagePath;
-            Log.i("Comapring: ", "chat.finalImagePath()"+ finalImagePath);
-
             holder.mChartImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i("Onimageclick: ", "Onimageclick3");
 
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_VIEW);
@@ -229,7 +214,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.mChatText.setVisibility(View.VISIBLE);
             holder.mChartImage.setVisibility(View.GONE);
         }
-//        holder.mChatUser.setText(name);
         holder.mChartTime.setText(mFormatter.format(chat.getTimeStamp()));
     }
 

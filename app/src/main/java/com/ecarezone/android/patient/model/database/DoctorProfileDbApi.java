@@ -3,7 +3,6 @@ package com.ecarezone.android.patient.model.database;
 import android.content.Context;
 
 import com.ecarezone.android.patient.model.Doctor;
-import com.ecarezone.android.patient.model.UserProfile;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.UpdateBuilder;
@@ -126,7 +125,6 @@ public class DoctorProfileDbApi {
         return null;
     }
     public int getProfileIdUsingEmail(String emailId) {
-//        Doctor[] profiles = new Doctor[0];
         try {
             Dao<Doctor, Integer> userProfileDao = mDbHelper.getDoctorsProfileDao();
             QueryBuilder<Doctor, Integer> queryBuilder = userProfileDao.queryBuilder();
@@ -143,7 +141,6 @@ public class DoctorProfileDbApi {
     }
 
     public int getByDocId(long doctorId) {
-//        Doctor[] profiles = new Doctor[0];
         try {
             Dao<Doctor, Integer> userProfileDao = mDbHelper.getDoctorsProfileDao();
             QueryBuilder<Doctor, Integer> queryBuilder = userProfileDao.queryBuilder();

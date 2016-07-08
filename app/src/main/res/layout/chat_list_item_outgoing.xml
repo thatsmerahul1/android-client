@@ -11,17 +11,7 @@
         android:orientation="vertical"
         android:layout_gravity="right"
         android:background="@drawable/outgoing_message_bg"
-        >
-
-       <!-- <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14dp"
-            android:id="@+id/chatUser"
-            android:layout_gravity="top"
-            android:text="hi"
-            />-->
-
+        > 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

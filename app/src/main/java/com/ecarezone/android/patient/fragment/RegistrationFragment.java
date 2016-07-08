@@ -54,8 +54,6 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.sinch.android.rtc.SinchError;
 
-import java.util.Objects;
-
 
 /**
  * Created by CHAO WEI on 5/1/2015.
@@ -178,8 +176,6 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
 
         mCheckBoxTerms.setText(Html.fromHtml(txt));
         mCheckBoxTerms.setMovementMethod(LinkMovementMethod.getInstance());
-
-
         return view;
     }
 
@@ -205,14 +201,6 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                 mSpinnerLanguage.setTag(mSpinnerLanguage.getText().toString());
             }
             //Client side validation for username and password
-            /*if (TextUtils.isEmpty(username)
-                    || (!android.util.Patterns.EMAIL_ADDRESS.matcher(username.trim()).matches())
-                    || (TextUtils.isEmpty(password) || (password.trim().length() < 8))) {
-                Toast.makeText(v.getContext(), R.string.error_password_less_than_registration, Toast.LENGTH_LONG).show();
-            } else {
-                mButtonRegister.setEnabled(false);
-                doRegistration(username, password, (String) mSpinnerCountry.getTag(), (String) mSpinnerLanguage.getTag());
-            }*/
             if (TextUtils.isEmpty(username)
                     || (!android.util.Patterns.EMAIL_ADDRESS.matcher(username.trim()).matches())) {
                 Toast.makeText(v.getContext(), R.string.error_user_name, Toast.LENGTH_LONG).show();
@@ -325,8 +313,6 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         SignupRequest signupRequest = new SignupRequest(username, hashedPassword, 1,
                 country, language, "N/A", "N/A", Constants.API_KEY, Constants.deviceUnique);
         getSpiceManager().execute(signupRequest, new DosSettingsRequestListener());
-
-
     }
 
     private void doLogin(final String username, final String password) {
@@ -423,7 +409,6 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                             nextScreen(activity);
                         }
                     });
-
                 }
                 progressDialog.dismiss();
             } else {

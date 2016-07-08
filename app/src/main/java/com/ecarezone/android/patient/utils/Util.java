@@ -14,7 +14,6 @@ import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.Appointment;
 import com.ecarezone.android.patient.model.database.AppointmentDbApi;
-import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 
 import java.text.DateFormat;
 import java.text.ParseException;

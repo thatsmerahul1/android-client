@@ -8,7 +8,6 @@ import android.util.Log;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.Appointment;
-import com.ecarezone.android.patient.model.AppointmentResponse;
 import com.ecarezone.android.patient.model.database.AppointmentDbApi;
 import com.ecarezone.android.patient.model.rest.GetAllAppointmentResponse;
 import com.ecarezone.android.patient.model.rest.ValidateAppointmentRequest;

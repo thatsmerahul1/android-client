@@ -77,7 +77,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
         }
         return mProfileDao;
     }
-
+    // doctor profile data-access-object(Dao).
     public Dao<Doctor, Integer> getDoctorsProfileDao() throws SQLException {
         if (mDoctorProfileDao == null) {
             mDoctorProfileDao = getDao(Doctor.class);
@@ -99,7 +99,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
         }
         return mChatDao;
     }
-
+    // appointment data-access-object(Dao).
     public Dao<Appointment, Integer> getAppointmentDao() throws SQLException {
         if (mAppointmentDao == null) {
             mAppointmentDao = getDao(Appointment.class);

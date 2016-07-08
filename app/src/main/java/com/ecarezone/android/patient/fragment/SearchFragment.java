@@ -3,7 +3,6 @@ package com.ecarezone.android.patient.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +14,8 @@ import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.adapter.DoctorsAdapter;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.model.Doctor;
-import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 
 import java.util.ArrayList;
-import java.util.ListIterator;
 
 
 /**
@@ -39,7 +36,6 @@ public class SearchFragment extends EcareZoneBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -58,19 +54,6 @@ public class SearchFragment extends EcareZoneBaseFragment {
                 data.putParcelable(Constants.DOCTOR_DETAIL, doctorList.get(position));
                 final Activity activity = getActivity();
 
-//                ListIterator<Doctor> iter = doctorList.listIterator();
-//                Doctor doctor = null;
-//                while (iter.hasNext()) {
-//                    doctor = iter.next();
-//                    DoctorProfileDbApi doctorProfileDbApi = DoctorProfileDbApi.getInstance(getActivity());
-//                    int doctorid = doctorProfileDbApi.getProfileIdUsingEmail(doctor.emailId);
-//                    if (doctorid == 0 || doctor.doctorId != doctorid) {
-//                        doctorProfileDbApi.saveProfile(doctor.doctorId, doctor);
-//                    } else {
-//                        doctorProfileDbApi.updateProfile(String.valueOf(doctor.doctorId), doctor);
-//                    }
-//                }
-
                 if (activity != null) {
                     Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorBioActivity.class);
                     showDoctorIntent.putExtra(Constants.DOCTOR_BIO_DETAIL, data);
@@ -78,8 +61,6 @@ public class SearchFragment extends EcareZoneBaseFragment {
                 }
             }
         });
-
         return view;
     }
-
 }

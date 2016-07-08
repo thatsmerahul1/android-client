@@ -64,7 +64,6 @@ public class ProfilesAdapter extends BaseAdapter {
             profileItem = ((ProfileItem) convertView.getTag());
         }
 
-
         if ((profileItem != null) && (mProfiles != null)) {
             UserProfile item = mProfiles.get(position);
 
@@ -115,7 +114,6 @@ public class ProfilesAdapter extends BaseAdapter {
                 profileLayout.setBackgroundResource(R.drawable.blue_to_white_rectangle_layout_selector);
             }
         }
-//        profileItem.title.setText();
         return convertView;
     }
 
@@ -128,10 +126,6 @@ public class ProfilesAdapter extends BaseAdapter {
             itemImage = (ImageView) view.findViewById(R.id.imageView);
             title = (TextView) view.findViewById(R.id.textView);
         }
-    }
-
-    public void setImageForParticularProfile(String profileId, String imagePath){
-
     }
 
     @Override

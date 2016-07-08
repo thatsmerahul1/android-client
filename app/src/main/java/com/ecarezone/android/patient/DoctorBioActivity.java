@@ -38,7 +38,6 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
     private String doctorName;
     private ProgressDialog progressDialog;
     private boolean isDocAlreadyAddded;
-    private boolean fromInfo;
 
     @Override
     protected String getCallerName() {
@@ -68,7 +67,7 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
                         new Toolbar.OnMenuItemClickListener() {
                             @Override
                             public boolean onMenuItemClick(MenuItem item) {
-                                if (item.getItemId() == R.id.action_add) {
+                                /*if (item.getItemId() == R.id.action_add) {
                                     Log.i(TAG, "Menu = " + item.getTitle() + ", " + item.getItemId());
                                     if(NetworkCheck.isNetworkAvailable(getBaseContext())) {
                                         sendAddDoctorRequest();
@@ -84,7 +83,7 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
                                     } else {
                                         Toast.makeText(getBaseContext(), "Please check your internet connection", Toast.LENGTH_LONG).show();
                                     }
-                                }
+                                }*/
                                 return true;
                             }
                         });
@@ -102,9 +101,9 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add, menu);
+//        getMenuInflater().inflate(R.menu.menu_add, menu);
         if(isDocAlreadyAddded){
-            menu.findItem(R.id.action_add).setVisible(false);
+//            menu.findItem(R.id.action_add).setVisible(false);
 
         }
         return true;

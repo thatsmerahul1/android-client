@@ -159,8 +159,10 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        //chat notification. Register reciever
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(message,
                 new IntentFilter("send"));
+        // for request pending display
         reqPending = true;
         DoctorProfileDbApi doctorProfileDbApi = DoctorProfileDbApi.getInstance(getActivity());
         doctorList =  doctorProfileDbApi.getPendingRequest(reqPending);
@@ -168,23 +170,22 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
             reqPendingContainer.setVisibility(View.VISIBLE);
             mycareDoctorAdapter = new DoctorsAdapter(getActivity(), doctorList, reqPending);
             reqPendingList.setAdapter(mycareDoctorAdapter);
-        }
-        else {
+        } else {
             mycareDoctorAdapter.notifyDataSetChanged();
         }
-         if(NetworkCheck.isNetworkAvailable(getActivity())) {
+
+        if(NetworkCheck.isNetworkAvailable(getActivity())) {
             populateMyCareDoctorList();
             populateRecommendedDoctorList();
         } else {
             Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
         }
-
     }
-
 
     @Override
     public void onPause() {
         super.onPause();
+        //chat notification. Unregister reciever
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(message);
     }
 
@@ -410,7 +411,6 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
             }
         }
         return false;
-
     }
 
     @SuppressWarnings("resource")

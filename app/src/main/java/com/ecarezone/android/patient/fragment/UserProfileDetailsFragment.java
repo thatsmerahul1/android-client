@@ -41,7 +41,6 @@ import android.widget.Toast;
 import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.ProfileDetailsActivity;
 import com.ecarezone.android.patient.R;
-import com.ecarezone.android.patient.adapter.ProfilesAdapter;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.UserProfile;
@@ -134,7 +133,6 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
         Button deleteProfileBtn = (Button) view.findViewById(R.id.deleteProfileBtn);
 
-//        String myProfileText = getResources().getString(R.string.profile_mine);
         if (!mActivity.getIntent().getBooleanExtra(ProfileDetailsActivity.IS_NEW_PROFILE, false)) {
             // Profile exists. Retrieve from DB and display the profile details
             String profileId = mActivity.getIntent().getStringExtra(ProfileDetailsActivity.PROFILE_ID);
@@ -142,23 +140,16 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 mProfile = profileDbApi.getProfile(LoginInfo.userId.toString(), profileId);
             }
         } else if (!profileDbApi.hasProfile(LoginInfo.userId.toString())) {
-            // No profiles found. make this as "My profile"
-//            profileNameET.setText(mProfile.profileName);
-//            profileNameET.setEnabled(false);
-//            profileDbApi.updateIsMyProfile(LoginInfo.userId.toString(), profile, true);
-             isMyProfile = true;
+            isMyProfile = true;
         }
 
-//        Button deleteProfileBtn = (Button) view.findViewById(R.id.deleteProfileBtn);
 
         if (mProfile != null) {
             setProfileValuesToFormFields(mProfile);
             deleteProfileBtn.setOnClickListener(this);
             if (mProfile.profileName != null /*&& mProfile.profileName.equals(myProfileText)*/) {
                 // For "My profile" disable delete button & the profile name field
-//                profileNameET.setEnabled(false);
-//                deleteProfileBtn.setEnabled(false);
-            }
+             }
             if(mProfile.isMyProfile){
                 deleteProfileBtn.setEnabled(false);
             }
@@ -562,9 +553,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 dialog.dismiss();
             }
         });
-
     }
-
 
     private void showGenderSelectorDialog() {
         new AlertDialog.Builder(getActivity())
@@ -621,12 +610,10 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
 
                 getActivity().setResult(getActivity().RESULT_OK, null);
                 getActivity().finish();
-                Log.i("Save", "Inside CreateProfileResponseListener in if");
 
             }
             dismissDialog();
-            Log.i("Save", "inside CreateProfileResponseListener");
-        }
+         }
     }
 
     private class UpdateProfileResponseListener implements RequestListener<CreateProfileResponse> {

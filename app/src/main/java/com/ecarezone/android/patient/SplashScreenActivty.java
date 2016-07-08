@@ -3,7 +3,6 @@ package com.ecarezone.android.patient;
 import android.os.Bundle;
 import android.view.Window;
 
-import com.crittercism.app.Crittercism;
 import com.ecarezone.android.patient.fragment.SplashScreenFragment;
 import com.ecarezone.android.patient.utils.SinchUtil;
 

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import android.widget.TextView;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.model.Doctor;
 import com.ecarezone.android.patient.model.database.ChatDbApi;
-import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 import com.ecarezone.android.patient.utils.ImageUtil;
 import com.squareup.picasso.Picasso;
 
@@ -24,7 +22,6 @@ import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by 293890 on 19-02-2016.
@@ -70,9 +67,9 @@ public class DoctorsAdapter extends BaseAdapter {
         if (view == null) {
         holder = new ViewHolder();
             if(reqPending){
-                view = inflater.inflate(R.layout.request_pending_item, null);
+                view = inflater.inflate(R.layout.request_pending_item, null); //for request pending list
             } else {
-                view = inflater.inflate(R.layout.doctor_list_item_layout, null);
+                view = inflater.inflate(R.layout.doctor_list_item_layout, null); // my care and recommonded list
                 holder.doctorPresence = view.findViewById(R.id.doctor_presence);
                 holder.chatCount = (TextView) view.findViewById(R.id.chat_count);
             }
@@ -190,20 +187,14 @@ public class DoctorsAdapter extends BaseAdapter {
                     .centerCrop().placeholder(R.drawable.news_other)
                     .error(R.drawable.news_other)
                     .into(avatar);
-//            Bitmap imgBitmap = Bitmap.createBitmap(bitmap, 0,
-//                    0, bitmap.getWidth(), bitmap.getHeight(),
-//                    matrix, true);
-//            avatar.setImageBitmap(imgBitmap);
         } else {
             Picasso.with(activity)
                     .load(imagePath).resize(dp, dp)
                     .centerCrop().placeholder(R.drawable.news_other)
                     .error(R.drawable.news_other)
                     .into(avatar);
-//            avatar.setImageBitmap(bitmap);
         }
     }
-
 
     private void setDoctorPresence(ViewHolder holder, String status) {
         if(status != null) {
@@ -216,7 +207,7 @@ public class DoctorsAdapter extends BaseAdapter {
             }
         }
     }
-
+   // View holder for each item in list
     class ViewHolder {
         ImageView avatar;
         TextView doctorName;

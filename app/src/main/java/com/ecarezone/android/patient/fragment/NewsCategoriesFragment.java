@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +20,8 @@ import com.ecarezone.android.patient.NewsListActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.adapter.NewsCategoriesAdapter;
 import com.ecarezone.android.patient.model.News;
-import com.ecarezone.android.patient.model.rest.GetNewsResponse;
 import com.ecarezone.android.patient.model.rest.GetNewsRequest;
+import com.ecarezone.android.patient.model.rest.GetNewsResponse;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -42,7 +41,6 @@ public class NewsCategoriesFragment extends EcareZoneBaseFragment implements Gri
     private GetNewsResponse mGetNewsResonse = null;
     private GridView mGridView;
     private ProgressDialog mProgressDialog;
-    private Point mScreenSize;
 
     @Override
     protected String getCallerName() {
