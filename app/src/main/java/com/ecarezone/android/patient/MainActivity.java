@@ -33,6 +33,8 @@ import com.ecarezone.android.patient.model.rest.GetAllAppointmentRequest;
 import com.ecarezone.android.patient.model.rest.GetAllAppointmentResponse;
 import com.ecarezone.android.patient.model.rest.ValidateAppointmentRequest;
 import com.ecarezone.android.patient.model.rest.base.BaseResponse;
+import com.ecarezone.android.patient.service.FetchAppointmentService;
+import com.ecarezone.android.patient.utils.AppointmentAlarmReceiver;
 import com.ecarezone.android.patient.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -96,6 +98,12 @@ public class MainActivity extends EcareZoneBaseActivity {
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setTitle(Constants.ECARE_ZONE);
 
+        if(getIntent().getBooleanExtra("from_login_screen", false)){
+            // when a user logs into a different device.
+            // needed to fetch all his/her existing appointments and populate the DB
+            FetchAppointmentService.startActionFetchAppointment(getApplicationContext());
+        }
+
         /* queries the db and checks whether to show welcome screen or to show home screen.
            Check is based on whether the user has created a profile or not. */
         new AsyncTask<Void, Void, Boolean>() {
@@ -129,7 +137,7 @@ public class MainActivity extends EcareZoneBaseActivity {
         }.execute();
 //        disconnectHandler.post(disconnectCallback);
 
-        getAllAppointments();
+//        getAllAppointments();
         setStatusAlarm();
         Util.setAppointmentAlarm(this);
     }
@@ -155,7 +163,7 @@ public class MainActivity extends EcareZoneBaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        validateAppointment();
+//        validateAppointment();
         Util.changeStatus(true, this);
     }
 

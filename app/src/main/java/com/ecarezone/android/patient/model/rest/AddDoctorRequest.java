@@ -20,9 +20,9 @@ public class AddDoctorRequest extends RetrofitSpiceRequest<AddDoctorResponse, Ec
     String apiKey;
     @Expose
     String deviceUnique;
-    @Expose
+//    @Expose
     Long doctorId;
-    @Expose
+//    @Expose
     String doctorName;
 
     public AddDoctorRequest(Long doctorId, String doctorName, String email, String password, String apiKey, String deviceUnique) {

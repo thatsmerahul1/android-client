@@ -73,7 +73,7 @@ public class Util {
     public static void setAppointmentAlarm(Context context){
 
         AppointmentDbApi appointmentDb = AppointmentDbApi.getInstance(context);
-        List<Appointment> appointmentList = appointmentDb.getAppointments(String.valueOf(LoginInfo.userId), 1);
+        List<Appointment> appointmentList = appointmentDb.getAppointmentsByPatientId(String.valueOf(LoginInfo.userId), true);
 
         if (appointmentList.size() > 0) {
 

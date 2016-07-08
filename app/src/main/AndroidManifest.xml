@@ -161,6 +161,9 @@
         <receiver
             android:name=".gcm.HeartBeatReceiver"
             android:enabled="true" />
+        <service
+            android:name=".service.FetchAppointmentService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

@@ -338,7 +338,7 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
             @Override
             public void onClick(View v) {
                 locationFinder = new LocationFinder(getActivity());
-                hashedPassword = PasswordUtil.getHashedPassword(password);
+//                hashedPassword = PasswordUtil.getHashedPassword(password);
                 LoginRequest request =
                         new LoginRequest(username, hashedPassword, 1, Constants.API_KEY, Constants.deviceUnique, locationFinder.getLatitude(), locationFinder.getLongitude());
                 final LoginResponse response = new LoginResponse();
