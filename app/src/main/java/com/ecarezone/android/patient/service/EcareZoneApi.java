@@ -1,6 +1,6 @@
 package com.ecarezone.android.patient.service;
 
-import com.ecarezone.android.patient.model.AppointmentResponse;
+import com.ecarezone.android.patient.model.AppointmentAcceptRequest;
 import com.ecarezone.android.patient.model.rest.AddDoctorRequest;
 import com.ecarezone.android.patient.model.rest.AddDoctorResponse;
 import com.ecarezone.android.patient.model.rest.BookAppointmentRequest;
@@ -16,6 +16,7 @@ import com.ecarezone.android.patient.model.rest.GetDoctorResponse;
 import com.ecarezone.android.patient.model.rest.GetNewsResponse;
 import com.ecarezone.android.patient.model.rest.LoginRequest;
 import com.ecarezone.android.patient.model.rest.LoginResponse;
+import com.ecarezone.android.patient.model.rest.PendingAppointmentResponse;
 import com.ecarezone.android.patient.model.rest.Repo;
 import com.ecarezone.android.patient.model.rest.SearchDoctorsRequest;
 import com.ecarezone.android.patient.model.rest.SearchDoctorsResponse;
@@ -25,7 +26,6 @@ import com.ecarezone.android.patient.model.rest.UpdatePasswordRequest;
 import com.ecarezone.android.patient.model.rest.UpdateProfileRequest;
 import com.ecarezone.android.patient.model.rest.UploadImageResponse;
 import com.ecarezone.android.patient.model.rest.ValidateAppointmentRequest;
-import com.ecarezone.android.patient.model.rest.base.BaseRequest;
 import com.ecarezone.android.patient.model.rest.base.BaseResponse;
 
 import java.lang.annotation.Documented;
@@ -113,11 +113,17 @@ public interface EcareZoneApi {
     @GET("/appointments/users/{userId}")
     GetAllAppointmentResponse getAllAppointments(@Path("userId") long userId);
 
-    @DELETE("/deleteappointment/users/{appointmentId}")
+    @DELETE("/deleteappointment/{appointmentId}")
     BaseResponse deleteAppointment(@Path("appointmentId") long appointmentId, @Body DeleteAppointmentRequest request);
 
     @POST("/changeStatus")
     BaseResponse changeStatus(@Body ChangeStatusRequest request);
+
+    @GET("/pendingappointments/users/{userId}")
+    PendingAppointmentResponse getPendingAppointmentList(@Path("userId") long userId);
+
+    @PUT("/acceptappointment/{appointmentId}")
+    BaseResponse acceptAppointmentRequest(@Path("appointmentId") long appointmentId, @Body AppointmentAcceptRequest request);
 }
 
 /**

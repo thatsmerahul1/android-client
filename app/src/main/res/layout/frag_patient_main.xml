@@ -22,7 +22,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:minWidth="56dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/icon_welcome_news_selector" />
@@ -36,24 +36,26 @@
                     android:id="@+id/text_view_home_news_indicator"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp"
                     android:background="@drawable/circle_red"
                     android:gravity="center"
                     android:paddingBottom="1dp"
                     android:text="2"
-                    android:visibility="invisible"
                     android:textColor="@android:color/white"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:visibility="invisible" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_gravity="start"
                     android:layout_marginStart="4dp"
+                    android:layout_marginLeft="4dp"
                     android:gravity="start"
                     android:paddingBottom="1dp"
                     android:text="@string/home_last_news_feed"
@@ -79,14 +81,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:minWidth="56dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/icon_welcome_message_selector" />
 
             <RelativeLayout
+                android:id="@+id/new_message_counter_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/new_message_counter_layout"
                 android:layout_gravity="center">
 
                 <TextView
@@ -94,26 +97,30 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp"
                     android:background="@drawable/circle_red"
                     android:gravity="center"
                     android:textColor="@android:color/white"
-                    android:visibility="gone"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/text_view_home_message_value"
-                    android:text="@string/home_new_messages"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_gravity="start"
                     android:layout_marginStart="4dp"
+                    android:layout_marginLeft="4dp"
                     android:layout_toRightOf="@id/text_view_home_message_indicator"
                     android:gravity="start"
                     android:lines="2"
+                    android:text="@string/home_new_messages"
                     android:textColor="@color/text_black_color_selector"
                     android:textSize="18sp" />
 
@@ -122,13 +129,33 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/currentAppointmentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/pendingAppointmentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/profileFinishReminderLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:padding="8dp"
             android:background="@drawable/blue_rectangle_layout_selector"
             android:orientation="vertical"
+            android:padding="8dp"
             android:visibility="gone">
 
             <TextView
@@ -170,7 +197,6 @@
 
         </LinearLayout>
 
-
         <RelativeLayout
             android:id="@+id/doctorRecommendationLayout"
             android:layout_width="wrap_content"
@@ -182,8 +208,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginBottom="64dp"
+                android:layout_marginTop="8dp"
 
                 android:background="@drawable/welcome_dialog"
                 android:orientation="vertical"

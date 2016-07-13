@@ -28,9 +28,6 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true" />
 
     <application
         android:name=".PatientApplication"
@@ -127,11 +124,6 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
-        <service
-            android:name=".service.RoboEcareSpiceServices"
-            android:exported="false" />
-        <service android:name=".service.SinchService" />
-
         <receiver
             android:name=".gcm.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
@@ -141,9 +133,6 @@
                 <category android:name="com.ecarezone.android.patient.calling" />
             </intent-filter>
         </receiver>
-
-        <service android:name=".gcm.GcmIntentService" />
-        <service android:name=".gcm.HeartbeatService" />
 
         <activity
             android:name=".UpdatePasswordActivity"
@@ -161,9 +150,22 @@
         <receiver
             android:name=".gcm.HeartBeatReceiver"
             android:enabled="true" />
+
+        <service
+            android:name=".service.RoboEcareSpiceServices"
+            android:exported="false" />
+        <service android:name=".service.SinchService" />
         <service
             android:name=".service.FetchAppointmentService"
             android:exported="false"></service>
+        <service
+            android:name=".gcm.GcmIntentService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".gcm.HeartbeatService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

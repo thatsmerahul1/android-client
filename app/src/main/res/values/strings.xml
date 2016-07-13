@@ -27,7 +27,10 @@
     <string name="sorry">Sorry</string>
     <string name="is_not_available_right_now">is not available right now,\nplease book a time.</string>
     <string name="your">Your</string>
-    <string name="appointment_with">appointment with</string>
+    <string name="appointment">appointment</string>
+    <string name="dr">Dr.</string>
+    <string name="with">with</string>
+    <string name="call">call</string>
     <string name="has_been_booked">has been booked.</string>
     <string name="time_to_call">Time to call</string>
     <string name="change_date_n_time">Change date&amp;time</string>
@@ -94,6 +97,7 @@
     <string name="progress_dialog_create_account">Creating account</string>
     <string name="progress_dialog_logout">Logging out</string>
     <string name="progress_dialog_requesting">Requesting</string>
+    <string name="processing">Processing, please wait...</string>
 
     <!-- Settings -->
     <string name="country">Country:</string>
@@ -169,8 +173,17 @@
     <string name="no_slots_open">There is a conflict with the requested appointment. Please try another slot</string>
     <string name="book">Book</string>
     <string name="thirty_mins">30 min</string>
+    <string name="appointment_accepted">Appointment accepted</string>
     <string name="appointment_deleted">Appointment successfully cancelled</string>
     <string name="appointment_cannot_be_set">Appointment date cannot be set for a past time/date.</string>
+    <string name="appointment_time">Time</string>
+    <string name="patient_pending_request_accept">Accept</string>
+    <string name="patient_pending_request_reject">Reject</string>
+    <integer name="video_call_value">0</integer>
+    <integer name="voip_call_value">1</integer>
+    <string name="apointment_with_dr">Appointment with Dr.</string>
+    <string name="you_have_an">You have an </string>
+    <string name="call_appointment">call appointment</string>
 
 
     <!-- Home -->

@@ -21,10 +21,10 @@ public class DeleteAppointmentRequest extends RetrofitSpiceRequest<BaseResponse,
     String apiKey;
     @Expose
     String deviceUnique;
-    @Expose
-    String dateTime;
-    @Expose
-    String callType;
+//    @Expose
+//    String dateTime;
+//    @Expose
+//    String callType;
     long appointmentId;
 
     public DeleteAppointmentRequest(String email, String password, String apiKey,
@@ -35,8 +35,8 @@ public class DeleteAppointmentRequest extends RetrofitSpiceRequest<BaseResponse,
         this.apiKey = apiKey;
         this.deviceUnique = deviceUnique;
         this.password = password;
-        this.dateTime = dateTime;
-        this.callType = callType;
+//        this.dateTime = dateTime;
+//        this.callType = callType;
         this.appointmentId = appointmentId;
     }
 

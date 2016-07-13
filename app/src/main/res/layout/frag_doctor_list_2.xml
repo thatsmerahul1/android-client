@@ -47,7 +47,6 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/common_signin_btn_dark_text_disabled"
                 android:visibility="invisible" />
 
             <LinearLayout

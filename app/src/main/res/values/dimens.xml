@@ -15,4 +15,5 @@
     <dimen name="doctor_list_item_margin">8dp</dimen>
     <dimen name="logo_top_margin">60dp</dimen>
     <dimen name="unread_chat_circle_margin">28dp</dimen>
+    <dimen name="appointment_thumbnail_edge_size">60dp</dimen>
 </resources>

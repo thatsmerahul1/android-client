@@ -12,6 +12,9 @@ import android.widget.TextView;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.fragment.DoctorFragment;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by 10603675 on 23-06-2016.
  */
@@ -52,7 +55,10 @@ public class EditAppointmentDialog extends DialogFragment implements View.OnClic
         isTimeToCall = getArguments().getBoolean("isTimeToCall", false);
         doctorName = getArguments().getString("doctor_name");
         callType = getArguments().getString("callType");
-        dateTime = getArguments().getString("dateTime");
+        long dateInLong = getArguments().getLong("dateTime", System.currentTimeMillis());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy, MMM. dd. hh:mm a");
+        dateTime = sdf.format(new Date(dateInLong));
 
         final View view = inflater.inflate(R.layout.edit_appointment_dialog_layout, container, false);
         textViewInfo = (TextView) view.findViewById(R.id.textViewInfo);
@@ -76,16 +82,20 @@ public class EditAppointmentDialog extends DialogFragment implements View.OnClic
             btnTimeToCall.setVisibility(View.GONE);
             btnCancel.setVisibility(View.GONE);
 
-            String infoText = getString(R.string.sorry)+", Dr."+doctorName+"\n"+getString(R.string.is_not_available_right_now);
+            String infoText = getString(R.string.sorry) + ", Dr." + doctorName + "\n" + getString(R.string.is_not_available_right_now);
             textViewInfo.setText(infoText);
 
             btnChangeTime.setText(R.string.doctor_appointment);
             btnChangeTime.setOnClickListener(this);
         } else {
 
-            String infoText = getString(R.string.your)+ " "+
-                    callType.toLowerCase()+ " "+getString(R.string.appointment_with)+ " Dr."+doctorName+
-                    " "+getString(R.string.has_been_booked);
+            String infoText = getString(R.string.your) + " " +
+                    callType.toLowerCase() + " " +
+                    getString(R.string.call) + " " +
+                    getString(R.string.appointment) + "\n" +
+                    getString(R.string.with) + " "+
+                    getString(R.string.dr)+ doctorName + "\n" +
+                    getString(R.string.has_been_booked);
             textViewInfo.setText(infoText);
 
             textViewTime.setText(dateTime);

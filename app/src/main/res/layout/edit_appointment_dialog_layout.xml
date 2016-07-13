@@ -19,11 +19,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
         android:textColor="@color/ecarezone_green_dark"
         android:id="@+id/textViewTime"
         android:layout_marginTop="30dp"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold" />
 
     <Button
         android:layout_marginTop="40dp"

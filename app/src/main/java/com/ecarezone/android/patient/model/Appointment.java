@@ -112,11 +112,11 @@ public class Appointment implements Serializable, Comparable<Appointment> {
     @Override
     public int compareTo(Appointment another) {
         if (dateTimeInLong < another.dateTimeInLong) {
-            return -1;
+            return 1;
         } else if (dateTimeInLong == another.dateTimeInLong) {
             return 0;
         } else {
-            return 1;
+            return -1;
         }
 
     }

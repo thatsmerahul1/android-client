@@ -7,9 +7,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v4.view.GravityCompat;
+import android.os.SystemClock;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -29,27 +27,19 @@ import com.ecarezone.android.patient.fragment.SettingsFragment;
 import com.ecarezone.android.patient.fragment.UserProfileFragment;
 import com.ecarezone.android.patient.fragment.WelcomeFragment;
 import com.ecarezone.android.patient.gcm.HeartBeatReceiver;
+import com.ecarezone.android.patient.gcm.HeartbeatService;
 import com.ecarezone.android.patient.model.Appointment;
-import com.ecarezone.android.patient.model.AppointmentResponse;
 import com.ecarezone.android.patient.model.database.AppointmentDbApi;
-import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 import com.ecarezone.android.patient.model.database.ProfileDbApi;
-import com.ecarezone.android.patient.model.rest.ChangeStatusRequest;
 import com.ecarezone.android.patient.model.rest.GetAllAppointmentRequest;
 import com.ecarezone.android.patient.model.rest.GetAllAppointmentResponse;
-import com.ecarezone.android.patient.model.rest.ValidateAppointmentRequest;
-import com.ecarezone.android.patient.model.rest.base.BaseRequest;
-import com.ecarezone.android.patient.model.rest.base.BaseResponse;
 import com.ecarezone.android.patient.service.FetchAppointmentService;
-import com.ecarezone.android.patient.utils.AppointmentAlarmReceiver;
 import com.ecarezone.android.patient.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
-import java.util.Calendar;
-import java.util.List;
+import java.util.HashMap;
 
-import retrofit.http.Path;
 
 /**
  * Created by CHAO WEI on 5/3/2015.
@@ -63,6 +53,7 @@ public class MainActivity extends EcareZoneBaseActivity {
     private ActionBar mActionBar = null;
     private boolean isBackStackRequired;
     private boolean isWelcomeMainRequired;
+    private PatientFragment mPatientFragment;
     int status = 1;
 
     public static final long DISCONNECT_TIMEOUT = 60000; // 1 min = 1 * 60 * 1000 ms
@@ -147,33 +138,38 @@ public class MainActivity extends EcareZoneBaseActivity {
 //        disconnectHandler.post(disconnectCallback);
 
 //        getAllAppointments();
+        initStatus();
         setStatusAlarm();
         Util.setAppointmentAlarm(this);
+    }
+
+    private void initStatus() {
+        PatientApplication doctorApplication = (PatientApplication) getApplicationContext();
+        doctorApplication.setLastAvailabilityStatus(1);
+        HashMap<String, Boolean> statusMap = doctorApplication.getNameValuePair();
+        statusMap.put(Constants.STATUS_CHANGE, true);
+        doctorApplication.setStatusNameValuePair(statusMap);
+
+        Intent intent = new Intent(this, HeartbeatService.class);
+        intent.putExtra(Constants.UPDATE_STATUS, true);
+        startService(intent);
     }
 
     private void setStatusAlarm() {
 
         try {
-            Calendar updateTime = Calendar.getInstance();
             Intent intent = new Intent(this, HeartBeatReceiver.class);
             intent.putExtra(Constants.SEND_HEART_BEAT, true);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
-                    0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    Constants.UPDATE_STATUS_REQ_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager mAlarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             mAlarmManager.setInexactRepeating(AlarmManager.RTC,
-                    updateTime.getTimeInMillis(),
+                    SystemClock.elapsedRealtime(),
                     AlarmManager.INTERVAL_FIFTEEN_MINUTES / 3, pendingIntent);
+            Log.i("HeartbeatService", "Heartbeat alarm started");
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-//        validateAppointment();
-        Util.changeStatus(true, this);
     }
 
     @Override
@@ -229,7 +225,10 @@ public class MainActivity extends EcareZoneBaseActivity {
         Log.d(TAG, "onNavigationChanged " + fragmentLayoutResId);
         if (fragmentLayoutResId < 0) return;
         if (fragmentLayoutResId == R.layout.frag_patient_main) {
-            changeFragment(R.id.screen_container, new PatientFragment(),
+            if(mPatientFragment == null) {
+                mPatientFragment = PatientFragment.getNewInstance();
+            }
+            changeFragment(R.id.screen_container, mPatientFragment,
                     getString(R.string.main_side_menu_home), args, false);
             isBackStackRequired = false;
             isWelcomeMainRequired = true;
@@ -287,54 +286,6 @@ public class MainActivity extends EcareZoneBaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-//    private Handler disconnectHandler = new Handler() {
-//        public void handleMessage(Message msg) {
-//        }
-//    };
-
-//    private Runnable disconnectCallback = new Runnable() {
-//        @Override
-//        public void run() {
-//            // Perform any required operation on disconnect
-//            Log.d(TAG, "status" + "status update called");
-//            stopDisconnectTimer();
-//        }
-//    };
-//
-//    public void stopDisconnectTimer() {
-//        disconnectHandler.removeCallbacks(disconnectCallback);
-////        if(DoctorApplication.nameValuePair)
-//
-//        if (!PatientApplication.nameValuePair.get(Constants.STATUS_CHANGE)) {
-//            status = 2;
-//        } else {
-//            status = 1;
-//        }
-//        if (PatientApplication.lastAvailablityStaus != status) {
-//            ChangeStatusRequest request = new ChangeStatusRequest(status, LoginInfo.hashedPassword,
-//                    LoginInfo.userName, Integer.toString(1));
-//            getSpiceManager().execute(request, new ChangeStatusRequestListener());
-//            Log.d(TAG, "statuschange " + "changed");
-//        }
-//        PatientApplication.lastAvailablityStaus = status;
-//        Log.d(TAG, "statuschangelastAvailablityStaus " + status);
-//        disconnectHandler.postDelayed(disconnectCallback, DISCONNECT_TIMEOUT);
-//    }
-//
-//    public final class ChangeStatusRequestListener implements RequestListener<BaseResponse> {
-//        @Override
-//        public void onRequestFailure(SpiceException spiceException) {
-////            progressDialog.dismiss();
-//        }
-//
-//        @Override
-//        public void onRequestSuccess(final BaseResponse baseResponse) {
-//            Log.d(TAG, "statuschange " + "changed");
-//
-////            DoctorApplication.lastAvailablityStaus = status ;
-//        }
-//    }
-
     /********************
      * FETCH ALL APPOINTMENTS
      **********************/
@@ -362,7 +313,8 @@ public class MainActivity extends EcareZoneBaseActivity {
                         int appointmentSize = baseResponse.data.size();
                         AppointmentDbApi appointmentDbApi = AppointmentDbApi.getInstance(getApplicationContext());
                         for (Appointment appointment : baseResponse.data) {
-                            appointmentDbApi.updateOrInsertAppointment(appointment);
+//                            appointmentDbApi.updateOrInsertAppointment(appointment);
+                            appointmentDbApi.saveAppointment(appointment);
                         }
                     }
                 }
@@ -370,56 +322,10 @@ public class MainActivity extends EcareZoneBaseActivity {
         }
     }
 
-    /********************
-     * VALIDATE APPOINTMENT
-     ****************/
-    private void validateAppointment() {
-
-        AppointmentDbApi appointmentDbApi = AppointmentDbApi.getInstance(getApplicationContext());
-        List<Appointment> appointmentList = appointmentDbApi.getAllPendingAppointments();
-        if (appointmentList != null) {
-            for (Appointment appointmentIns : appointmentList) {
-                try {
-                    ValidateAppointmentRequest request =
-                            new ValidateAppointmentRequest(appointmentIns.getAppointmentId(), LoginInfo.userName, LoginInfo.hashedPassword, Constants.API_KEY, Constants.deviceUnique);
-                    getSpiceManager().execute(request, new ValidateTaskRequestListener(appointmentIns.getAppointmentId()));
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-
-        }
-    }
-
-    private class ValidateTaskRequestListener implements RequestListener<com.ecarezone.android.patient.model.rest.base.BaseResponse> {
-
-        long appointmentId;
-
-        public ValidateTaskRequestListener(long appointmentId) {
-            this.appointmentId = appointmentId;
-        }
-
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-
-        }
-
-        @Override
-        public void onRequestSuccess(BaseResponse baseResponse) {
-
-            if (baseResponse != null) {
-                if (baseResponse.toString() != null) {
-                    AppointmentDbApi appointmentDbApi = AppointmentDbApi.getInstance(getApplicationContext());
-                    if (baseResponse.toString().contains("Appointment is accepted ")) {
-//                        appointment has been accepted
-                        appointmentDbApi.updateAppointmentStatus(appointmentId, true);
-                    } else {
-//                        appointment not accepted
-                        appointmentDbApi.updateAppointmentStatus(appointmentId, false);
-                    }
-                }
-            }
-        }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Util.changeStatus(true, this);
     }
 
     @Override

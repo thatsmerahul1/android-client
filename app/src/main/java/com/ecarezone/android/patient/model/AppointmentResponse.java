@@ -14,7 +14,7 @@ public class AppointmentResponse {
     @Expose
     public String callType;
     @Expose
-    public int patientId;
+    public String patientId;
     @Expose
     public String doctorId;
     @Expose

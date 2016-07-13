@@ -23,8 +23,9 @@ public class AppointmentAlarmReceiver extends BroadcastReceiver {
 
 
         NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(context)
-                .setContentTitle("Appointment with Dr." + doctorName)
-                .setContentText("You have an "+appointment_type+" appointment with Dr."+doctorName)
+                .setContentTitle(context.getString(R.string.apointment_with_dr) + doctorName)
+                .setContentText(context.getString(R.string.you_have_an)+
+                        appointment_type+" "+context.getString(R.string.apointment_with_dr)+doctorName)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setDefaults(Notification.DEFAULT_SOUND)
                 .setColor(Color.BLUE)

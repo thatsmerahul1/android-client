@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -23,7 +22,6 @@ import android.widget.Toast;
 import com.ecarezone.android.patient.AppointmentActivity;
 import com.ecarezone.android.patient.CallActivity;
 import com.ecarezone.android.patient.ChatActivity;
-import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.VideoActivity;
@@ -38,25 +36,20 @@ import com.ecarezone.android.patient.model.database.AppointmentDbApi;
 import com.ecarezone.android.patient.model.database.ChatDbApi;
 import com.ecarezone.android.patient.model.rest.AddDoctorRequest;
 import com.ecarezone.android.patient.model.rest.AddDoctorResponse;
-import com.ecarezone.android.patient.model.rest.BookAppointmentRequest;
 import com.ecarezone.android.patient.model.rest.DeleteAppointmentRequest;
 import com.ecarezone.android.patient.model.rest.ValidateAppointmentRequest;
 import com.ecarezone.android.patient.model.rest.base.BaseResponse;
 import com.ecarezone.android.patient.utils.PermissionUtil;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
 import com.ecarezone.android.patient.utils.Util;
-import com.google.gson.annotations.Expose;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.squareup.picasso.Picasso;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import org.apache.commons.lang3.text.WordUtils;
+
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
 
 
 /**
@@ -88,11 +81,13 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     private boolean showAddDoctorOption;
     private AppointmentDbApi appointmentDbApi;
 
-    private Appointment currentAppointment;
+    private Appointment currentVideoAppointment;
+    private Appointment currentVoipAppointment;
+
     private EditAppointmentDialog editAppointmentDialog;
 
-    private static int videoCall = 0;
-    private static int voipCall = 1;
+    private static int VIDEO_CALL;
+    private static int VOIP_CALL;
 
     public interface OnAppointmentOptionButtonClickListener {
         public static int BTN_TIME_TO_CALL = 0;
@@ -117,6 +112,9 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.frag_doctor, container, false);
+
+        VIDEO_CALL = getResources().getInteger(R.integer.video_call_value);
+        VOIP_CALL = getResources().getInteger(R.integer.voip_call_value);
 
         appointmentDbApi = AppointmentDbApi.getInstance(getApplicationContext());
         doctorDetailData = getArguments();
@@ -160,16 +158,26 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             setDoctorPresenceIcon(doctor.status);
             if (doctor.status.equalsIgnoreCase("1")) {
                 doctorStatusText.setText(R.string.doctor_available);
-            } else {
+                doctorStatusIcon.setImageResource(R.drawable.circle_green);
+            } else if (doctor.status.equalsIgnoreCase("0")) {
                 doctorStatusText.setText(R.string.doctor_busy);
+                doctorStatusIcon.setImageResource(R.drawable.circle_red);
+            } else {
+                doctorStatusText.setText(R.string.doctor_idle);
+                doctorStatusIcon.setImageResource(R.drawable.circle_amber);
             }
-            doctorStatusText.setVisibility(View.VISIBLE);
-            doctorNameView.setText("Dr. " + doctor.name);
-            doctorSpecialist.setText(doctor.category);
-        }
-        doctorId = doctor.doctorId;
-        doctorName = doctor.name;
 
+            doctorId = doctor.doctorId;
+            if (doctor.name != null) {
+                doctorName = WordUtils.capitalize(doctor.name);
+            }
+
+            doctorStatusText.setVisibility(View.VISIBLE);
+            doctorNameView.setText("Dr. " + doctorName);
+            if (doctor.category != null) {
+                doctorSpecialist.setText(WordUtils.capitalize(doctor.category));
+            }
+        }
 
         String imageUrl = doctor.avatarUrl;
 
@@ -189,7 +197,9 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         if (v == null) return;
         FragmentManager fragmentManager;
         Bundle bundle;
+        int typeOfCall = VIDEO_CALL;
         viewId = v.getId();
+
         if (NetworkCheck.isNetworkAvailable(mActivity)) {
             switch (viewId) {
                 case R.id.btn_doctor_chat_id:
@@ -197,21 +207,31 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                     break;
                 case R.id.btn_doctor_video_id:
 
+                    if (currentVideoAppointment != null) {
+                        typeOfCall = currentVideoAppointment.getCallType().equalsIgnoreCase("video")
+                                ? VIDEO_CALL : VOIP_CALL;
+                    }
                     editAppointmentDialog =
-                            EditAppointmentDialog.newInstance(mOnAppointmentOptionClicked, videoCall);
+                            EditAppointmentDialog.newInstance(mOnAppointmentOptionClicked,
+                                    typeOfCall);
                     fragmentManager = getActivity().getFragmentManager();
 
-                    bundle = getAppointmentBundle(v);
+                    bundle = getAppointmentBundle(v, VIDEO_CALL);
                     editAppointmentDialog.setArguments(bundle);
                     editAppointmentDialog.show(fragmentManager, "EditAppointmentDialogFragment");
 //                    callVideoButtonClicked();
                     break;
                 case R.id.btn_doctor_voice_id:
 
+                    if (currentVoipAppointment != null) {
+                        typeOfCall = currentVoipAppointment.getCallType().equalsIgnoreCase("video")
+                                ? VIDEO_CALL : VOIP_CALL;
+                    }
 
-                    bundle = getAppointmentBundle(v);
+                    bundle = getAppointmentBundle(v, VOIP_CALL);
                     editAppointmentDialog =
-                            EditAppointmentDialog.newInstance(mOnAppointmentOptionClicked, voipCall);
+                            EditAppointmentDialog.newInstance(mOnAppointmentOptionClicked,
+                                    typeOfCall);
                     fragmentManager = getActivity().getFragmentManager();
                     editAppointmentDialog.setArguments(bundle);
                     editAppointmentDialog.show(fragmentManager, "EditAppointmentDialogFragment");
@@ -231,7 +251,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                     bundle.putBoolean("isAppointmentAvailable", false);
                     bundle.putString("doctor_name", doctorName);
                     editAppointmentDialog =
-                            EditAppointmentDialog.newInstance(mOnAppointmentOptionClicked, voipCall);
+                            EditAppointmentDialog.newInstance(mOnAppointmentOptionClicked, VOIP_CALL);
                     fragmentManager = getActivity().getFragmentManager();
                     editAppointmentDialog.setArguments(bundle);
                     editAppointmentDialog.show(fragmentManager, "EditAppointmentDialogFragment");
@@ -247,32 +267,42 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         }
     }
 
-    private Bundle getAppointmentBundle(View v) {
+    private Bundle getAppointmentBundle(View v, int typeOfCall) {
         Bundle bundle = new Bundle();
         bundle.putString("doctor_name", doctorName);
         Object obj = v.getTag();
-        if(obj != null){
-            if(obj instanceof String) {
+        if (obj != null) {
+            if (obj instanceof String) {
                 String tagValue = ((String) obj);
                 if ((tagValue).equalsIgnoreCase("make_appointment")) {
                     bundle.putBoolean("isAppointmentAvailable", false);
                     bundle.putBoolean("isTimeToCall", false);
-                }
-                else if((tagValue).equalsIgnoreCase("timeToCall")){
+                } else if ((tagValue).equalsIgnoreCase("timeToCall")) {
                     bundle.putBoolean("isAppointmentAvailable", true);
                     bundle.putBoolean("isTimeToCall", true);
-                    bundle.putString("callType", currentAppointment.getCallType());
-                    bundle.putString("dateTime", currentAppointment.getTimeStamp());
-                }
-                else if((tagValue).equalsIgnoreCase("editAppointment")){
+                    if(typeOfCall == VIDEO_CALL) {
+                        bundle.putString("callType", currentVideoAppointment.getCallType());
+                        bundle.putLong("dateTime", currentVideoAppointment.getDateTimeInLong());
+                    }
+                    else{
+                        bundle.putString("callType", currentVoipAppointment.getCallType());
+                        bundle.putLong("dateTime", currentVoipAppointment.getDateTimeInLong());
+                    }
+                } else if ((tagValue).equalsIgnoreCase("editAppointment")) {
                     bundle.putBoolean("isAppointmentAvailable", true);
                     bundle.putBoolean("isTimeToCall", false);
-                    bundle.putString("callType", currentAppointment.getCallType());
-                    bundle.putString("dateTime", currentAppointment.getTimeStamp());
+                    if(typeOfCall == VIDEO_CALL) {
+                        bundle.putString("callType", currentVideoAppointment.getCallType());
+                        bundle.putLong("dateTime", currentVideoAppointment.getDateTimeInLong());
+                    }
+                    else{
+                        bundle.putString("callType", currentVoipAppointment.getCallType());
+                        bundle.putLong("dateTime", currentVoipAppointment.getDateTimeInLong());
+                    }
                 }
             }
         }
-        return  bundle;
+        return bundle;
     }
 
     private void callVideoButtonClicked() {
@@ -305,11 +335,16 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         mActivity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }
 
-    private void createAppointment(boolean isEdit) {
+    private void createAppointment(boolean isEdit, int typeOfCall) {
         Intent intent = new Intent(mActivity.getApplicationContext(), AppointmentActivity.class);
         intent.putExtra("doctorId", doctor.doctorId);
         if (isEdit) {
-            intent.putExtra("currentAppointment", currentAppointment);
+            if(typeOfCall == VIDEO_CALL) {
+                intent.putExtra("currentAppointment", currentVideoAppointment);
+            }
+            else{
+                intent.putExtra("currentAppointment", currentVoipAppointment);
+            }
         }
         mActivity.startActivity(intent);
         mActivity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
@@ -321,17 +356,17 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                 public void onButtonClicked(int whichButtonClicked, int typeOfCall) {
 
                     if (whichButtonClicked == OnAppointmentOptionButtonClickListener.BTN_TIME_TO_CALL) {
-                        if (typeOfCall == videoCall) {
+                        if (typeOfCall == VIDEO_CALL) {
                             callVideoButtonClicked();
                         } else {
                             callButtonClicked();
                         }
                     } else if (whichButtonClicked == OnAppointmentOptionButtonClickListener.BTN_MAKE_AN_APPOINTMENT) {
-                        createAppointment(false);
+                        createAppointment(false, typeOfCall);
                     } else if (whichButtonClicked == OnAppointmentOptionButtonClickListener.BTN_CHANGE_TIME) {
-                        createAppointment(true);
+                        createAppointment(true, typeOfCall);
                     } else if (whichButtonClicked == OnAppointmentOptionButtonClickListener.BTN_CANCEL) {
-                        cancelAppointment();
+                        cancelAppointment(typeOfCall);
                     }
                 }
             };
@@ -385,7 +420,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     public void onStart() {
         super.onStart();
         try {
-            if(isAppointmentPresent()) {
+            if (isAppointmentPresent()) {
                 Util.setAppointmentAlarm(getActivity());
             }
         } catch (Exception ex) {
@@ -398,37 +433,70 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
         boolean isAppointmentPresent = false;
         Date currentDate = new Date();
+        List<Appointment> allAppointmentsList = appointmentDbApi.getAllAppointments();
         List<Appointment> appointmentsList = appointmentDbApi.getAppointmentHistory(doctor.doctorId, LoginInfo.userId, currentDate);
         if (appointmentsList != null) {
 
             if (appointmentsList.size() > 0) {
-                currentAppointment = appointmentsList.get(0);
-                if (currentAppointment.isConfirmed()) {
-                    isAppointmentPresent = true;
-                    long convDateTime = Util.getTimeInLongFormat(currentAppointment.getTimeStamp());
 
+                currentVideoAppointment = getConfirmedAppointment(appointmentsList, "video");
+                currentVoipAppointment = getConfirmedAppointment(appointmentsList, "voip");
+
+                if (currentVideoAppointment != null && currentVideoAppointment.isConfirmed()) {
+                    isAppointmentPresent = true;
+                    long convDateTime = Util.getTimeInLongFormat(currentVideoAppointment.getTimeStamp());
                     if (convDateTime <= currentDate.getTime()) {
-                        if (appointmentsList.get(0).getCallType().equalsIgnoreCase("voip")) {
-                            doctorVideo.setCompoundDrawablesWithIntrinsicBounds(null,
-                                    getResources().getDrawable(R.drawable.button_video_call_with_green_notification), null, null);
-                            doctorVideo.setTag("timeToCall");
-                        } else {
-                            doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
-                                    getResources().getDrawable(R.drawable.button_voip_normal_with_green_notification), null, null);
-                            doctorVoice.setTag("timeToCall");
-                        }
+
+                        doctorVideo.setCompoundDrawablesWithIntrinsicBounds(null,
+                                getResources().getDrawable(R.drawable.button_video_call_with_green_notification), null, null);
+                        doctorVideo.setTag("timeToCall");
                     } else {
-                        if (appointmentsList.get(0).getCallType().equalsIgnoreCase("voip")) {
-                            doctorVideo.setCompoundDrawablesWithIntrinsicBounds(null,
-                                    getResources().getDrawable(R.drawable.button_video_call_with_notification), null, null);
-                            doctorVideo.setTag("editAppointment");
-                        } else {
-                            doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
-                                    getResources().getDrawable(R.drawable.button_voip_normal_with_notification), null, null);
-                            doctorVoice.setTag("editAppointment");
-                        }
+                        doctorVideo.setCompoundDrawablesWithIntrinsicBounds(null,
+                                getResources().getDrawable(R.drawable.button_video_call_with_notification), null, null);
+                        doctorVideo.setTag("editAppointment");
                     }
                 }
+
+                if (currentVoipAppointment != null && currentVoipAppointment.isConfirmed()) {
+                    isAppointmentPresent = true;
+                    long convDateTime = Util.getTimeInLongFormat(currentVoipAppointment.getTimeStamp());
+                    if (convDateTime <= currentDate.getTime()) {
+                        doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
+                                getResources().getDrawable(R.drawable.button_voip_normal_with_green_notification), null, null);
+                        doctorVoice.setTag("timeToCall");
+                    } else {
+                        doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
+                                getResources().getDrawable(R.drawable.button_voip_normal_with_notification), null, null);
+                        doctorVoice.setTag("editAppointment");
+                    }
+                }
+
+//                if (currentAppointment != null && currentAppointment.isConfirmed()) {
+//                    isAppointmentPresent = true;
+//                    long convDateTime = Util.getTimeInLongFormat(currentAppointment.getTimeStamp());
+//
+//                    if (convDateTime <= currentDate.getTime()) {
+//                        if (currentAppointment.getCallType().equalsIgnoreCase("video")) {
+//                            doctorVideo.setCompoundDrawablesWithIntrinsicBounds(null,
+//                                    getResources().getDrawable(R.drawable.button_video_call_with_green_notification), null, null);
+//                            doctorVideo.setTag("timeToCall");
+//                        } else {
+//                            doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
+//                                    getResources().getDrawable(R.drawable.button_voip_normal_with_green_notification), null, null);
+//                            doctorVoice.setTag("timeToCall");
+//                        }
+//                    } else {
+//                        if (currentAppointment.getCallType().equalsIgnoreCase("video")) {
+//                            doctorVideo.setCompoundDrawablesWithIntrinsicBounds(null,
+//                                    getResources().getDrawable(R.drawable.button_video_call_with_notification), null, null);
+//                            doctorVideo.setTag("editAppointment");
+//                        } else {
+//                            doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
+//                                    getResources().getDrawable(R.drawable.button_voip_normal_with_notification), null, null);
+//                            doctorVoice.setTag("editAppointment");
+//                        }
+//                    }
+//                }
             } else {
                 doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
                         getResources().getDrawable(R.drawable.button_voip_normal), null, null);//.setBackgroundResource(R.drawable.button_voip_normal);
@@ -437,8 +505,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                         getResources().getDrawable(R.drawable.button_video_call_normal), null, null);
                 doctorVideo.setTag("make_appointment");
             }
-        }
-        else {
+        } else {
             doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
                     getResources().getDrawable(R.drawable.button_voip_normal), null, null);//.setBackgroundResource(R.drawable.button_voip_normal);
             doctorVoice.setTag("make_appointment");
@@ -447,6 +514,16 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             doctorVideo.setTag("make_appointment");
         }
         return isAppointmentPresent;
+    }
+
+    private Appointment getConfirmedAppointment(List<Appointment> appointmentsList, String callType) {
+
+        for (Appointment appointment : appointmentsList) {
+            if (appointment.isConfirmed() && appointment.getCallType().equalsIgnoreCase(callType)) {
+                return appointment;
+            }
+        }
+        return null;
     }
 
     /*
@@ -492,7 +569,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     private void validateAppointment() {
 
         List<Appointment> appointmentsList = appointmentDbApi.getAppointments(String.valueOf(doctor.doctorId), false);
-        if(appointmentsList != null) {
+        if (appointmentsList != null) {
             for (Appointment appointmentIns : appointmentsList) {
 
                 try {
@@ -536,12 +613,24 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         }
     }
 
-    /*********CANCEL APPOINTMENT***********/
+    /*********
+     * CANCEL APPOINTMENT
+     **********
+     * @param typeOfCall*/
      /*
         Cancel Appointment
      */
-    private void cancelAppointment() {
+    private void cancelAppointment(int typeOfCall) {
         progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Adding Doctor......");
+
+        Appointment currentAppointment;
+        if(typeOfCall == VIDEO_CALL){
+            currentAppointment = currentVideoAppointment;
+        }
+        else{
+            currentAppointment = currentVoipAppointment;
+        }
+        appointmentIdToBeDeleted = currentAppointment.getAppointmentId();
         long appointmentId = currentAppointment.getAppointmentId();
         String appointmentTime = currentAppointment.getTimeStamp();
         String callType = currentAppointment.getCallType();//voice/video
@@ -555,11 +644,12 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
     }
 
+    private long appointmentIdToBeDeleted;
     public final class DeleteAppointmentTaskRequestListener implements RequestListener<BaseResponse> {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
-            if(progressDialog != null && progressDialog.isShowing()){
+            if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
         }
@@ -567,15 +657,15 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         @Override
         public void onRequestSuccess(BaseResponse baseResponse) {
 
-            if(progressDialog != null && progressDialog.isShowing()){
+            if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
 
-            if(baseResponse.status.code == HTTP_STATUS_OK &&
-                    baseResponse.status.message.startsWith("Appointment deleted successfully")){
-                appointmentDbApi.deleteAppointment(currentAppointment);
+            if (baseResponse.status.code == HTTP_STATUS_OK &&
+                    baseResponse.status.message.startsWith("Appointment deleted successfully")) {
+                appointmentDbApi.deleteAppointment(appointmentIdToBeDeleted);
                 EcareZoneAlertDialog.showAlertDialog(getActivity(), getString(R.string.alert),
-                       getString(R.string.appointment_deleted), getString(R.string.welcome_button_ok));
+                        getString(R.string.appointment_deleted), getString(R.string.welcome_button_ok));
                 try {
                     isAppointmentPresent();
                 } catch (Exception ex) {
@@ -583,5 +673,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                 }
             }
         }
-    };
+    }
+
+    ;
 }

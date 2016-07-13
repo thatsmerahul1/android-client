@@ -10,6 +10,10 @@ android {
         targetSdkVersion 23
         versionCode 100010
         versionName "1.0.1"
+        multiDexEnabled true
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
     buildTypes {
         release {
@@ -37,14 +41,16 @@ dependencies {
     compile files('libs/httpclientandroidlib-1.2.1.jar')
     compile files('libs/sinch-android-rtc-3.9.2.jar')
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    provided 'com.android.support:support-annotations:23.+'
     compile 'com.octo.android.robospice:robospice-retrofit:1.4.13'
     compile 'com.android.support:appcompat-v7:23.+'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'commons-codec:commons-codec:1.10'
     compile 'com.android.support:recyclerview-v7:23.0.+'
-    provided 'com.android.support:support-annotations:23.+'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
-    compile 'com.google.android.gms:play-services:6.5.87'
-    compile 'com.crittercism:crittercism-android-agent:+'
+    compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.google.android.gms:play-services-ads:8.4.0'
+    compile 'com.google.android.gms:play-services-identity:8.4.0'
+    compile 'com.google.android.gms:play-services-gcm:8.4.0'
 }

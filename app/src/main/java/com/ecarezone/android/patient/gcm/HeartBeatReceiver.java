@@ -15,8 +15,8 @@ public class HeartBeatReceiver extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
 
         Intent heartBeatService = new Intent(context, HeartbeatService.class);
-        intent.putExtra(Constants.SEND_HEART_BEAT, true);
-        intent.putExtra(Constants.UPDATE_STATUS, true);
+        heartBeatService.putExtra(Constants.SEND_HEART_BEAT, true);
+        heartBeatService.putExtra(Constants.UPDATE_STATUS, true);
         context.startService(heartBeatService);
     }
 }

@@ -57,4 +57,5 @@ public class Constants {
 
     public static String SEND_HEART_BEAT = "send_heart_beat";
     public static String UPDATE_STATUS = "update_status";
+    public static final int UPDATE_STATUS_REQ_ID = 1;
 }

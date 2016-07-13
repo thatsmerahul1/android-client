@@ -40,10 +40,13 @@ public class AppointmentDbApi {
 
     }
 
-    /* Saves a user chat in local database. Returns success failure response. */
-    public  boolean saveAppointment(Appointment appointment) {
+    /* Saves a appointment in local database. Returns success failure response. */
+    public boolean saveAppointment(Appointment appointment) {
         try {
             Dao<Appointment, Integer> appointmentDao = mDbHelper.getAppointmentDao();
+            if(isAppointmentPresent(appointment.getAppointmentId())){
+                deleteAppointment(appointment);
+            }
             int status = appointmentDao.create(appointment);
             return status != 0;
         } catch (SQLException e) {
@@ -105,7 +108,7 @@ public class AppointmentDbApi {
         return false;
     }
 
-    public boolean updateAppointmentStatus(long appointmentId, boolean isConfirmed){
+    public boolean updateAppointmentStatus(long appointmentId, boolean isConfirmed) {
 
         try {
             Dao<Appointment, Integer> appointmentDao = mDbHelper.getAppointmentDao();
@@ -115,7 +118,7 @@ public class AppointmentDbApi {
 
             updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_IS_CONFIRMED, isConfirmed);
             int isUpdated = updateBuilder.update();
-            if(isUpdated > 0){
+            if (isUpdated > 0) {
                 return true;
             }
         } catch (SQLException e) {
@@ -125,15 +128,14 @@ public class AppointmentDbApi {
 
     }
 
-    public boolean updateOrInsertAppointment(Appointment appointment){
+    public boolean updateOrInsertAppointment(Appointment appointment) {
 
         long appointmentId = appointment.getAppointmentId();
         List<Appointment> appointmentList = getAppointment(appointmentId);
-        if(appointmentList == null || appointmentList.size() == 0){
+        if (appointmentList == null || appointmentList.size() == 0) {
 //            Appointment does not exist..
             saveAppointment(appointment);
-        }
-        else {
+        } else {
 //            Update the existing appointment...
             try {
                 Dao<Appointment, Integer> appointmentDao = mDbHelper.getAppointmentDao();
@@ -157,7 +159,7 @@ public class AppointmentDbApi {
         return false;
     }
 
-    public List<Appointment> getAppointment(long appointmentId){
+    public List<Appointment> getAppointment(long appointmentId) {
 
         List<Appointment> appointmentList = null;
 
@@ -191,9 +193,10 @@ public class AppointmentDbApi {
 //                            .gt(DbContract.Appointments.COLUMN_NAME_DATE_TIME, startDate.getTime());
             queryBuilder.orderBy(DbContract.Appointments.COLUMN_NAME_APPOINTMENT_ID, true);
             appointmentList = queryBuilder.query();
-            if(appointmentList != null){
-                for(Appointment appointment : appointmentList) {
+            if (appointmentList != null) {
+                for (Appointment appointment : appointmentList) {
                     long appointmentTime = Util.getTimeInLongFormat(appointment.getTimeStamp());
+
                     if (startDate.getTime() < appointmentTime) {
                         appointment.setDateTimeInLong(appointmentTime);
                         retAppointmentList.add(appointment);
@@ -246,7 +249,7 @@ public class AppointmentDbApi {
         return null;
     }
 
-    public List<Appointment> getAllPendingAppointments(){
+    public List<Appointment> getAllPendingAppointments() {
         try {
             Dao<Appointment, Integer> appointmentDao = mDbHelper.getAppointmentDao();
             QueryBuilder<Appointment, Integer> queryBuilder = appointmentDao.queryBuilder();
@@ -261,7 +264,7 @@ public class AppointmentDbApi {
         return null;
     }
 
-    public List<Appointment> getAllAppointments(){
+    public List<Appointment> getAllAppointments() {
         try {
             Dao<Appointment, Integer> appointmentDao = mDbHelper.getAppointmentDao();
             QueryBuilder<Appointment, Integer> queryBuilder = appointmentDao.queryBuilder();
@@ -275,7 +278,6 @@ public class AppointmentDbApi {
     }
 
     /**
-     *
      * @param currentAppointment
      * @return
      */
@@ -294,7 +296,25 @@ public class AppointmentDbApi {
     }
 
     /**
-     *
+     * @param appointmentId
+     * @return
+     */
+    public boolean deleteAppointment(long appointmentId) {
+        try {
+            Dao<Appointment, Integer> appointmentDao = mDbHelper.getAppointmentDao();
+            DeleteBuilder<Appointment, Integer> deleteBuilder = appointmentDao.deleteBuilder();
+            deleteBuilder.where()
+                    .eq(DbContract.Appointments.COLUMN_NAME_APPOINTMENT_ID, appointmentId);
+            int count = deleteBuilder.delete();
+            return count > 0 ? true : false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    /**
      * @param appointmentId
      * @return
      */

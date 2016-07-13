@@ -1,0 +1,63 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/appointment_pending_layout_"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="14dp"
+    android:background="@drawable/blue_rectangle_layout_selector"
+    android:orientation="horizontal"
+    android:weightSum="1">
+
+    <ImageView
+        android:id="@+id/appointment_type_icon"
+        android:layout_width="@dimen/appointment_thumbnail_edge_size"
+        android:layout_height="@dimen/appointment_thumbnail_edge_size"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="4dp"
+        android:src="@drawable/icon_video" />
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+
+        <TextView
+            android:id="@+id/appointment_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/appointment_time"
+            android:textColor="@color/text_black_color_selector"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/doctor_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/appointment_type"
+            android:layout_gravity="center"
+            android:text="@string/doctor_name1"
+            android:textColor="@color/text_black_color_selector"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/appointment_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/appointment_type"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/doctor_name"
+            android:paddingBottom="5dp"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:text="@string/doctor_name1"
+            android:textColor="@color/ecarezone_green_dark"
+             />
+
+    </RelativeLayout>
+</LinearLayout>

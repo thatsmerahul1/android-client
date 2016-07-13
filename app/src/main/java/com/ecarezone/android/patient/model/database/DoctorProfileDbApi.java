@@ -76,18 +76,37 @@ public class DoctorProfileDbApi {
     }
 
     /* retrieve the details of a particular profile */
-    public Doctor getProfile(String userId /*String profileId*/) {
+    public Doctor getProfile(String emailId) {
         try {
             Dao<Doctor, Integer> userProfileDao = mDbHelper.getDoctorsProfileDao();
             QueryBuilder<Doctor, Integer> queryBuilder = userProfileDao.queryBuilder();
             return queryBuilder.where()
-                    .eq(DbContract.DoctorProfiles.COLUMN_NAME_EMAIL, userId)
+                    .eq(DbContract.DoctorProfiles.COLUMN_NAME_EMAIL, emailId)
                     .queryForFirst();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    public Doctor getProfileById(String id){
+        try {
+            Dao<Doctor, Integer> userProfileDao = mDbHelper.getDoctorsProfileDao();
+            QueryBuilder<Doctor, Integer> queryBuilder = userProfileDao.queryBuilder();
+            return queryBuilder.where()
+                    .eq(DbContract.DoctorProfiles.COLUMN_NAME_USER_ID, id)
+                    .queryForFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public int getProfileIdUsingEmail(String emailId) {
 //        Doctor[] profiles = new Doctor[0];
         try {

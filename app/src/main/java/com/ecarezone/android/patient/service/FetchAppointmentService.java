@@ -148,17 +148,17 @@ public class FetchAppointmentService extends IntentService {
                     Appointment appointment = null;
                     while (iter.hasNext()) {
                         appointment = iter.next();
-                        try {
-                            appointment.setTimeStamp(String.valueOf(dateFormat.parse(appointment.getTimeStamp()).getTime()));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
+//                        try {
+//                            appointment.setTimeStamp(String.valueOf(dateFormat.parse(appointment.getTimeStamp()).getTime()));
+//                        } catch (ParseException e) {
+//                            e.printStackTrace();
+//                        }
 
-                        if (appointmentDbApi.isAppointmentPresent(appointment.getAppointmentId())) {
-                            appointmentDbApi.updateAppointment(appointment.getAppointmentId(), appointment);
-                        } else {
+//                        if (appointmentDbApi.isAppointmentPresent(appointment.getAppointmentId())) {
+//                            appointmentDbApi.updateAppointment(appointment.getAppointmentId(), appointment);
+//                        } else {
                             appointmentDbApi.saveAppointment(appointment);
-                        }
+//                        }
                     }
                     validateAppointment();
                 }
