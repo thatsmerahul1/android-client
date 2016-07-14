@@ -263,19 +263,19 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Log.i(TAG, "position = " + position);
                             Bundle data = new Bundle();
-                            data.putParcelable(Constants.DOCTOR_DETAIL, doctorList.get(position));
-                            data.putBoolean(Constants.DOCTOR_ALEADY_ADDED, true);
-                            final Activity activity = getActivity();
-                            if (activity != null) {
-                                Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorActivity.class);
-                                showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
-                                showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
-                                activity.startActivity(showDoctorIntent);
-                                activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                            if(doctorList.size()>0) {
+                                data.putParcelable(Constants.DOCTOR_DETAIL, doctorList.get(position));
+                                data.putBoolean(Constants.DOCTOR_ALEADY_ADDED, true);
+                                if (getActivity() != null) {
+                                    Intent showDoctorIntent = new Intent(getActivity().getApplicationContext(), DoctorActivity.class);
+                                    showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
+                                    showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
+                                    getActivity().startActivity(showDoctorIntent);
+                                    getActivity().overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                                }
                             }
                         }
                     });
-
                     mycareDoctorContainer.setVisibility(View.VISIBLE);
                     doctorsDivider.setVisibility(View.VISIBLE);
 
