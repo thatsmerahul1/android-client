@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,12 +19,13 @@ import com.ecarezone.android.patient.RegistrationActivity;
 import com.ecarezone.android.patient.app.widget.NavigationItem;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
-import com.ecarezone.android.patient.model.rest.GetDoctorRequest;
 import com.ecarezone.android.patient.model.rest.LoginRequest;
 import com.ecarezone.android.patient.model.rest.LoginResponse;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+
+;
 
 /**
  * Created by CHAO WEI on 5/3/2015.
@@ -134,7 +135,6 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
                         Intent intent = new Intent(activity.getApplicationContext(), RegistrationActivity.class);
                         intent.putExtra("stop_sinch", true);
                         activity.startActivity(intent);
-//                        activity.startActivity(new Intent(activity.getApplicationContext(), RegistrationActivity.class));
                         activity.finish();
                     }
 
@@ -168,6 +168,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
 
         final int viewId = v.getId();
         if (viewId == R.id.navigation_user_profile) {
+            //onclick of profile in side navigation bar
             invokeNavigationChanged(R.layout.list_view, null);
         }
     }

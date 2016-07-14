@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.R;
@@ -78,12 +77,11 @@ public class SplashScreenFragment extends EcareZoneBaseFragment implements Sinch
                                 Log.i(TAG, "userId::" + userId);
                                 SinchUtil.getSinchServiceInterface().startClient(LoginInfo.userName);
 
-                            } /*else {*/
+                            }
                             Intent intent = new Intent(activity.getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                             activity.finish();
-                       /* }*/
-                        } else {
+                         } else {
                             if (user != null) {
                                 LoginInfo.userName = user.email;
                             }

@@ -163,18 +163,15 @@ public class VideoFragment extends EcareZoneBaseFragment implements View.OnClick
 
     @Override
     public void onCallEstablished(Call call) {
-        Log.d(TAG, "Call established");
         SinchUtil.getSinchAudioPlayer().stopProgressTone();
         mActivity.setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
         AudioController audioController = SinchUtil.getSinchServiceInterface().getAudioController();
         audioController.enableSpeaker();
-        Log.d(TAG, "Call offered video: " + call.getDetails().isVideoOffered());
         mCallId = call.getCallId();
     }
 
     @Override
     public void onCallProgressing(Call call) {
-        Log.d(TAG, "Call progressing");
         SinchUtil.getSinchAudioPlayer().playProgressTone();
         mCallId = call.getCallId();
     }
@@ -186,7 +183,6 @@ public class VideoFragment extends EcareZoneBaseFragment implements View.OnClick
 
     @Override
     public void onVideoTrackAdded(Call call) {
-        Log.d(TAG, "Video track added");
         mCallId = call.getCallId();
         addVideoViews();
     }

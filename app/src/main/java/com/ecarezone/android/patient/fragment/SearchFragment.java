@@ -3,7 +3,6 @@ package com.ecarezone.android.patient.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +36,6 @@ public class SearchFragment extends EcareZoneBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -47,7 +45,7 @@ public class SearchFragment extends EcareZoneBaseFragment {
         data = getArguments();
         final ArrayList<Doctor> doctorList = data.getParcelableArrayList(Constants.DOCTOR_LIST);
         doctorListView = (ListView) view.findViewById(R.id.list_view_users);
-        doctorsAdapter = new DoctorsAdapter(getActivity(), doctorList);
+        doctorsAdapter = new DoctorsAdapter(getActivity(), doctorList,false);
         doctorListView.setAdapter(doctorsAdapter);
         doctorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -55,6 +53,7 @@ public class SearchFragment extends EcareZoneBaseFragment {
                 Bundle data = new Bundle();
                 data.putParcelable(Constants.DOCTOR_DETAIL, doctorList.get(position));
                 final Activity activity = getActivity();
+
                 if (activity != null) {
                     Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorBioActivity.class);
                     showDoctorIntent.putExtra(Constants.DOCTOR_BIO_DETAIL, data);
@@ -62,8 +61,6 @@ public class SearchFragment extends EcareZoneBaseFragment {
                 }
             }
         });
-
         return view;
     }
-
 }

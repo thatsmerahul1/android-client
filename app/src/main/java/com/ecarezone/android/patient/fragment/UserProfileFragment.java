@@ -102,4 +102,3 @@ public class UserProfileFragment extends EcareZoneBaseFragment implements
     private UserProfile mProfile;
 }
 
-

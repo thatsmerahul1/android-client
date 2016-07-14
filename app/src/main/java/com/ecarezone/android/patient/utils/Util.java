@@ -16,7 +16,6 @@ import com.ecarezone.android.patient.gcm.HeartbeatService;
 import com.ecarezone.android.patient.model.Appointment;
 import com.ecarezone.android.patient.model.AppointmentResponse;
 import com.ecarezone.android.patient.model.database.AppointmentDbApi;
-import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 
 import java.io.BufferedReader;
 import java.io.IOException;

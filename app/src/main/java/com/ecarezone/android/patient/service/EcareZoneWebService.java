@@ -1,7 +1,6 @@
 package com.ecarezone.android.patient.service;
 
 import com.ecarezone.android.patient.config.Constants;
-import com.ecarezone.android.patient.utils.ImageUtil;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;

@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.rest.UpdatePasswordRequest;
@@ -70,13 +69,6 @@ public class UpdatePasswordActivity extends EcareZoneBaseActivity {
                             } else {
                                 doPasswordUpdate();
                             }
-//                            if (newPwd.length() != 0 && confirmPwd.length() != 0 && !newPwd.equals(confirmPwd)) {
-//                                mTextViewerror.setText(getString(R.string.password_mismatch));
-//                                mTextViewerror.setVisibility(View.VISIBLE);
-//                                return false;
-//                            }
-//                            mTextViewerror.setVisibility(View.GONE);
-//                            doPasswordUpdate();
                             return true;
                         }
                     });
@@ -134,7 +126,6 @@ public class UpdatePasswordActivity extends EcareZoneBaseActivity {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
             progressDialog.dismiss();
-
         }
 
         @Override

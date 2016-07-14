@@ -2,7 +2,6 @@ package com.ecarezone.android.patient.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.ListView;
 import com.ecarezone.android.patient.NewsListActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.adapter.NewsListAdapter;
-import com.ecarezone.android.patient.fragment.dialog.NewsWebviewDialogFragment;
 import com.ecarezone.android.patient.model.News;
 import com.ecarezone.android.patient.view.SingleNewsItem;
 
@@ -61,15 +59,8 @@ public class NewsListFragment extends EcareZoneBaseFragment implements AdapterVi
         bundle.putString(NEWS_LINK, news.newsLink);
         bundle.putString(NEWS_DESCRIPTION, news.newsAbstract);
 
-
         Intent intent = new Intent(getActivity(), SingleNewsItem.class);
         intent.putExtra("bundle", bundle);
         startActivity(intent);
-//        NewsWebviewDialogFragment webviewDialogFragment = new NewsWebviewDialogFragment();
-//        webviewDialogFragment.setTargetFragment(this, REQUEST_SHOW_NEWS_IN_WEB_VIEW);
-//        webviewDialogFragment.setArguments(bundle);
-//
-//        FragmentManager fragmentManager = getFragmentManager();
-//        webviewDialogFragment.show(fragmentManager, "NewsDialogFragment");
     }
 }

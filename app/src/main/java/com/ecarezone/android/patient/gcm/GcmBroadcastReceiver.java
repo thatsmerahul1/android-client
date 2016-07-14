@@ -9,6 +9,7 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 /**
  * Created by L&T Technology Services.
  */
+//For chat notification
 public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 
     @Override

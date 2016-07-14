@@ -1,10 +1,8 @@
 package com.ecarezone.android.patient.model.rest;
 
 import com.ecarezone.android.patient.config.LoginInfo;
-import com.ecarezone.android.patient.model.rest.base.BaseResponse;
 import com.ecarezone.android.patient.service.EcareZoneApi;
 import com.google.gson.annotations.Expose;
-import com.octo.android.robospice.persistence.retrofit.RetrofitObjectPersister;
 import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 
 import java.io.Serializable;

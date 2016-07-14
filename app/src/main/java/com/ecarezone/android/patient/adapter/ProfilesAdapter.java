@@ -64,7 +64,6 @@ public class ProfilesAdapter extends BaseAdapter {
             profileItem = ((ProfileItem) convertView.getTag());
         }
 
-
         if ((profileItem != null) && (mProfiles != null)) {
             UserProfile item = mProfiles.get(position);
 
@@ -115,7 +114,6 @@ public class ProfilesAdapter extends BaseAdapter {
                 profileLayout.setBackgroundResource(R.drawable.blue_to_white_rectangle_layout_selector);
             }
         }
-//        profileItem.title.setText();
         return convertView;
     }
 
@@ -130,10 +128,6 @@ public class ProfilesAdapter extends BaseAdapter {
         }
     }
 
-    public void setImageForParticularProfile(String profileId, String imagePath){
-
-    }
-
     @Override
     public void notifyDataSetChanged() {
         // This is to refresh the data & UI after a profile is created/updated/deleted.
@@ -143,9 +137,7 @@ public class ProfilesAdapter extends BaseAdapter {
             mProfiles = new ArrayList<UserProfile>(Arrays.asList(tempProfiles));
             // check whether the db contains more or single profile.
             // If no profiles, add "Create your profile" item to this mProfiles list
-            if ((tempProfiles.length == 0) ||
-                    ((tempProfiles.length == 1) && (!mProfiles.get(0).profileName
-                            .equals(mContext.getResources().getString(R.string.profile_mine))))) {
+            if ((tempProfiles.length == 0)) {
                 UserProfile myProfileItem = new UserProfile();
                 myProfileItem.profileName = mContext.getResources().getString(R.string.profile_add_your_profile);
                 mProfiles.add(myProfileItem);

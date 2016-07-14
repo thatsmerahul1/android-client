@@ -26,7 +26,6 @@ public class AddDoctorRequestDialog extends DialogFragment {
     public AddDoctorRequestDialog() {
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 

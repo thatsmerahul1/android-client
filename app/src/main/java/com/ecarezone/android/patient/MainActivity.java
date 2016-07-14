@@ -33,6 +33,8 @@ import com.ecarezone.android.patient.model.database.AppointmentDbApi;
 import com.ecarezone.android.patient.model.database.ProfileDbApi;
 import com.ecarezone.android.patient.model.rest.GetAllAppointmentRequest;
 import com.ecarezone.android.patient.model.rest.GetAllAppointmentResponse;
+import com.ecarezone.android.patient.model.rest.ValidateAppointmentRequest;
+import com.ecarezone.android.patient.model.rest.base.BaseResponse;
 import com.ecarezone.android.patient.service.FetchAppointmentService;
 import com.ecarezone.android.patient.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -40,6 +42,8 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.HashMap;
 
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by CHAO WEI on 5/3/2015.

@@ -73,12 +73,10 @@ public class RegistrationActivity extends EcareZoneBaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-//        Util.changeStatus(true, this);
-    }
+     }
 
     @Override
     protected void onStop() {
         super.onStop();
-//        Util.changeStatus(false, this);
-    }
+     }
 }

@@ -1,10 +1,6 @@
 package com.ecarezone.android.patient.utils;
 
-import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.service.AESUtil;
-
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * Created by jifeng.zhang on 14/06/15.

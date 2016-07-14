@@ -217,7 +217,6 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
         @Override
         public void onRequestSuccess(final GetDoctorResponse response) {
 
-//            Log.d(TAG, "Status Code " + response.status.code);
             if (response.status != null) {
                 if (response.status.code == 200) {
                     final Activity activity = getActivity();
@@ -231,7 +230,6 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
                     activity.startActivity(showDoctorIntent);
                 }
             }
-
         }
     }
 

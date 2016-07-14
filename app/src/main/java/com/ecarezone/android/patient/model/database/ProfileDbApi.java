@@ -1,7 +1,6 @@
 package com.ecarezone.android.patient.model.database;
 
 import android.content.Context;
-import android.content.Intent;
 
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.config.LoginInfo;

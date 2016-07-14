@@ -20,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -132,7 +133,6 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
         Button deleteProfileBtn = (Button) view.findViewById(R.id.deleteProfileBtn);
 
-//        String myProfileText = getResources().getString(R.string.profile_mine);
         if (!mActivity.getIntent().getBooleanExtra(ProfileDetailsActivity.IS_NEW_PROFILE, false)) {
             // Profile exists. Retrieve from DB and display the profile details
             String profileId = mActivity.getIntent().getStringExtra(ProfileDetailsActivity.PROFILE_ID);
@@ -140,23 +140,16 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 mProfile = profileDbApi.getProfile(LoginInfo.userId.toString(), profileId);
             }
         } else if (!profileDbApi.hasProfile(LoginInfo.userId.toString())) {
-            // No profiles found. make this as "My profile"
-//            profileNameET.setText(mProfile.profileName);
-//            profileNameET.setEnabled(false);
-//            profileDbApi.updateIsMyProfile(LoginInfo.userId.toString(), profile, true);
-             isMyProfile = true;
+            isMyProfile = true;
         }
 
-//        Button deleteProfileBtn = (Button) view.findViewById(R.id.deleteProfileBtn);
 
         if (mProfile != null) {
             setProfileValuesToFormFields(mProfile);
             deleteProfileBtn.setOnClickListener(this);
             if (mProfile.profileName != null /*&& mProfile.profileName.equals(myProfileText)*/) {
                 // For "My profile" disable delete button & the profile name field
-//                profileNameET.setEnabled(false);
-//                deleteProfileBtn.setEnabled(false);
-            }
+             }
             if(mProfile.isMyProfile){
                 deleteProfileBtn.setEnabled(false);
             }
@@ -206,7 +199,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             );
         } catch (Exception ex) {
             ex.printStackTrace();
-            ;
+
         }
     }
 
@@ -443,7 +436,9 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 long profileId = Long.parseLong(mProfile.profileId);
                 updateProfileInServer(profileId, userProfile);
             }
+            Log.i("Save", "Inside SaveProfileAsyncTask");
             return null;
+
         }
     }
 
@@ -558,44 +553,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 dialog.dismiss();
             }
         });
-
-
-        /*new AlertDialog.Builder(getActivity())
-                .setItems(R.array.photo_options, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        if (which == 1) {
-                            if (PermissionUtil.isPermissionRequired()
-                                    && PermissionUtil.getAllpermissionRequired(getActivity(),
-                                    PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS).length > 0) {
-
-                                PermissionUtil.setAllPermission(getActivity(),
-                                        PermissionUtil.REQUEST_CODE_ASK_CAPTURE_PHOTO_PERMISSIONS,
-                                        PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS);
-                            } else {
-                                // already have all permissions
-
-                                mSelectedPhotoPath = ImageUtil.dispatchTakePictureIntent(getActivity(),false, null);
-                            }
-                        } else {
-                            if (PermissionUtil.isPermissionRequired()
-                                    && PermissionUtil.getAllpermissionRequired(getActivity(),
-                                    PermissionUtil.WRITE_EXTERNAL_STORAGE_PERMISSIONS).length > 0) {
-
-                                PermissionUtil.setAllPermission(getActivity(),
-                                        PermissionUtil.REQUEST_CODE_ASK_WRITE_EXTERNAL_STORAGE_PERMISSIONS,
-                                        PermissionUtil.WRITE_EXTERNAL_STORAGE_PERMISSIONS);
-                            } else {
-                                // already have all permissions
-                                dispatchSelectFromGalleryIntent();
-                            }
-                        }
-                    }
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .show();*/
     }
-
 
     private void showGenderSelectorDialog() {
         new AlertDialog.Builder(getActivity())
@@ -644,7 +602,6 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         @Override
         public void onRequestSuccess(CreateProfileResponse response) {
             if (response != null && response.profileId != null && Integer.parseInt(response.profileId) > 0) {
-
                 UserProfile profile = createUserProfileFromResponse(response);
 
                 ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
@@ -653,9 +610,10 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
 
                 getActivity().setResult(getActivity().RESULT_OK, null);
                 getActivity().finish();
+
             }
             dismissDialog();
-        }
+         }
     }
 
     private class UpdateProfileResponseListener implements RequestListener<CreateProfileResponse> {

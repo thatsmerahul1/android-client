@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ecarezone.android.patient.config.Constants;
-import com.ecarezone.android.patient.fragment.DoctorBioFragment;
 import com.ecarezone.android.patient.fragment.DoctorFragment;
 import com.ecarezone.android.patient.utils.Util;
 

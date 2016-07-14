@@ -3,7 +3,6 @@ package com.ecarezone.android.patient.model.database;
 import android.content.Context;
 
 import com.ecarezone.android.patient.model.Chat;
-import com.ecarezone.android.patient.model.UserProfile;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.QueryBuilder;

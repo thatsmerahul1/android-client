@@ -98,6 +98,7 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         country = (TextView)view.findViewById(R.id.country);
         language = (TextView)view.findViewById(R.id.language);
 
+        //enabling the textview
         email.setVisibility(View.VISIBLE);
         password.setVisibility(View.VISIBLE);
         country.setVisibility(View.VISIBLE);
@@ -197,7 +198,6 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
             Log.d("Naga","Updating Password ");
             getActivity().startActivity(new Intent(getActivity(), UpdatePasswordActivity.class));
         }
-
     }
 
     private void createRegestrationDialog(String type) {
@@ -213,7 +213,6 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         regFragment.setArguments(bun);
 
         regFragment.show(fm, Constants.REGISTRATION_DIALOG_TAG);
-
     }
 
     /*
@@ -287,7 +286,6 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         @Override
         public void onRequestFailure(SpiceException spiceException) {
             progressDialog.dismiss();
-
         }
 
         @Override
