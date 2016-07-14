@@ -160,11 +160,11 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                 doctorStatusText.setText(R.string.doctor_available);
                 doctorStatusIcon.setImageResource(R.drawable.circle_green);
             } else if (doctor.status.equalsIgnoreCase("0")) {
-                doctorStatusText.setText(R.string.doctor_busy);
-                doctorStatusIcon.setImageResource(R.drawable.circle_red);
-            } else {
                 doctorStatusText.setText(R.string.doctor_idle);
                 doctorStatusIcon.setImageResource(R.drawable.circle_amber);
+            } else {
+                doctorStatusText.setText(R.string.doctor_busy);
+                doctorStatusIcon.setImageResource(R.drawable.circle_red);
             }
 
             doctorId = doctor.doctorId;
