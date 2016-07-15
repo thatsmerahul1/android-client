@@ -89,7 +89,7 @@ public interface EcareZoneApi {
     @POST("/users/{userId}/profiles")
     CreateProfileResponse createProfile(@Path("userId") Long userId, @Body CreateProfileRequest request);
 
-    @DELETE("/users/{userId}/profiles/{profileId}")
+    @POST("/users/{userId}/profiles/{profileId}")
     BaseResponse deleteProfile(@Path("userId") Long userId, @Path("profileId") Long profileId, @Body DeleteProfileRequest request);
 
     @GET("/users/{userId}/news")
@@ -113,7 +113,7 @@ public interface EcareZoneApi {
     @GET("/appointments/users/{userId}")
     GetAllAppointmentResponse getAllAppointments(@Path("userId") long userId);
 
-    @DELETE("/deleteappointment/{appointmentId}")
+    @POST("/deleteappointment/{appointmentId}")
     BaseResponse deleteAppointment(@Path("appointmentId") long appointmentId, @Body DeleteAppointmentRequest request);
 
     @POST("/changeStatus")

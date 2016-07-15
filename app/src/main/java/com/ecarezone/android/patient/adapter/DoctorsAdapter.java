@@ -136,11 +136,11 @@ public class DoctorsAdapter extends BaseAdapter {
 
             if (doctor.status != null) {
                 if (doctor.status.equalsIgnoreCase("0")) {
-                    holder.doctorAvailability.setText(R.string.doctor_busy);
+                    holder.doctorAvailability.setText(R.string.doctor_idle);
                 } else if (doctor.status.equalsIgnoreCase("1")) {
                     holder.doctorAvailability.setText(R.string.doctor_available);
                 } else {
-                    holder.doctorAvailability.setText(R.string.doctor_idle);
+                    holder.doctorAvailability.setText(R.string.doctor_busy);
                 }
             }
             setDoctorPresence(holder, doctor.status);
@@ -201,9 +201,9 @@ public class DoctorsAdapter extends BaseAdapter {
             if (status.equalsIgnoreCase("1")) {
                 holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_green));
             } else if (status.equalsIgnoreCase("0")) {
-               holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_red));
+               holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_amber));
             } else {
-                holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_amber));
+                holder.doctorPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_red));
             }
         }
     }
