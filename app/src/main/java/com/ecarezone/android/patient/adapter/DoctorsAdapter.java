@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecarezone.android.patient.R;
+import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.model.Doctor;
 import com.ecarezone.android.patient.model.database.ChatDbApi;
 import com.ecarezone.android.patient.utils.ImageUtil;
@@ -135,9 +136,9 @@ public class DoctorsAdapter extends BaseAdapter {
             }
 
             if (doctor.status != null) {
-                if (doctor.status.equalsIgnoreCase("0")) {
+                if (doctor.status.equalsIgnoreCase(String.valueOf(Constants.IDLE))) {
                     holder.doctorAvailability.setText(R.string.doctor_idle);
-                } else if (doctor.status.equalsIgnoreCase("1")) {
+                } else if (doctor.status.equalsIgnoreCase(String.valueOf(Constants.ONLINE))) {
                     holder.doctorAvailability.setText(R.string.doctor_available);
                 } else {
                     holder.doctorAvailability.setText(R.string.doctor_busy);

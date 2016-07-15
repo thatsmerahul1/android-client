@@ -24,6 +24,7 @@ import com.ecarezone.android.patient.model.rest.LoginResponse;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.urbanairship.UAirship;
 
 ;
 
@@ -136,6 +137,15 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
                         intent.putExtra("stop_sinch", true);
                         activity.startActivity(intent);
                         activity.finish();
+
+                        UAirship.takeOff(getActivity().getApplication(), new UAirship.OnReadyCallback() {
+
+                            @Override
+                            public void onAirshipReady(UAirship uAirship) {
+                                uAirship.getPushManager().setPushEnabled(false);//.setUserNotificationsEnabled(true);
+                            }
+
+                        });
                     }
 
                 } else {

@@ -20,6 +20,7 @@ import com.ecarezone.android.patient.model.database.UserTable;
 import com.ecarezone.android.patient.service.SinchService;
 import com.ecarezone.android.patient.utils.SinchUtil;
 import com.sinch.android.rtc.SinchError;
+import com.urbanairship.UAirship;
 
 
 public class SplashScreenFragment extends EcareZoneBaseFragment implements SinchService.StartFailedListener {
@@ -78,6 +79,7 @@ public class SplashScreenFragment extends EcareZoneBaseFragment implements Sinch
                                 SinchUtil.getSinchServiceInterface().startClient(LoginInfo.userName);
 
                             }
+
                             Intent intent = new Intent(activity.getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                             activity.finish();

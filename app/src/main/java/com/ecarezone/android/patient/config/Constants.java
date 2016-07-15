@@ -62,7 +62,7 @@ public class Constants {
     public static String SHARED_PREFERENCE_NAME = "eCareZoneSP";
     public static String UA_CHANNEL_NUMBER = "ua_channel_number";
     public static String PUSH_NEWS_UPDATE = "ua_news_update";
-    public static String PUSH_STATUS_UPDATE = "ua_status_update";
+
     public static String BROADCAST_STATUS_CHANGED = "broadcast_status_changed";
     public static String SET_STATUS = "set_status";
 }

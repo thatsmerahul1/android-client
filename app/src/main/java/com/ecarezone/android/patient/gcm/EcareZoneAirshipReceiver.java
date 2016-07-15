@@ -58,7 +58,7 @@ public class EcareZoneAirshipReceiver extends AirshipReceiver {
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(Constants.PUSH_NEWS_UPDATE));
             }
             else if(message.getAlert().startsWith("Doctor")){
-                Intent intent = new Intent(Constants.PUSH_STATUS_UPDATE);
+                Intent intent = new Intent(Constants.BROADCAST_STATUS_CHANGED);
                 intent.putExtra(Constants.SET_STATUS, message.getAlert());
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
             }

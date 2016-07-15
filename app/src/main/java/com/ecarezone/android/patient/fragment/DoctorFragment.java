@@ -122,6 +122,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         showAddDoctorOption = doctorDetailData.getBoolean(DoctorListFragment.ADD_DOCTOR_DISABLE_CHECK, false);
         getAllComponent(view, doctor);
         IntentFilter intentFilter = new IntentFilter("send");
+        intentFilter.addAction(Constants.BROADCAST_STATUS_CHANGED);
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(message, intentFilter);
 
         validateAppointment();
@@ -155,17 +156,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         }
 
         if (doctor != null) {
-            setDoctorPresenceIcon(doctor.status);
-            if (doctor.status.equalsIgnoreCase("1")) {
-                doctorStatusText.setText(R.string.doctor_available);
-                doctorStatusIcon.setImageResource(R.drawable.circle_green);
-            } else if (doctor.status.equalsIgnoreCase("0")) {
-                doctorStatusText.setText(R.string.doctor_idle);
-                doctorStatusIcon.setImageResource(R.drawable.circle_amber);
-            } else {
-                doctorStatusText.setText(R.string.doctor_busy);
-                doctorStatusIcon.setImageResource(R.drawable.circle_red);
-            }
+
+            setDoctorStatus();
 
             doctorId = doctor.doctorId;
             if (doctor.name != null) {
@@ -189,6 +181,20 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                     .centerCrop().placeholder(R.drawable.news_other)
                     .error(R.drawable.news_other)
                     .into(doctorProfileImg);
+        }
+    }
+
+    private void setDoctorStatus() {
+        setDoctorPresenceIcon(doctor.status);
+        if (doctor.status.equalsIgnoreCase(String.valueOf(Constants.ONLINE))) {
+            doctorStatusText.setText(R.string.doctor_available);
+            doctorStatusIcon.setImageResource(R.drawable.circle_green);
+        } else if (doctor.status.equalsIgnoreCase(String.valueOf(Constants.OFFLINE))) {
+            doctorStatusText.setText(R.string.doctor_idle);
+            doctorStatusIcon.setImageResource(R.drawable.circle_amber);
+        } else {
+            doctorStatusText.setText(R.string.doctor_busy);
+            doctorStatusIcon.setImageResource(R.drawable.circle_red);
         }
     }
 
@@ -280,22 +286,20 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                 } else if ((tagValue).equalsIgnoreCase("timeToCall")) {
                     bundle.putBoolean("isAppointmentAvailable", true);
                     bundle.putBoolean("isTimeToCall", true);
-                    if(typeOfCall == VIDEO_CALL) {
+                    if (typeOfCall == VIDEO_CALL) {
                         bundle.putString("callType", currentVideoAppointment.getCallType());
                         bundle.putLong("dateTime", currentVideoAppointment.getDateTimeInLong());
-                    }
-                    else{
+                    } else {
                         bundle.putString("callType", currentVoipAppointment.getCallType());
                         bundle.putLong("dateTime", currentVoipAppointment.getDateTimeInLong());
                     }
                 } else if ((tagValue).equalsIgnoreCase("editAppointment")) {
                     bundle.putBoolean("isAppointmentAvailable", true);
                     bundle.putBoolean("isTimeToCall", false);
-                    if(typeOfCall == VIDEO_CALL) {
+                    if (typeOfCall == VIDEO_CALL) {
                         bundle.putString("callType", currentVideoAppointment.getCallType());
                         bundle.putLong("dateTime", currentVideoAppointment.getDateTimeInLong());
-                    }
-                    else{
+                    } else {
                         bundle.putString("callType", currentVoipAppointment.getCallType());
                         bundle.putLong("dateTime", currentVoipAppointment.getDateTimeInLong());
                     }
@@ -339,10 +343,9 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         Intent intent = new Intent(mActivity.getApplicationContext(), AppointmentActivity.class);
         intent.putExtra("doctorId", doctor.doctorId);
         if (isEdit) {
-            if(typeOfCall == VIDEO_CALL) {
+            if (typeOfCall == VIDEO_CALL) {
                 intent.putExtra("currentAppointment", currentVideoAppointment);
-            }
-            else{
+            } else {
                 intent.putExtra("currentAppointment", currentVoipAppointment);
             }
         }
@@ -560,8 +563,40 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             if (intent.getAction().equalsIgnoreCase("send")) {
                 updateChatCount();
             }
+            if (intent.getAction().equalsIgnoreCase(Constants.BROADCAST_STATUS_CHANGED)) {
+                String statusTxt = intent.getStringExtra(Constants.SET_STATUS);
+                if (statusTxt != null) {
+                    String[] statusArr = statusTxt.split(",");
+                    if (statusArr.length > 2) {
+                        int docId = -1;
+                        try {
+                            docId = Integer.parseInt(statusArr[1].trim());
+                        } catch (NumberFormatException nfe) {
+                            nfe.printStackTrace();
+                        }
+                        if (docId > -1) {
+
+                            if (doctor.doctorId == docId) {
+                                if (statusArr[2].trim().equalsIgnoreCase("online")) {
+                                    doctor.status = String.valueOf(Constants.ONLINE);
+                                } else {
+                                    doctor.status = String.valueOf(Constants.OFFLINE);
+                                }
+                                setDoctorStatus();
+                            }
+                        }
+                    }
+
+                }
+            }
         }
     };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(message);
+    }
 
     /******************
      * VALIDATE APPOINTMENT
@@ -615,8 +650,10 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
     /*********
      * CANCEL APPOINTMENT
-     **********
-     * @param typeOfCall*/
+     * *********
+     *
+     * @param typeOfCall
+     */
      /*
         Cancel Appointment
      */
@@ -624,10 +661,9 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Adding Doctor......");
 
         Appointment currentAppointment;
-        if(typeOfCall == VIDEO_CALL){
+        if (typeOfCall == VIDEO_CALL) {
             currentAppointment = currentVideoAppointment;
-        }
-        else{
+        } else {
             currentAppointment = currentVoipAppointment;
         }
         appointmentIdToBeDeleted = currentAppointment.getAppointmentId();
@@ -645,6 +681,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     }
 
     private long appointmentIdToBeDeleted;
+
     public final class DeleteAppointmentTaskRequestListener implements RequestListener<BaseResponse> {
 
         @Override

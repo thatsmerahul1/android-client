@@ -93,6 +93,13 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         } catch (Exception e) {
         }
         pendingdoctorList = new ArrayList<>();
+
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getActivity());
+        IntentFilter intentFilter = new IntentFilter(Constants.BROADCAST_STATUS_CHANGED);
+        intentFilter.addAction("send");
+        lbm.registerReceiver(message, intentFilter);
+
+
         pullDBFromdevice();
     }
 
@@ -108,7 +115,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String queryString) {
-                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                if (NetworkCheck.isNetworkAvailable(getActivity())) {
                     performDoctorSearch(queryString);
                 } else {
                     Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
@@ -162,11 +169,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
     public void onResume() {
         super.onResume();
 
-        //chat notification. Register reciever
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(message,
-                new IntentFilter("send"));
-
-        if(NetworkCheck.isNetworkAvailable(getActivity())) {
+        if (NetworkCheck.isNetworkAvailable(getActivity())) {
             populateMyCareDoctorList();
             populateRecommendedDoctorList();
         } else {
@@ -175,25 +178,24 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         // for request pending display
         DoctorProfileDbApi doctorProfileDbApi = DoctorProfileDbApi.getInstance(getActivity());
         ArrayList<Doctor> pendingList = doctorProfileDbApi.getPendingRequest(reqPending);
-        if(pendingList != null) {
+        if (pendingList != null) {
             pendingdoctorList.addAll(pendingList);
 
             if (pendingDoctorAdapter == null) {
                 reqPendingContainer.setVisibility(View.VISIBLE);
                 pendingDoctorAdapter = new DoctorsAdapter(getActivity(), pendingdoctorList, reqPending);
                 reqPendingList.setAdapter(pendingDoctorAdapter);
-            }
-            else{
+            } else {
                 pendingDoctorAdapter.notifyDataSetChanged();
             }
         }
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        //chat notification. Unregister reciever
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(message);
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(
+                message);
     }
 
     private void populateMyCareDoctorList() {
@@ -207,6 +209,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                 new SearchDoctorsRequest(null, null, null, null, null, null);
         getSpiceManager().execute(request, new RecommendeDoctorListRequestListener());
     }
+
     private void performDoctorSearch(String queryString) {
         progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
                 getText(R.string.progress_dialog_search).toString());
@@ -245,7 +248,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                     } else {
                         doctorProfileDbApi.updateProfile(String.valueOf(doctor.doctorId), doctor);
                         doctorProfileDbApi.updatePendingReqProfile(String.valueOf(doctor.doctorId), false);
-                     }
+                    }
                 }
 
                 if (doctorList.size() == 0) {
@@ -259,7 +262,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                     }
                 } else if (doctorList.size() > 0) {
                     //clear pending list after doctor accepts
-                    if(pendingDoctorAdapter != null) {
+                    if (pendingDoctorAdapter != null) {
                         pendingdoctorList.clear();
                         doctorProfileDbApi = DoctorProfileDbApi.getInstance(getActivity());
                         ArrayList<Doctor> pendingList = doctorProfileDbApi.getPendingRequest(true);
@@ -354,26 +357,26 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                     recommendedDoctorAdapter = new DoctorsAdapter(getActivity(), recommendedDoctorList, false);
                     recommendedDoctorListView.setAdapter(recommendedDoctorAdapter);
                     recommendedDoctorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                         @Override
-                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                             Log.i(TAG, "position = " + position);
-                             Bundle data = new Bundle();
-                             data.putParcelable(Constants.DOCTOR_DETAIL, recommendedDoctorList.get(position));
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Log.i(TAG, "position = " + position);
+                            Bundle data = new Bundle();
+                            data.putParcelable(Constants.DOCTOR_DETAIL, recommendedDoctorList.get(position));
 
-                             final Activity activity = getActivity();
-                             if (activity != null) {
-                                 Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorBioActivity.class);
+                            final Activity activity = getActivity();
+                            if (activity != null) {
+                                Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorBioActivity.class);
 
-                                 if (checkDocotorExist(position)) {
-                                     data.putBoolean(ADD_DOCTOR_DISABLE_CHECK, true);
-                                 } else {
-                                     data.putBoolean(ADD_DOCTOR_DISABLE_CHECK, false);
-                                 }
-                                 showDoctorIntent.putExtra(Constants.DOCTOR_BIO_DETAIL, data);
-                                 activity.startActivity(showDoctorIntent);
-                                 activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                             }
-                         }
+                                if (checkDocotorExist(position)) {
+                                    data.putBoolean(ADD_DOCTOR_DISABLE_CHECK, true);
+                                } else {
+                                    data.putBoolean(ADD_DOCTOR_DISABLE_CHECK, false);
+                                }
+                                showDoctorIntent.putExtra(Constants.DOCTOR_BIO_DETAIL, data);
+                                activity.startActivity(showDoctorIntent);
+                                activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                            }
+                        }
                     });
 
                     recommendedDoctorContainer.setVisibility(View.VISIBLE);
@@ -465,30 +468,23 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
             if (recommendedDoctorAdapter != null) {
                 recommendedDoctorAdapter.notifyDataSetChanged();
             }
-
-            else if (intent.getAction().equalsIgnoreCase(Constants.BROADCAST_STATUS_CHANGED)) {
+            if (intent.getAction().equalsIgnoreCase(Constants.BROADCAST_STATUS_CHANGED)) {
                 String statusTxt = intent.getStringExtra(Constants.SET_STATUS);
-                if(statusTxt != null) {
+                if (statusTxt != null) {
                     String[] statusArr = statusTxt.split(",");
-                    String status;
-//                    if (intent.getBooleanExtra(Constants.SET_STATUS, false)) {
-//                        status = "1";
-//                    } else {
-//                        status = "0";
-//                    }
-                    if(statusArr.length > 2) {
+                    if (statusArr.length > 2) {
                         int docId = -1;
                         try {
                             docId = Integer.parseInt(statusArr[1].trim());
+                        } catch (NumberFormatException nfe) {
+                            nfe.printStackTrace();
                         }
-                        catch (NumberFormatException nfe){nfe.printStackTrace();}
-                        if(docId > -1) {
+                        if (docId > -1) {
                             for (Doctor doctorItem : doctorList) {
                                 if (doctorItem.doctorId == docId) {
-                                    if(statusArr[2].equalsIgnoreCase("online")) {
+                                    if (statusArr[2].trim().equalsIgnoreCase("online")) {
                                         doctorItem.status = "1";
-                                    }
-                                    else{
+                                    } else {
                                         doctorItem.status = "0";
                                     }
                                     break;
@@ -503,6 +499,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
     };
 
 }
+
 // to set hight of listview
 class Utility {
 

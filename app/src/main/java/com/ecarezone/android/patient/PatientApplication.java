@@ -33,18 +33,22 @@ public class PatientApplication extends Application {
         super.onCreate();
         MultiDex.install(this);
 
+        UAirship.takeOff(this, new UAirship.OnReadyCallback() {
+
+            @Override
+            public void onAirshipReady(UAirship uAirship) {
+                uAirship.getPushManager().setUserNotificationsEnabled(true);
+            }
+
+        });
+
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCE_NAME,
                 Context.MODE_PRIVATE);
         if(sharedPreferences.getString(Constants.UA_CHANNEL_NUMBER, null) == null) {
 
-            UAirship.takeOff(this, new UAirship.OnReadyCallback() {
-
-                @Override
-                public void onAirshipReady(UAirship uAirship) {
-                    uAirship.getPushManager().setUserNotificationsEnabled(true);
-                }
-
-            });
+        }
+        else{
+            Constants.deviceUnique = sharedPreferences.getString(Constants.UA_CHANNEL_NUMBER, Constants.deviceUnique);
         }
     }
 
