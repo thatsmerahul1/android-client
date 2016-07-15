@@ -151,6 +151,20 @@
             android:name=".gcm.HeartBeatReceiver"
             android:enabled="true" />
 
+        <receiver
+            android:name=".gcm.EcareZoneAirshipReceiver"
+            android:exported="false">
+
+                
+            <intent-filter>
+                        <action android:name="com.urbanairship.push.CHANNEL_UPDATED" />
+                        <action android:name="com.urbanairship.push.OPENED" />
+                        <action android:name="com.urbanairship.push.DISMISSED" />
+                        <action android:name="com.urbanairship.push.RECEIVED" />
+                        <category android:name="${applicationId}" />                    
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".service.RoboEcareSpiceServices"
             android:exported="false" />

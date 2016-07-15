@@ -58,4 +58,11 @@ public class Constants {
     public static String SEND_HEART_BEAT = "send_heart_beat";
     public static String UPDATE_STATUS = "update_status";
     public static final int UPDATE_STATUS_REQ_ID = 1;
+
+    public static String SHARED_PREFERENCE_NAME = "eCareZoneSP";
+    public static String UA_CHANNEL_NUMBER = "ua_channel_number";
+    public static String PUSH_NEWS_UPDATE = "ua_news_update";
+    public static String PUSH_STATUS_UPDATE = "ua_status_update";
+    public static String BROADCAST_STATUS_CHANGED = "broadcast_status_changed";
+    public static String SET_STATUS = "set_status";
 }

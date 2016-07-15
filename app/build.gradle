@@ -49,8 +49,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.0.+'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
-    compile 'com.google.android.gms:play-services:8.4.0'
-    compile 'com.google.android.gms:play-services-ads:8.4.0'
-    compile 'com.google.android.gms:play-services-identity:8.4.0'
-    compile 'com.google.android.gms:play-services-gcm:8.4.0'
+    compile 'com.urbanairship.android:urbanairship-sdk:7.2.+'
 }

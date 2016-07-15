@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -141,7 +142,11 @@ public class MainActivity extends EcareZoneBaseActivity {
         }.execute();
 //        disconnectHandler.post(disconnectCallback);
 
-//        getAllAppointments();
+
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(Constants.SHARED_PREFERENCE_NAME,
+                Context.MODE_PRIVATE);
+        Constants.deviceUnique = sharedPreferences.getString(Constants.UA_CHANNEL_NUMBER, Constants.deviceUnique);
+
         initStatus();
         setStatusAlarm();
         Util.setAppointmentAlarm(this);

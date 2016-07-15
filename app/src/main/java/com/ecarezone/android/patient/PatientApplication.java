@@ -2,7 +2,11 @@ package com.ecarezone.android.patient;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
+
+import com.ecarezone.android.patient.config.Constants;
+import com.urbanairship.UAirship;
 
 import java.util.HashMap;
 
@@ -28,6 +32,20 @@ public class PatientApplication extends Application {
     public void onCreate() {
         super.onCreate();
         MultiDex.install(this);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCE_NAME,
+                Context.MODE_PRIVATE);
+        if(sharedPreferences.getString(Constants.UA_CHANNEL_NUMBER, null) == null) {
+
+            UAirship.takeOff(this, new UAirship.OnReadyCallback() {
+
+                @Override
+                public void onAirshipReady(UAirship uAirship) {
+                    uAirship.getPushManager().setUserNotificationsEnabled(true);
+                }
+
+            });
+        }
     }
 
     public void setStatusNameValuePair(HashMap<String, Boolean> nameValuePair) {

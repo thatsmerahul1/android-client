@@ -310,6 +310,11 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         //TODO register
         progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), getText(R.string.progress_dialog_create_account).toString());
         hashedPassword = PasswordUtil.getHashedPassword(password);
+
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(Constants.SHARED_PREFERENCE_NAME,
+                Context.MODE_PRIVATE);
+        Constants.deviceUnique = sharedPreferences.getString(Constants.UA_CHANNEL_NUMBER, Constants.deviceUnique);
+
         SignupRequest signupRequest = new SignupRequest(username, hashedPassword, 1,
                 country, language, "N/A", "N/A", Constants.API_KEY, Constants.deviceUnique);
         getSpiceManager().execute(signupRequest, new DosSettingsRequestListener());

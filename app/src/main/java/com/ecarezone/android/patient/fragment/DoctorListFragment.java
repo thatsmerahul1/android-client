@@ -453,6 +453,40 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
             if (recommendedDoctorAdapter != null) {
                 recommendedDoctorAdapter.notifyDataSetChanged();
             }
+
+            else if (intent.getAction().equalsIgnoreCase(Constants.BROADCAST_STATUS_CHANGED)) {
+                String statusTxt = intent.getStringExtra(Constants.SET_STATUS);
+                if(statusTxt != null) {
+                    String[] statusArr = statusTxt.split(",");
+                    String status;
+//                    if (intent.getBooleanExtra(Constants.SET_STATUS, false)) {
+//                        status = "1";
+//                    } else {
+//                        status = "0";
+//                    }
+                    if(statusArr.length > 2) {
+                        int docId = -1;
+                        try {
+                            docId = Integer.parseInt(statusArr[1].trim());
+                        }
+                        catch (NumberFormatException nfe){nfe.printStackTrace();}
+                        if(docId > -1) {
+                            for (Doctor doctorItem : doctorList) {
+                                if (doctorItem.doctorId == docId) {
+                                    if(statusArr[2].equalsIgnoreCase("online")) {
+                                        doctorItem.status = "1";
+                                    }
+                                    else{
+                                        doctorItem.status = "0";
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    mycareDoctorAdapter.notifyDataSetChanged();
+                }
+            }
         }
     };
 
