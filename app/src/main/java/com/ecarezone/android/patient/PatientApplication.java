@@ -42,7 +42,7 @@ public class PatientApplication extends Application {
 
         });
 
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCE_NAME,
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME,
                 Context.MODE_PRIVATE);
         if(sharedPreferences.getString(Constants.UA_CHANNEL_NUMBER, null) == null) {
 

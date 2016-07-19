@@ -311,7 +311,7 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), getText(R.string.progress_dialog_create_account).toString());
         hashedPassword = PasswordUtil.getHashedPassword(password);
 
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(Constants.SHARED_PREFERENCE_NAME,
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(Constants.SHARED_PREF_NAME,
                 Context.MODE_PRIVATE);
         Constants.deviceUnique = sharedPreferences.getString(Constants.UA_CHANNEL_NUMBER, Constants.deviceUnique);
 

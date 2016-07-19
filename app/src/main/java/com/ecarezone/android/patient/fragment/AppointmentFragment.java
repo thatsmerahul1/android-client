@@ -105,6 +105,14 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
         radioVoip = (RadioButton) view.findViewById(R.id.radioVoip);
         btnAppointment = (Button) view.findViewById(R.id.button_appointment);
 
+        int typeOfCall = getArguments().getInt("typeOfCall", 0);
+        if(getResources().getInteger(R.integer.video_call_value) == typeOfCall){
+            radioVideo.setChecked(true);
+        }
+        else{
+            radioVideo.setChecked(true);
+        }
+
         radioVideo.setOnClickListener(this);
         radioVoip.setOnClickListener(this);
         btnAppointment.setOnClickListener(this);

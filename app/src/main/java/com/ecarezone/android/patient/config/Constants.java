@@ -42,27 +42,34 @@ public class Constants {
     public static String EXTRA_NAME = "name";
 
     //Login Screen Constants
-    public static String USER_ID = "UserId";
-    public static String IS_LOGIN = "is_login";
-    public static String SHARED_PREF_NAME = "eCareZone";
+    public static final String USER_ID = "UserId";
+    public static final String IS_LOGIN = "is_login";
+    public static final String SHARED_PREF_NAME = "eCareZone";
 
     //Registration Constants
-    public static String REGISTRATION_DIALOG_TAG = "RegDiaFragment";
+    public static final String REGISTRATION_DIALOG_TAG = "RegDiaFragment";
 
     //status changes
     public static String STATUS_CHANGE = "statusChange";
-    public static final int OFFLINE = 2;
+    public static final int OFFLINE = 0;
     public static final int ONLINE = 1;
-    public static final int IDLE = 0;
+    public static final int IDLE = 2;
 
-    public static String SEND_HEART_BEAT = "send_heart_beat";
-    public static String UPDATE_STATUS = "update_status";
+    public static final String SEND_HEART_BEAT = "send_heart_beat";
+    public static final String UPDATE_STATUS = "update_status";
     public static final int UPDATE_STATUS_REQ_ID = 1;
 
-    public static String SHARED_PREFERENCE_NAME = "eCareZoneSP";
-    public static String UA_CHANNEL_NUMBER = "ua_channel_number";
-    public static String PUSH_NEWS_UPDATE = "ua_news_update";
+    public static final String UA_CHANNEL_NUMBER = "ua_channel_number";
+    public static final String PUSH_NEWS_UPDATE = "ua_news_update";
 
-    public static String BROADCAST_STATUS_CHANGED = "broadcast_status_changed";
-    public static String SET_STATUS = "set_status";
+    public static final String BROADCAST_STATUS_CHANGED = "broadcast_status_changed";
+    public static final String SET_STATUS = "set_status";
+    public static final String USER_ROLE = "1";
+
+    // news
+    public static final String NEWS_MESSAGE = "news_message";
+    public static final String UNREAD_NEWS_CATEGORY = "unread_news_category";
+    public static final String NEWS_MESSAGE_CATEGORY_SET_KEY = "news_message_key_set";
+    public static final String NEWS_CATEGORY_PREPEND_STRING = "news_";
+//    public static final String UNREAD_NEWS_COUNT = "unread_news_count";
 }

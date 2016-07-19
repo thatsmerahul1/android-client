@@ -7,6 +7,8 @@ import android.util.Log;
 import com.ecarezone.android.patient.PatientApplication;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
+import com.ecarezone.android.patient.model.UserProfile;
+import com.ecarezone.android.patient.model.database.ProfileDbApi;
 import com.ecarezone.android.patient.model.rest.ChangeStatusRequest;
 import com.ecarezone.android.patient.model.rest.base.BaseResponse;
 import com.ecarezone.android.patient.service.RoboEcareSpiceServices;
@@ -47,9 +49,14 @@ public class HeartbeatService extends IntentService {
                 } else {
                     status = Constants.ONLINE;
                 }
+                ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
+                int profileId = profileDbApi.getProfileIdUsingEmail(LoginInfo.userName);
+                UserProfile userProfile = profileDbApi.getProfile(LoginInfo.userId.toString(), String.valueOf(profileId));
+
                 if (patientApplication.getLastAvailabilityStatus() != status) {
-                    ChangeStatusRequest request = new ChangeStatusRequest(status, LoginInfo.hashedPassword,
-                            LoginInfo.userName, "1");
+                    ChangeStatusRequest request = new ChangeStatusRequest(LoginInfo.userName,
+                            LoginInfo.hashedPassword, userProfile.name, Constants.USER_ROLE,
+                            status, Constants.deviceUnique);
                     getSpiceManager().execute(request, new ChangeStatusRequestListener());
                 }
             }
@@ -64,7 +71,7 @@ public class HeartbeatService extends IntentService {
         }
     }
 
-    public final class ChangeStatusRequestListener implements RequestListener<BaseResponse> {
+    public final class ChangeStatusRequestListener implements RequestListener<String> {
 
         private String TAG = "ChangeStatusRequestListener";
 
@@ -74,7 +81,7 @@ public class HeartbeatService extends IntentService {
         }
 
         @Override
-        public void onRequestSuccess(final BaseResponse baseResponse) {
+        public void onRequestSuccess(final String baseResponse) {
             Log.d(TAG, "statuschange " + "changed");
 
 //            DoctorApplication.lastAvailablityStaus = status ;

@@ -116,8 +116,11 @@ public interface EcareZoneApi {
     @POST("/deleteappointment/{appointmentId}")
     BaseResponse deleteAppointment(@Path("appointmentId") long appointmentId, @Body DeleteAppointmentRequest request);
 
-    @POST("/changeStatus")
-    BaseResponse changeStatus(@Body ChangeStatusRequest request);
+//    @POST("/changeStatus")
+//    BaseResponse changeStatus(@Body ChangeStatusRequest request);
+
+    @POST("/ECZ/doctor/pushstatus/{userId}")
+    String changeStatus(@Path("userId") long userId, @Body ChangeStatusRequest request);
 
     @GET("/pendingappointments/users/{userId}")
     PendingAppointmentResponse getPendingAppointmentList(@Path("userId") long userId);

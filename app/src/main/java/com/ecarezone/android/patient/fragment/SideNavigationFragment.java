@@ -19,6 +19,7 @@ import com.ecarezone.android.patient.RegistrationActivity;
 import com.ecarezone.android.patient.app.widget.NavigationItem;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
+import com.ecarezone.android.patient.model.rest.ChangeStatusRequest;
 import com.ecarezone.android.patient.model.rest.LoginRequest;
 import com.ecarezone.android.patient.model.rest.LoginResponse;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
@@ -109,6 +110,9 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
         LoginRequest request =
                 new LoginRequest(LoginInfo.userName, null, 1, null, null, null, null);
         getSpiceManager().execute(request, new LogoutRequestListener());
+
+        /* TODO */
+        // change status to offline
     }
 
     //Logout response

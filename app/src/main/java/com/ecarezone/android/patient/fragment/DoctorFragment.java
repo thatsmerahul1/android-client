@@ -86,9 +86,6 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
     private EditAppointmentDialog editAppointmentDialog;
 
-    private static int VIDEO_CALL;
-    private static int VOIP_CALL;
-
     public interface OnAppointmentOptionButtonClickListener {
         public static int BTN_TIME_TO_CALL = 0;
         public static int BTN_CHANGE_TIME = 1;
@@ -113,8 +110,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.frag_doctor, container, false);
 
-        VIDEO_CALL = getResources().getInteger(R.integer.video_call_value);
-        VOIP_CALL = getResources().getInteger(R.integer.voip_call_value);
+//        VIDEO_CALL = getResources().getInteger(R.integer.video_call_value);
+//        VOIP_CALL = getResources().getInteger(R.integer.voip_call_value);
 
         appointmentDbApi = AppointmentDbApi.getInstance(getApplicationContext());
         doctorDetailData = getArguments();
@@ -175,7 +172,6 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
         if (imageUrl != null && imageUrl.trim().length() > 8) {
             int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
-            ;
             Picasso.with(mActivity)
                     .load(imageUrl).resize(dp, dp)
                     .centerCrop().placeholder(R.drawable.news_other)
@@ -203,7 +199,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         if (v == null) return;
         FragmentManager fragmentManager;
         Bundle bundle;
-        int typeOfCall = VIDEO_CALL;
+        int typeOfCall = getResources().getInteger(R.integer.video_call_value);
         viewId = v.getId();
 
         if (NetworkCheck.isNetworkAvailable(mActivity)) {
@@ -215,14 +211,15 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
                     if (currentVideoAppointment != null) {
                         typeOfCall = currentVideoAppointment.getCallType().equalsIgnoreCase("video")
-                                ? VIDEO_CALL : VOIP_CALL;
+                                ? getResources().getInteger(R.integer.video_call_value) :
+                                getResources().getInteger(R.integer.voip_call_value);
                     }
                     editAppointmentDialog =
                             EditAppointmentDialog.newInstance(mOnAppointmentOptionClicked,
                                     typeOfCall);
                     fragmentManager = getActivity().getFragmentManager();
 
-                    bundle = getAppointmentBundle(v, VIDEO_CALL);
+                    bundle = getAppointmentBundle(v, getResources().getInteger(R.integer.video_call_value));
                     editAppointmentDialog.setArguments(bundle);
                     editAppointmentDialog.show(fragmentManager, "EditAppointmentDialogFragment");
 //                    callVideoButtonClicked();
@@ -231,10 +228,11 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
                     if (currentVoipAppointment != null) {
                         typeOfCall = currentVoipAppointment.getCallType().equalsIgnoreCase("video")
-                                ? VIDEO_CALL : VOIP_CALL;
+                                ? getResources().getInteger(R.integer.video_call_value) :
+                                getResources().getInteger(R.integer.voip_call_value);
                     }
 
-                    bundle = getAppointmentBundle(v, VOIP_CALL);
+                    bundle = getAppointmentBundle(v, getResources().getInteger(R.integer.voip_call_value));
                     editAppointmentDialog =
                             EditAppointmentDialog.newInstance(mOnAppointmentOptionClicked,
                                     typeOfCall);
@@ -257,7 +255,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                     bundle.putBoolean("isAppointmentAvailable", false);
                     bundle.putString("doctor_name", doctorName);
                     editAppointmentDialog =
-                            EditAppointmentDialog.newInstance(mOnAppointmentOptionClicked, VOIP_CALL);
+                            EditAppointmentDialog.newInstance(mOnAppointmentOptionClicked,
+                                    getResources().getInteger(R.integer.voip_call_value));
                     fragmentManager = getActivity().getFragmentManager();
                     editAppointmentDialog.setArguments(bundle);
                     editAppointmentDialog.show(fragmentManager, "EditAppointmentDialogFragment");
@@ -286,7 +285,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                 } else if ((tagValue).equalsIgnoreCase("timeToCall")) {
                     bundle.putBoolean("isAppointmentAvailable", true);
                     bundle.putBoolean("isTimeToCall", true);
-                    if (typeOfCall == VIDEO_CALL) {
+                    if (typeOfCall == getResources().getInteger(R.integer.video_call_value)) {
                         bundle.putString("callType", currentVideoAppointment.getCallType());
                         bundle.putLong("dateTime", currentVideoAppointment.getDateTimeInLong());
                     } else {
@@ -296,7 +295,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                 } else if ((tagValue).equalsIgnoreCase("editAppointment")) {
                     bundle.putBoolean("isAppointmentAvailable", true);
                     bundle.putBoolean("isTimeToCall", false);
-                    if (typeOfCall == VIDEO_CALL) {
+                    if (typeOfCall == getResources().getInteger(R.integer.video_call_value)) {
                         bundle.putString("callType", currentVideoAppointment.getCallType());
                         bundle.putLong("dateTime", currentVideoAppointment.getDateTimeInLong());
                     } else {
@@ -342,8 +341,9 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     private void createAppointment(boolean isEdit, int typeOfCall) {
         Intent intent = new Intent(mActivity.getApplicationContext(), AppointmentActivity.class);
         intent.putExtra("doctorId", doctor.doctorId);
+        intent.putExtra("typeOfCall", typeOfCall);
         if (isEdit) {
-            if (typeOfCall == VIDEO_CALL) {
+            if (typeOfCall == getResources().getInteger(R.integer.video_call_value)) {
                 intent.putExtra("currentAppointment", currentVideoAppointment);
             } else {
                 intent.putExtra("currentAppointment", currentVoipAppointment);
@@ -359,7 +359,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                 public void onButtonClicked(int whichButtonClicked, int typeOfCall) {
 
                     if (whichButtonClicked == OnAppointmentOptionButtonClickListener.BTN_TIME_TO_CALL) {
-                        if (typeOfCall == VIDEO_CALL) {
+                        if (typeOfCall == getResources().getInteger(R.integer.video_call_value)) {
                             callVideoButtonClicked();
                         } else {
                             callButtonClicked();
@@ -443,7 +443,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             if (appointmentsList.size() > 0) {
 
                 currentVideoAppointment = getConfirmedAppointment(appointmentsList, "video");
-                currentVoipAppointment = getConfirmedAppointment(appointmentsList, "voip");
+                currentVoipAppointment = getConfirmedAppointment(appointmentsList, "voice");
 
                 if (currentVideoAppointment != null && currentVideoAppointment.isConfirmed()) {
                     isAppointmentPresent = true;
@@ -643,6 +643,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 //                        appointment not accepted
                         appointmentDbApi.updateAppointmentStatus(appointmentId, false);
                     }
+                    isAppointmentPresent();
                 }
             }
         }
@@ -661,7 +662,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Adding Doctor......");
 
         Appointment currentAppointment;
-        if (typeOfCall == VIDEO_CALL) {
+        if (typeOfCall == getResources().getInteger(R.integer.video_call_value)) {
             currentAppointment = currentVideoAppointment;
         } else {
             currentAppointment = currentVoipAppointment;

@@ -3,7 +3,6 @@ package com.ecarezone.android.patient.fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -19,7 +18,9 @@ import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.NewsListActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.adapter.NewsCategoriesAdapter;
+import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.model.News;
+import com.ecarezone.android.patient.model.NewsCategory;
 import com.ecarezone.android.patient.model.rest.GetNewsRequest;
 import com.ecarezone.android.patient.model.rest.GetNewsResponse;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
@@ -41,6 +42,7 @@ public class NewsCategoriesFragment extends EcareZoneBaseFragment implements Gri
     private GetNewsResponse mGetNewsResonse = null;
     private GridView mGridView;
     private ProgressDialog mProgressDialog;
+    private String unReadNewCategory;
 
     @Override
     protected String getCallerName() {
@@ -50,11 +52,11 @@ public class NewsCategoriesFragment extends EcareZoneBaseFragment implements Gri
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+        if(getArguments() != null) {
+            unReadNewCategory = getArguments().getString(Constants.UNREAD_NEWS_CATEGORY);
+        }
+
         mProgressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
                 getActivity().getString(R.string.progress_dialog_loading));
 
@@ -85,6 +87,7 @@ public class NewsCategoriesFragment extends EcareZoneBaseFragment implements Gri
 
         ((MainActivity) getActivity()).getSupportActionBar()
                 .setTitle(getResources().getText(R.string.news_actionbar_title));
+
         return view;
     }
 
@@ -114,6 +117,25 @@ public class NewsCategoriesFragment extends EcareZoneBaseFragment implements Gri
 
             mGridView.setAdapter(mNewsCategoriesAdapter);
             mProgressDialog.dismiss();
+
+            if(unReadNewCategory != null){
+                NewsCategory[] newsList =  mGetNewsResonse.data;
+                int position = 0;
+                for(NewsCategory newsCategory : newsList) {
+                    ArrayList<News> newsArr = (ArrayList<News>) newsCategory.newsAbstractList;
+
+                    if (newsCategory.newsCategory.equalsIgnoreCase(unReadNewCategory)) {
+
+                        // Add the news list & its category name to the bundle and pass it to the intent
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelableArrayList(NEWS_PARCELABLE, newsArr);
+                        bundle.putString(NEWS_CATEGORY_NAME, mGetNewsResonse.data[position].newsCategory);
+                        startActivity(new Intent(getApplicationContext(), NewsListActivity.class).putExtra(NEWS_BUNDLE, bundle));
+                        break;
+                    }
+                    position++;
+                }
+            }
         }
     }
 }

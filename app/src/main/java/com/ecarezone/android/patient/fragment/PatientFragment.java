@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,7 +27,6 @@ import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.ProfileDetailsActivity;
 import com.ecarezone.android.patient.R;
-import com.ecarezone.android.patient.adapter.OnButtonClickedListener;
 import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.fragment.dialog.EcareZoneAlertDialog;
@@ -54,26 +54,14 @@ import com.squareup.picasso.Picasso;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.text.WordUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-
-import ch.boye.httpclientandroidlib.client.ClientProtocolException;
+import java.util.Set;
 
 /**
  * Created by CHAO WEI on 5/12/2015.
@@ -84,7 +72,10 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
 
     private LinearLayout mProfileFinishReminderLayout = null;
     private RelativeLayout mMessageCounterLayout = null;
+
     private TextView mHomeMessageIndicator;
+    private TextView mHomeNewsIndicator;
+
     private boolean requestInPrgress = false;
     private LinearLayout mPendingAppointmentLayout;
     private LinearLayout mCurrentAppointmentLayout;
@@ -130,7 +121,14 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
         mCurrentAppointmentLayout = (LinearLayout) view.findViewById(R.id.currentAppointmentLayout);
 
         mMessageCounterLayout = (RelativeLayout) view.findViewById(R.id.new_message_counter_layout);
+
+        mHomeNewsIndicator = (TextView) view.findViewById(R.id.text_view_home_news_indicator);
         mHomeMessageIndicator = (TextView) view.findViewById(R.id.text_view_home_message_indicator);
+
+        IntentFilter intentFilter = new IntentFilter("send");
+        intentFilter.addAction(Constants.PUSH_NEWS_UPDATE);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(message,
+                intentFilter);
 
         populateAppointmentsFromDatabase();
         return view;
@@ -146,10 +144,64 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
         }
     }
 
-    BroadcastReceiver message = new BroadcastReceiver() {
+    /**
+     * Broadcast receiver to receive push messages
+     */
+    private BroadcastReceiver message = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateUnreadMessageCount(ChatDbApi.getInstance(context).getUnReadChatCount());
+
+            if (intent.getAction().equalsIgnoreCase(Constants.PUSH_NEWS_UPDATE)) {
+                SharedPreferences sharedPreferences =
+                        getApplicationContext().getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                String newsCategory = intent.getStringExtra(Constants.NEWS_MESSAGE);//News,Fitness&Exercise
+                if (newsCategory != null) {
+                    String[] category = newsCategory.split(",");
+                    if (category.length > 1) {
+
+                        Set<String> categorySet = sharedPreferences.getStringSet(
+                                Constants.NEWS_MESSAGE_CATEGORY_SET_KEY, null);
+                        if (categorySet == null) {
+                            categorySet = new HashSet<>();
+                        }
+                        categorySet.add(category[1]);
+
+                        int unreadCount = sharedPreferences.getInt(
+                                Constants.NEWS_CATEGORY_PREPEND_STRING + category[1], 0);
+                        if (unreadCount == 0) {
+                            editor.putInt(Constants.NEWS_CATEGORY_PREPEND_STRING + category[1], 1).apply();
+                        } else {
+                            editor.putInt(Constants.NEWS_CATEGORY_PREPEND_STRING + category[1],
+                                    unreadCount++).apply();
+                        }
+
+                        int totalUnreadNewsCount = 0;
+                        if (categorySet != null) {
+                            Iterator<String> iterator = categorySet.iterator();
+                            while (iterator.hasNext()) {
+
+                                String categoryTemp = iterator.next();
+                                int unreadNewsCount = sharedPreferences.getInt(Constants.NEWS_CATEGORY_PREPEND_STRING + categoryTemp, 0);
+                                if (unreadNewsCount > 0) {
+                                    totalUnreadNewsCount += unreadNewsCount;
+                                }
+                            }
+                        }
+
+                        if (totalUnreadNewsCount < 1) {
+                            mHomeNewsIndicator.setVisibility(View.INVISIBLE);
+                        } else {
+                            mHomeNewsIndicator.setText(String.valueOf(totalUnreadNewsCount));
+                            mHomeNewsIndicator.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+                }
+            } else if (intent.getAction().equalsIgnoreCase("send")) {
+                updateUnreadMessageCount(ChatDbApi.getInstance(context).getUnReadChatCount());
+            }
         }
     };
 
@@ -161,6 +213,26 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
         if (!requestInPrgress) {
             fetchPendingAppointments();
         }
+        updateNewsCount();
+    }
+
+    private void updateNewsCount() {
+
+        SharedPreferences sharedPreferences =
+                getApplicationContext().getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        Set<String> categorySet = sharedPreferences.getStringSet(Constants.NEWS_MESSAGE_CATEGORY_SET_KEY, null);
+        int totalUnreadNewsCount = 0;
+        for(String key : categorySet){
+
+            totalUnreadNewsCount += sharedPreferences.getInt(Constants.NEWS_CATEGORY_PREPEND_STRING+key, 0);
+
+        }
+        if (totalUnreadNewsCount < 1) {
+            mHomeNewsIndicator.setVisibility(View.INVISIBLE);
+        } else {
+            mHomeNewsIndicator.setText(String.valueOf(totalUnreadNewsCount));
+            mHomeNewsIndicator.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -169,15 +241,42 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(Constants.ECARE_ZONE);
         new ProfileFinishedAsyncTask().execute();
         SinchUtil.setChatHistoryChangeListner(this);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(message,
-                new IntentFilter("send"));
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.newsFeedLayout:
-                ((MainActivity) getActivity()).onNavigationChanged(R.layout.frag_news_categories, null);
+
+                SharedPreferences sharedPreferences =
+                        getApplicationContext().getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+                Set<String> categorySet = sharedPreferences.getStringSet(
+                        Constants.NEWS_MESSAGE_CATEGORY_SET_KEY, null);
+                int totalUnreadNewsCount = 0;
+                String unreadNewsCategory = null;
+                if (categorySet != null) {
+                    Iterator<String> iterator = categorySet.iterator();
+                    while (iterator.hasNext()) {
+
+                        String category = iterator.next();
+                        int unreadNewsCount = sharedPreferences.getInt(Constants.NEWS_CATEGORY_PREPEND_STRING + category, 0);
+                        if (unreadNewsCount > 0) {
+                            totalUnreadNewsCount += unreadNewsCount;
+                            unreadNewsCategory = category;
+                        }
+                    }
+                }
+
+                Bundle bundle = new Bundle();
+
+                if (totalUnreadNewsCount == 1) {
+                    bundle.putString(Constants.UNREAD_NEWS_CATEGORY, unreadNewsCategory);
+                } else {
+                    bundle = null;
+                }
+                ((MainActivity) getActivity()).onNavigationChanged(R.layout.frag_news_categories, bundle);
+
                 break;
             case R.id.chatAlertLayout:
                 ((MainActivity) getActivity()).onNavigationChanged(R.layout.frag_doctor_list, null);
@@ -187,7 +286,7 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
 //                ((MainActivity) getActivity()).onNavigationChanged(R.layout.frag_doctor_list, null);
                 if (NetworkCheck.isNetworkAvailable(getActivity())) {
                     GetDoctorRequest request = new GetDoctorRequest();
-                    getSpiceManager().execute(request, new RecommondedDoctor());
+                    getSpiceManager().execute(request, new RecommendedDoctor());
                 } else {
                     Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
                 }
@@ -206,7 +305,7 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
     }
 
 
-    public final class RecommondedDoctor implements RequestListener<GetDoctorResponse> {
+    public final class RecommendedDoctor implements RequestListener<GetDoctorResponse> {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
@@ -245,12 +344,6 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
         } else {
             mHomeMessageIndicator.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(message);
     }
 
     class ProfileFinishedAsyncTask extends AsyncTask<Void, Void, Boolean> {
@@ -353,6 +446,18 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
 
                 isCurrentAppointmentAvailable = true;
                 mCurrentAppointmentLayout.addView(view);
+
+                view.setTag(appointment);
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Appointment appointment = (Appointment) v.getTag();
+
+                        ((MainActivity) getActivity()).onNavigationChanged(R.layout.frag_doctor_list, null);
+
+                    }
+                });
             }
         }
         if (isCurrentAppointmentAvailable) {
@@ -467,9 +572,6 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
                     @Override
                     public void onClick(View v) {
                         rejectAppointment(data.get((Integer) v.getTag()));
-//                        DeleteAppointment deleteAppointment = new DeleteAppointment(
-//                                data.get((Integer) v.getTag()).id, mButtonClickListener);
-//                        deleteAppointment.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     }
                 });
 
@@ -595,111 +697,9 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
         }
     }
 
-    ;
-
-    /*********
-     * REJECT APPOINTMENT NETWORK COMMUNICATION
-     ***********/
-     /*
-        Reject Appointment
-        Retrofit is unable to send body parameter with method type delete
-         This is a workaround for this retrofit limitation
-     */
-
-    private class DeleteAppointment extends AsyncTask<String, String, String> {
-
-        private int appointmentId;
-        private String body;
-        private OnButtonClickedListener mButtonClickListener;
-
-        public DeleteAppointment(int appointmentId, OnButtonClickedListener mButtonClickListener) {
-            this.appointmentId = appointmentId;
-            this.mButtonClickListener = mButtonClickListener;
-            JSONObject jsonObj = new JSONObject();
-            try {
-                jsonObj.put("apiKey", Constants.API_KEY);
-                jsonObj.put("password", LoginInfo.hashedPassword);
-                jsonObj.put("deviceUnique", Constants.deviceUnique);
-                jsonObj.put("email", LoginInfo.userName);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            body = jsonObj.toString();
-        }
-
-        @Override
-        protected String doInBackground(String... param) {
-
-            String response = null;
-            String line = "";
-            URL url;
-            HttpURLConnection urlConnection = null;
-            BufferedReader rd;
-
-            try {
-                url = new URL("http://188.166.55.204:9000/deleteappointment/" + appointmentId);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setDoOutput(true);
-                urlConnection.setChunkedStreamingMode(0);
-
-                OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
-                writeStream(out);
-
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                response = Util.readDataFromInputStream(in);
-
-            } catch (ClientProtocolException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-            }
-            return response;
-        }
-
-        private void writeStream(OutputStream stream)
-                throws IOException {
-
-            OutputStream out = new BufferedOutputStream(stream);
-
-            if (body != null) {
-                out.write(URLEncoder.encode(body, "UTF-8")
-                        .getBytes());
-            }
-            out.flush();
-        }
-
-
-        @Override
-        protected void onCancelled(String s) {
-            super.onCancelled(s);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (mButtonClickListener != null) {
-                if (s != null && s.equalsIgnoreCase("Appointment deleted successfully")) {
-                    mButtonClickListener.onButtonClickedListener(-1, true);
-                } else {
-                    mButtonClickListener.onButtonClickedListener(-1, false);
-                }
-            }
-        }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(message);
     }
-
-    private OnButtonClickedListener mButtonClickListener = new OnButtonClickedListener() {
-        @Override
-        public void onButtonClickedListener(int position, boolean isSuccessful) {
-            if (isSuccessful) {
-                Toast.makeText(getActivity(), getString(R.string.appointment_deleted),
-                        Toast.LENGTH_LONG).show();
-            }
-        }
-    };
 }

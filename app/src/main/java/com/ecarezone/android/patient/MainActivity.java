@@ -1,6 +1,7 @@
 package com.ecarezone.android.patient;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -41,11 +42,14 @@ import com.ecarezone.android.patient.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.urbanairship.UAirship;
+import com.urbanairship.push.PushManager;
+import com.urbanairship.push.notifications.DefaultNotificationFactory;
 
 import java.util.HashMap;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by CHAO WEI on 5/3/2015.
@@ -74,6 +78,7 @@ public class MainActivity extends EcareZoneBaseActivity {
             @Override
             public void onAirshipReady(UAirship uAirship) {
                 uAirship.getPushManager().setUserNotificationsEnabled(true);
+                uAirship.getPushManager().setNotificationFactory(null);
             }
 
         });
@@ -154,7 +159,7 @@ public class MainActivity extends EcareZoneBaseActivity {
 //        disconnectHandler.post(disconnectCallback);
 
 
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(Constants.SHARED_PREFERENCE_NAME,
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(Constants.SHARED_PREF_NAME,
                 Context.MODE_PRIVATE);
         Constants.deviceUnique = sharedPreferences.getString(Constants.UA_CHANNEL_NUMBER, Constants.deviceUnique);
 

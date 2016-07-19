@@ -28,7 +28,7 @@ public class EcareZoneAirshipReceiver extends AirshipReceiver {
 
         // Broadcast that the channel was created. Used to refresh the channel ID on the home fragment
 //        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(ACTION_UPDATE_CHANNEL));
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCE_NAME,
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREF_NAME,
                 Context.MODE_PRIVATE);
         sharedPreferences.edit().putString(Constants.UA_CHANNEL_NUMBER, channelId).apply();
     }
@@ -39,7 +39,7 @@ public class EcareZoneAirshipReceiver extends AirshipReceiver {
 
         // Broadcast that the channel was updated. Used to refresh the channel ID on the home fragment
 //        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(ACTION_UPDATE_CHANNEL));
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCE_NAME,
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREF_NAME,
                 Context.MODE_PRIVATE);
         sharedPreferences.edit().putString(Constants.UA_CHANNEL_NUMBER, channelId).apply();
     }
@@ -55,7 +55,9 @@ public class EcareZoneAirshipReceiver extends AirshipReceiver {
 
         if(message != null && !message.getAlert().isEmpty()){
             if(message.getAlert().startsWith("News")) {
-                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(Constants.PUSH_NEWS_UPDATE));
+                Intent intent = new Intent(Constants.PUSH_NEWS_UPDATE);
+                intent.putExtra(Constants.NEWS_MESSAGE, message.getAlert());
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
             }
             else if(message.getAlert().startsWith("Doctor")){
                 Intent intent = new Intent(Constants.BROADCAST_STATUS_CHANGED);
