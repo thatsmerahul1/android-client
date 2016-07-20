@@ -177,7 +177,7 @@ public class ProfileDbApi {
                     .eq(DbContract.Profiles.COLUMN_NAME_EMAIL, email)
                     .query();
            if(userProfilesList!=null && userProfilesList.size() > 0){
-               return Integer.parseInt(userProfilesList.get(0).userId);
+               return Integer.parseInt(userProfilesList.get(0).profileId);
            }
         } catch (SQLException e) {
             e.printStackTrace();

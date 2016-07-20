@@ -23,12 +23,27 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
+import ch.boye.httpclientandroidlib.HttpEntity;
+import ch.boye.httpclientandroidlib.HttpResponse;
+import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.client.ClientProtocolException;
+import ch.boye.httpclientandroidlib.client.HttpClient;
+import ch.boye.httpclientandroidlib.client.entity.UrlEncodedFormEntity;
+import ch.boye.httpclientandroidlib.client.methods.HttpPost;
+import ch.boye.httpclientandroidlib.entity.ByteArrayEntity;
+import ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
+import ch.boye.httpclientandroidlib.impl.client.HttpClientBuilder;
+import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
+import ch.boye.httpclientandroidlib.protocol.HTTP;
 
 /**
  * Created by Umesh on 27-06-2016.
@@ -57,25 +72,18 @@ public class HeartbeatService extends IntentService {
             PatientApplication patientApplication = (PatientApplication) getApplicationContext();
 
             int status;
-            if(patientApplication.getNameValuePair().containsKey(Constants.STATUS_CHANGE)) {
+            if (patientApplication.getNameValuePair().containsKey(Constants.STATUS_CHANGE)) {
                 if (!patientApplication.getNameValuePair().get(Constants.STATUS_CHANGE)) {
                     status = Constants.IDLE;
                 } else {
                     status = Constants.ONLINE;
                 }
-                ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
-                int profileId = profileDbApi.getProfileIdUsingEmail(LoginInfo.userName);
-                UserProfile userProfile = profileDbApi.getProfile(LoginInfo.userId.toString(), String.valueOf(profileId));
 
                 if (patientApplication.getLastAvailabilityStatus() != status) {
-//                    ChangeStatusRequest request = new ChangeStatusRequest(LoginInfo.userName,
-//                            LoginInfo.hashedPassword, userProfile.name, Constants.USER_ROLE,
-//                            status, Constants.deviceUnique);
-//                    getSpiceManager().execute(request, new ChangeStatusRequestListener());
                     ChangeStatusRequest changeStatusService = new ChangeStatusRequest(status);
+                    changeStatusService.startHttpRequest();
                 }
-            }
-            else{
+            } else {
                 patientApplication.getNameValuePair().put(Constants.STATUS_CHANGE, false);
                 status = Constants.ONLINE;
             }
@@ -89,10 +97,10 @@ public class HeartbeatService extends IntentService {
 
     private class ChangeStatusRequest {
 
-        private int appointmentId;
-
 // {"email":"uapatient1@gmail.com", "password":"wkkdl/bt34SeumhQNMNlzQ==",
 // "name":"name", "role": "1","status":"0","deviceUnique":"b5d4c425-a305-4363-8d6a-f3fb65635abf"}
+
+        private String requestBody;
 
         public ChangeStatusRequest(int status) {
 
@@ -111,86 +119,53 @@ public class HeartbeatService extends IntentService {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            startHttpRequest(jsonObj.toString());
+            requestBody = jsonObj.toString();
         }
 
-        protected void startHttpRequest(String body) {
+        public void startHttpRequest() {
 
             String response = null;
-            String line = "";
-            URL url;
-            HttpURLConnection urlConnection = null;
-            BufferedReader rd;
+            HttpClient httpClient = HttpClientBuilder.create().build();
+            HttpPost httpPost = new HttpPost("http://188.166.55.204:8080/ECZ/notification/pushstatus/" + LoginInfo.userId);
+            // Set content type
+            httpPost.setHeader("Content-Type", "application/json");
 
+            if(requestBody != null) {
+                //Post Data
+                HttpEntity entity = new ByteArrayEntity(requestBody.getBytes());
+                httpPost.setEntity(entity);
+            }
+
+            //making POST request.
             try {
-                url = new URL("http://188.166.55.204:8080/ECZ/notification/pushstatus/" + LoginInfo.userId);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setDoOutput(true);
-                urlConnection.setChunkedStreamingMode(0);
+                HttpResponse responseHttp = httpClient.execute(httpPost);
+                if (responseHttp.getStatusLine().getStatusCode() == 200) {
+                    StringBuilder sb = new StringBuilder();
 
-                OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
-                writeStream(out, body);
-
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                response = Util.readDataFromInputStream(in);
-
+                    BufferedReader reader =
+                            new BufferedReader(new InputStreamReader(
+                                    responseHttp.getEntity().getContent()));
+                    String resp = null;
+                    while ((resp = reader.readLine()) != null) {
+                        sb.append(resp);
+                    }
+                    response = sb.toString();
+                }
+                // write response to log
+                Log.d("Http Post Response:", responseHttp.toString());
             } catch (ClientProtocolException e) {
-                // TODO Auto-generated catch block
+                // Log exception
                 e.printStackTrace();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
+                // Log exception
                 e.printStackTrace();
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
             }
 
             if (response != null && response.equalsIgnoreCase("Notification Sent")) {
                 Log.i("HeartbeatService", response);
             } else {
-                Log.i("HeartbeatService", "Notification Not Sent: "+response);
+                Log.i("HeartbeatService", "Notification Not Sent: " + response);
             }
         }
-
-        private void writeStream(OutputStream stream, String body)
-                throws IOException {
-
-            OutputStream out = new BufferedOutputStream(stream);
-
-            if (body != null) {
-                out.write(URLEncoder.encode(body, "UTF-8")
-                        .getBytes());
-            }
-            out.flush();
-        }
     }
-
-    public final class ChangeStatusRequestListener implements RequestListener<String> {
-
-        private String TAG = "ChangeStatusRequestListener";
-
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-//            progressDialog.dismiss();
-        }
-
-        @Override
-        public void onRequestSuccess(final String baseResponse) {
-            Log.d(TAG, "statuschange " + "changed");
-
-//            DoctorApplication.lastAvailablityStaus = status ;
-        }
-    }
-
-    private SpiceManager spiceManager = new SpiceManager(RoboEcareSpiceServices.class);
-
-    public SpiceManager getSpiceManager() {
-        if (!spiceManager.isStarted()) {
-            spiceManager.start(this);
-        }
-        return spiceManager;
-    }
-
 }
