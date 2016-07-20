@@ -13,7 +13,10 @@ public class GetDoctorRequest extends RetrofitSpiceRequest<GetDoctorResponse, Ec
     int doctorId;
 
 
-    public GetDoctorRequest() {
+    public GetDoctorRequest(int doctorId) {
+        super(GetDoctorResponse.class, EcareZoneApi.class);
+        this.doctorId = doctorId;
+    }  public GetDoctorRequest() {
         super(GetDoctorResponse.class, EcareZoneApi.class);
      }
 

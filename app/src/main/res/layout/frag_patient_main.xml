@@ -220,16 +220,102 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
                     android:text="@string/home_user_message"
+                    android:gravity="center_horizontal"
                     android:textColor="@color/ecarezone_blue_light"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/ecarezone_gray"/>
+
+
+                <LinearLayout
+                    android:id="@+id/doctor_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <com.ecarezone.android.patient.view.CircleImageView
+                        android:id="@+id/doctor_avatar"
+                        android:layout_width="@dimen/profile_thumbnail_edge_size"
+                        android:layout_height="@dimen/profile_thumbnail_edge_size"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/dr_john_photo"></com.ecarezone.android.patient.view.CircleImageView>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:weightSum="1">
+
+                            <TextView
+                                android:id="@+id/doctor_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@string/doctor_name1"
+                                android:textColor="@color/text_blue_color_selector"
+                                android:textSize="20sp"
+                                android:layout_weight="1"/>
+
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/doctor_type"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/doctor_type1"
+                            android:textColor="@color/text_blue_color_selector"
+                            android:textSize="14sp" />
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/ecarezone_gray"/>
 
                 <Button
                     android:id="@+id/viewDoctorProfile"
                     style="@style/EcareZoneGreenBorderButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:padding="10dp"
                     android:minWidth="128dp"
                     android:text="@string/home_see_profile" />
 

@@ -186,11 +186,11 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             doctorStatusText.setText(R.string.doctor_available);
             doctorStatusIcon.setImageResource(R.drawable.circle_green);
         } else if (doctor.status.equalsIgnoreCase(String.valueOf(Constants.OFFLINE))) {
-            doctorStatusText.setText(R.string.doctor_idle);
-            doctorStatusIcon.setImageResource(R.drawable.circle_amber);
-        } else {
             doctorStatusText.setText(R.string.doctor_busy);
             doctorStatusIcon.setImageResource(R.drawable.circle_red);
+        } else {
+            doctorStatusText.setText(R.string.doctor_idle);
+            doctorStatusIcon.setImageResource(R.drawable.circle_amber);
         }
     }
 
@@ -402,7 +402,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             doctorStatusIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.circle_green));
             doctorVideo.setEnabled(true);
             doctorVoice.setEnabled(true);
-        } else if (status.equalsIgnoreCase(Constants.BUSY) || status.equalsIgnoreCase("0")) {
+        } else if (status.equalsIgnoreCase(Constants.OFFLINE_TEXT) || status.equalsIgnoreCase("0")) {
             doctorStatusIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.circle_red));
             doctorVideo.setEnabled(false);
             doctorVoice.setEnabled(false);
@@ -577,12 +577,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                         if (docId > -1) {
 
                             if (doctor.doctorId == docId) {
-                                if (statusArr[2].trim().equalsIgnoreCase("online")) {
-                                    doctor.status = String.valueOf(Constants.ONLINE);
-                                } else {
-                                    doctor.status = String.valueOf(Constants.OFFLINE);
-                                }
-                                setDoctorStatus();
+                                  doctor.status = statusArr[2];
+                                  setDoctorStatus();
                             }
                         }
                     }

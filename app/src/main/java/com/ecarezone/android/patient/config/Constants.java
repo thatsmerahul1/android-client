@@ -36,6 +36,7 @@ public class Constants {
 
     public static String AVAILABLE = "available";
     public static String BUSY = "busy";
+    public static String OFFLINE_TEXT = "offline";
     public static String IDLE_TEXT = "idle";
 
     public static String EXTRA_EMAIL ="email";

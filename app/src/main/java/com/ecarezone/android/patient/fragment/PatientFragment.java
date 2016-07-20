@@ -34,11 +34,13 @@ import com.ecarezone.android.patient.model.Appointment;
 import com.ecarezone.android.patient.model.AppointmentAcceptRequest;
 import com.ecarezone.android.patient.model.AppointmentResponse;
 import com.ecarezone.android.patient.model.Doctor;
+import com.ecarezone.android.patient.model.User;
 import com.ecarezone.android.patient.model.UserProfile;
 import com.ecarezone.android.patient.model.database.AppointmentDbApi;
 import com.ecarezone.android.patient.model.database.ChatDbApi;
 import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 import com.ecarezone.android.patient.model.database.ProfileDbApi;
+import com.ecarezone.android.patient.model.database.UserTable;
 import com.ecarezone.android.patient.model.rest.DeleteAppointmentRequest;
 import com.ecarezone.android.patient.model.rest.GetDoctorRequest;
 import com.ecarezone.android.patient.model.rest.GetDoctorResponse;
@@ -82,7 +84,10 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
     private SimpleDateFormat sdf;
     private ProgressDialog progressDialog;
     private long currentAppointmentId;
-
+    TextView docName;
+    TextView docCategory;
+    Doctor doctor;
+    ImageView image;
     /*Empty fragment*/
     public PatientFragment() {
     }
@@ -110,6 +115,9 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
         //TODO hide or show this recommended doctor layout based on data.
         //recommendedDoctorLayout.setVisibility(View.GONE);
         Button viewDoctorProfileButton = (Button) view.findViewById(R.id.viewDoctorProfile);
+        docName = (TextView) view.findViewById(R.id.doctor_name);
+        docCategory = (TextView) view.findViewById(R.id.doctor_type);
+        image = (ImageView) view.findViewById(R.id.doctor_avatar);
         viewDoctorProfileButton.setOnClickListener(this);
 
         sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -131,6 +139,15 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
                 intentFilter);
 
         populateAppointmentsFromDatabase();
+        //to get recommanded doctor in home page
+        UserTable user = new UserTable(getActivity());
+        User userdata = user.getUserData(String.valueOf(LoginInfo.userId));
+        if (NetworkCheck.isNetworkAvailable(getActivity())) {
+             GetDoctorRequest request = new GetDoctorRequest(userdata.recommandedDoctorId);
+             getSpiceManager().execute(request, new RecommendedDoctor());
+        } else {
+            Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+        }
         return view;
     }
 
@@ -221,17 +238,19 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
         SharedPreferences sharedPreferences =
                 getApplicationContext().getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         Set<String> categorySet = sharedPreferences.getStringSet(Constants.NEWS_MESSAGE_CATEGORY_SET_KEY, null);
-        int totalUnreadNewsCount = 0;
-        for(String key : categorySet){
+        if(categorySet != null) {
+            int totalUnreadNewsCount = 0;
+            for (String key : categorySet) {
 
-            totalUnreadNewsCount += sharedPreferences.getInt(Constants.NEWS_CATEGORY_PREPEND_STRING+key, 0);
+                totalUnreadNewsCount += sharedPreferences.getInt(Constants.NEWS_CATEGORY_PREPEND_STRING + key, 0);
 
-        }
-        if (totalUnreadNewsCount < 1) {
-            mHomeNewsIndicator.setVisibility(View.INVISIBLE);
-        } else {
-            mHomeNewsIndicator.setText(String.valueOf(totalUnreadNewsCount));
-            mHomeNewsIndicator.setVisibility(View.VISIBLE);
+            }
+            if (totalUnreadNewsCount < 1) {
+                mHomeNewsIndicator.setVisibility(View.INVISIBLE);
+            } else {
+                mHomeNewsIndicator.setText(String.valueOf(totalUnreadNewsCount));
+                mHomeNewsIndicator.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -282,14 +301,11 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
                 ((MainActivity) getActivity()).onNavigationChanged(R.layout.frag_doctor_list, null);
                 break;
             case R.id.viewDoctorProfile:
-                // TODO call the doctor profile activity.
-//                ((MainActivity) getActivity()).onNavigationChanged(R.layout.frag_doctor_list, null);
-                if (NetworkCheck.isNetworkAvailable(getActivity())) {
-                    GetDoctorRequest request = new GetDoctorRequest();
-                    getSpiceManager().execute(request, new RecommendedDoctor());
-                } else {
-                    Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
-                }
+                Intent showDoctorIntent = new Intent(getActivity(), DoctorBioActivity.class);
+                Bundle data = new Bundle();
+                data.putParcelable(Constants.DOCTOR_DETAIL, doctor);
+                showDoctorIntent.putExtra(Constants.DOCTOR_BIO_DETAIL, data);
+                getActivity().startActivity(showDoctorIntent);
                 break;
             case R.id.button_finish_profile_ok:
                 ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
@@ -310,7 +326,6 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
         @Override
         public void onRequestFailure(SpiceException spiceException) {
 //            progressDialog.dismiss();
-
         }
 
         @Override
@@ -318,16 +333,20 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
 
             if (response.status != null) {
                 if (response.status.code == 200) {
-                    final Activity activity = getActivity();
+                    doctor = response.data;
+                    docName.setText(doctor.name);
+                    docCategory.setText(WordUtils.capitalize(doctor.doctorCategory));
+                    String imageUrl = doctor.avatarUrl;
+                    int dp = getActivity().getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
 
-                    Intent showDoctorIntent = new Intent(activity.getApplicationContext(), DoctorBioActivity.class);
-                    Doctor doctor = response.data;
-                    Bundle data = new Bundle();
-                    data.putParcelable(Constants.DOCTOR_DETAIL, doctor);
-
-                    showDoctorIntent.putExtra(Constants.DOCTOR_BIO_DETAIL, data);
-                    activity.startActivity(showDoctorIntent);
-                }
+                    if (imageUrl != null && imageUrl.trim().length() > 8) {
+                        Picasso.with(getActivity())
+                                .load(imageUrl).resize(dp, dp)
+                                .centerCrop().placeholder(R.drawable.news_other)
+                                .error(R.drawable.news_other)
+                                .into(image);
+                    }
+                 }
             }
         }
     }

@@ -157,7 +157,7 @@
     <string name="doctor_type1">Cardiologist</string>
     <string name="doctor_type2">General practitioner</string>
     <string name="doctor_available">Available</string>
-    <string name="doctor_busy">Busy</string>
+    <string name="doctor_busy">Offline</string>
     <string name="doctor_idle">Idle</string>
     <string name="doctor_search">Search</string>
     <string name="doctor_search_hint_text">Search doctors</string>
@@ -189,8 +189,8 @@
     <!-- Home -->
     <string name="home_last_news_feed">The latest news feed</string>
     <string name="home_new_messages">New messages</string>
-    <string name="home_user_message">Hi,\n\nWe have new doctor recommended for your case!</string>
-    <string name="home_see_profile">See profile</string>
+    <string name="home_user_message">New doctor recommanded for you.</string>
+    <string name="home_see_profile">See Doctor\'s bio</string>
 
     <!-- Doctor details -->
     <string name="doctor_details_chat">Chat</string>

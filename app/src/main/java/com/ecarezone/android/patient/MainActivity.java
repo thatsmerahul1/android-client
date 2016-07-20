@@ -170,7 +170,7 @@ public class MainActivity extends EcareZoneBaseActivity {
 
     private void initStatus() {
         PatientApplication doctorApplication = (PatientApplication) getApplicationContext();
-        doctorApplication.setLastAvailabilityStatus(1);
+        doctorApplication.setLastAvailabilityStatus(Constants.ONLINE);
         HashMap<String, Boolean> statusMap = doctorApplication.getNameValuePair();
         statusMap.put(Constants.STATUS_CHANGE, true);
         doctorApplication.setStatusNameValuePair(statusMap);

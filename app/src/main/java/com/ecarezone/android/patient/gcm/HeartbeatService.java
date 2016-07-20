@@ -9,46 +9,29 @@ import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.UserProfile;
 import com.ecarezone.android.patient.model.database.ProfileDbApi;
-import com.ecarezone.android.patient.service.RoboEcareSpiceServices;
-import com.ecarezone.android.patient.utils.Util;
-import com.octo.android.robospice.SpiceManager;
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
 
 import ch.boye.httpclientandroidlib.HttpEntity;
 import ch.boye.httpclientandroidlib.HttpResponse;
-import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.client.ClientProtocolException;
 import ch.boye.httpclientandroidlib.client.HttpClient;
-import ch.boye.httpclientandroidlib.client.entity.UrlEncodedFormEntity;
 import ch.boye.httpclientandroidlib.client.methods.HttpPost;
 import ch.boye.httpclientandroidlib.entity.ByteArrayEntity;
-import ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
 import ch.boye.httpclientandroidlib.impl.client.HttpClientBuilder;
-import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
-import ch.boye.httpclientandroidlib.protocol.HTTP;
 
 /**
  * Created by Umesh on 27-06-2016.
  */
 public class HeartbeatService extends IntentService {
+
+    PatientApplication patientApplication;
+    int status;
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      */
@@ -69,9 +52,9 @@ public class HeartbeatService extends IntentService {
             Log.i("HeartbeatService", "Heartbeat sent to GCM");
         }
         if (intent.getBooleanExtra(Constants.UPDATE_STATUS, false)) {
-            PatientApplication patientApplication = (PatientApplication) getApplicationContext();
+            patientApplication = (PatientApplication) getApplicationContext();
 
-            int status;
+
             if (patientApplication.getNameValuePair().containsKey(Constants.STATUS_CHANGE)) {
                 if (!patientApplication.getNameValuePair().get(Constants.STATUS_CHANGE)) {
                     status = Constants.IDLE;
@@ -87,7 +70,6 @@ public class HeartbeatService extends IntentService {
                 patientApplication.getNameValuePair().put(Constants.STATUS_CHANGE, false);
                 status = Constants.ONLINE;
             }
-            patientApplication.setLastAvailabilityStatus(status);
 
 
             Log.i("HeartbeatService", "status updated");
@@ -163,6 +145,8 @@ public class HeartbeatService extends IntentService {
 
             if (response != null && response.equalsIgnoreCase("Notification Sent")) {
                 Log.i("HeartbeatService", response);
+                patientApplication.setLastAvailabilityStatus(status);
+
             } else {
                 Log.i("HeartbeatService", "Notification Not Sent: " + response);
             }

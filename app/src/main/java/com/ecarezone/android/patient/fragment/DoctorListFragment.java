@@ -459,6 +459,8 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         }
     }
 
+    /* BroadcastReceiver receiver that updates the chat count or
+           * changes the availability status */
     BroadcastReceiver message = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -469,6 +471,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                 recommendedDoctorAdapter.notifyDataSetChanged();
             }
             if (intent.getAction().equalsIgnoreCase(Constants.BROADCAST_STATUS_CHANGED)) {
+//               Doctor, 247,2
                 String statusTxt = intent.getStringExtra(Constants.SET_STATUS);
                 if (statusTxt != null) {
                     String[] statusArr = statusTxt.split(",");
@@ -480,14 +483,12 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                             nfe.printStackTrace();
                         }
                         if (docId > -1) {
-                            for (Doctor doctorItem : doctorList) {
-                                if (doctorItem.doctorId == docId) {
-                                    if (statusArr[2].trim().equalsIgnoreCase("online")) {
-                                        doctorItem.status = "1";
-                                    } else {
-                                        doctorItem.status = "0";
+                            if(doctorList != null) {
+                                for (Doctor doctorItem : doctorList) {
+                                    if (doctorItem.doctorId == docId) {
+                                        doctorItem.status = statusArr[2];
+                                        break;
                                     }
-                                    break;
                                 }
                             }
                         }
