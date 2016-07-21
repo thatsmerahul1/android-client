@@ -37,7 +37,8 @@ public class PatientApplication extends Application {
 
             @Override
             public void onAirshipReady(UAirship uAirship) {
-                uAirship.getPushManager().setUserNotificationsEnabled(true);
+//                do not show notification in the notification tray
+                uAirship.getPushManager().setUserNotificationsEnabled(false);
             }
 
         });

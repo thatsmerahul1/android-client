@@ -2,14 +2,25 @@
 
 package com.ecarezone.android.patient.gcm;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.ecarezone.android.patient.ChatActivity;
+import com.ecarezone.android.patient.NewsListActivity;
+import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.config.Constants;
+import com.ecarezone.android.patient.model.Doctor;
+import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
+import com.sinch.android.rtc.messaging.Message;
 import com.urbanairship.AirshipReceiver;
 import com.urbanairship.push.PushMessage;
 
@@ -58,6 +69,9 @@ public class EcareZoneAirshipReceiver extends AirshipReceiver {
                 Intent intent = new Intent(Constants.PUSH_NEWS_UPDATE);
                 intent.putExtra(Constants.NEWS_MESSAGE, message.getAlert());
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+                showNotification(context, message.getAlert());
+
             }
             else if(message.getAlert().startsWith("Doctor")){
                 Intent intent = new Intent(Constants.BROADCAST_STATUS_CHANGED);
@@ -65,6 +79,33 @@ public class EcareZoneAirshipReceiver extends AirshipReceiver {
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
             }
         }
+    }
+
+    private void showNotification(Context context, String message) {
+        int notifyID = 1;
+
+        String[] category = message.split(",");
+
+        NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(context)
+                .setContentTitle("ECareZone News")
+                .setContentText("There is a news update on "+category[1])
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setDefaults(Notification.DEFAULT_SOUND)
+                .setColor(Color.BLUE)
+                .setAutoCancel(true);
+
+
+        Intent resultIntent = new Intent(context, NewsListActivity.class);
+        if (resultIntent != null) {
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                    resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mNotifyBuilder.setContentIntent(pendingIntent);
+        }
+        Notification notification = mNotifyBuilder.build();
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(notifyID, notification);
+
     }
 
     @Override

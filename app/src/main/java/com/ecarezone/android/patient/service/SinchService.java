@@ -342,7 +342,7 @@ public class SinchService extends Service {
         @Override
         public void onIncomingMessage(MessageClient messageClient, Message message) {
 
-            Log.i("inside listner", "mesaage incoming");
+            Log.i("inside listner", "message incoming");
             SinchUtil.saveIncomingChatHistory(message, getApplicationContext());
             if (mSinchServiceInterface.isMessageNotifcationRequired()) {
                 showNotification(message);
@@ -413,7 +413,7 @@ public class SinchService extends Service {
         messageClientList.remove(messageClientListener);
     }
 
-    /*Show the notfication while the user is offline*/
+    /*Show the notification while the user is in an idle state*/
     private void showNotification(Message message) {
         int notifyID = 1;
         DoctorProfileDbApi profileDbApi = DoctorProfileDbApi.getInstance(this);
