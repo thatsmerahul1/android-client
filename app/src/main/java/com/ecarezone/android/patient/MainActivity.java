@@ -2,14 +2,17 @@ package com.ecarezone.android.patient;
 
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -235,7 +238,8 @@ public class MainActivity extends EcareZoneBaseActivity {
             onNavigationChanged(isWelcomeMainRequired ? R.layout.frag_patient_main : R.layout.frag_welcome, null);
             isBackStackRequired = false;
         } else {
-            super.onBackPressed();
+//            super.onBackPressed();
+            moveTaskToBack(true);
         }
 
     }
@@ -358,5 +362,4 @@ public class MainActivity extends EcareZoneBaseActivity {
         super.onStop();
         Util.changeStatus(false, this);
     }
-
 }

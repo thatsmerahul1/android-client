@@ -18,6 +18,7 @@ import com.ecarezone.android.patient.ChatActivity;
 import com.ecarezone.android.patient.NewsListActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.config.Constants;
+import com.ecarezone.android.patient.fragment.NewsCategoriesFragment;
 import com.ecarezone.android.patient.model.Doctor;
 import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 import com.sinch.android.rtc.messaging.Message;
@@ -97,6 +98,7 @@ public class EcareZoneAirshipReceiver extends AirshipReceiver {
 
         Intent resultIntent = new Intent(context, NewsListActivity.class);
         if (resultIntent != null) {
+            resultIntent.putExtra(NewsCategoriesFragment.NEWS_CATEGORY_NAME, category[1]);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
                     resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             mNotifyBuilder.setContentIntent(pendingIntent);
