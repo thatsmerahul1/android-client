@@ -34,21 +34,13 @@ public class RegistrationAdapter extends ArrayAdapter<String> {
         this.items = items;
         this.itemCodes = itemCodes;
         this.country = country;
-        this.mCountry = code;
 
         mLanguageArr = context.getResources().getStringArray(R.array.language_local_array);
         mCountryArr = context.getResources().getStringArray(R.array.country_code_array);
         //for distinguishing from registration or from settings page
-        if(mCountry.equalsIgnoreCase("")) {
-            SharedPreferences langPreferences = context.getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
-            mLanguage = langPreferences.getString(Constants.LANGUAGE, "");
-        } else {
+        if(!country) {
             mLanguage = code;
-        }
-        if(mCountry.equalsIgnoreCase("")) {
-            SharedPreferences countryPreferences = context.getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
-            mCountry = countryPreferences.getString(Constants.COUNTRY, "");
-        }else {
+        } else {
             mCountry = code;
         }
     }
