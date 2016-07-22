@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.ecarezone.android.patient.config.Constants;
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.rest.UpdatePasswordRequest;
 import com.ecarezone.android.patient.model.rest.base.BaseResponse;
@@ -143,12 +144,12 @@ public class UpdatePasswordActivity extends EcareZoneBaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Util.changeStatus(true, this);
+        Util.changeStatus(Constants.ONLINE, this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Util.changeStatus(false, this);
+        Util.changeStatus(Constants.IDLE, this);
     }
 }

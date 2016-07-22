@@ -56,18 +56,19 @@ public class HeartbeatService extends IntentService {
 
 
             if (patientApplication.getNameValuePair().containsKey(Constants.STATUS_CHANGE)) {
-                if (!patientApplication.getNameValuePair().get(Constants.STATUS_CHANGE)) {
-                    status = Constants.IDLE;
-                } else {
-                    status = Constants.ONLINE;
-                }
+                int state;
+//                if ( patientApplication.getNameValuePair().get(Constants.STATUS_CHANGE)) {
+//                    status = Constants.IDLE;
+//                } else {
+//                    status = Constants.ONLINE;
+//                }
 
-                if (patientApplication.getLastAvailabilityStatus() != status) {
-                    ChangeStatusRequest changeStatusService = new ChangeStatusRequest(status);
+                if (patientApplication.getLastAvailabilityStatus() != patientApplication.getNameValuePair().get(Constants.STATUS_CHANGE)) {
+                    ChangeStatusRequest changeStatusService = new ChangeStatusRequest(patientApplication.getNameValuePair().get(Constants.STATUS_CHANGE));
                     changeStatusService.startHttpRequest();
                 }
             } else {
-                patientApplication.getNameValuePair().put(Constants.STATUS_CHANGE, false);
+                patientApplication.getNameValuePair().put(Constants.STATUS_CHANGE, patientApplication.getNameValuePair().get(Constants.STATUS_CHANGE));
                 status = Constants.ONLINE;
             }
 

@@ -65,8 +65,17 @@ public class MainActivity extends EcareZoneBaseActivity {
     private boolean isWelcomeMainRequired;
     private PatientFragment mPatientFragment;
     int status = 1;
+    static boolean from =false;
 
     public static final long DISCONNECT_TIMEOUT = 60000; // 1 min = 1 * 60 * 1000 ms
+
+    public static boolean getStatus() {
+        return from;
+    }
+
+    public void setStatus(boolean status) {
+        this.from = status;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,8 +180,8 @@ public class MainActivity extends EcareZoneBaseActivity {
     private void initStatus() {
         PatientApplication doctorApplication = (PatientApplication) getApplicationContext();
         doctorApplication.setLastAvailabilityStatus(Constants.ONLINE);
-        HashMap<String, Boolean> statusMap = doctorApplication.getNameValuePair();
-        statusMap.put(Constants.STATUS_CHANGE, true);
+        HashMap<String, Integer> statusMap = doctorApplication.getNameValuePair();
+        statusMap.put(Constants.STATUS_CHANGE, status);
         doctorApplication.setStatusNameValuePair(statusMap);
 
         Intent intent = new Intent(this, HeartbeatService.class);
@@ -350,13 +359,17 @@ public class MainActivity extends EcareZoneBaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Util.changeStatus(true, this);
+        Util.changeStatus(Constants.ONLINE, this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Util.changeStatus(false, this);
+        if(getStatus()){
+            Util.changeStatus(Constants.OFFLINE, this);
+        } else {
+            Util.changeStatus(Constants.IDLE, this);
+        }
     }
 
 }

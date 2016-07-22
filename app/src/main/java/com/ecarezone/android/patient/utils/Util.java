@@ -53,13 +53,13 @@ public class Util {
      * @param status
      * @param context
      */
-    public static void changeStatus(boolean status, Context context){
+    public static void changeStatus(Integer status, Context context){
         if(System.currentTimeMillis() - LAST_STATUS_CHANGE_TIME > 2000) {
             LAST_STATUS_CHANGE_TIME = System.currentTimeMillis();
             PatientApplication globalVariable = (PatientApplication) context.getApplicationContext();
             if(globalVariable.getNameValuePair() != null) {
                 if(globalVariable.getNameValuePair().containsKey(Constants.STATUS_CHANGE)) {
-                    boolean lastState = globalVariable.getNameValuePair().get(Constants.STATUS_CHANGE);
+                    Integer lastState = globalVariable.getNameValuePair().get(Constants.STATUS_CHANGE);
                     if (status != lastState) {
                         globalVariable.getNameValuePair().put(Constants.STATUS_CHANGE, status);
                         Intent intent = new Intent(context, HeartbeatService.class);

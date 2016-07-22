@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.ecarezone.android.patient.MainActivity;
 import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.RegistrationActivity;
@@ -37,6 +38,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
         FragmentManager.OnBackStackChangedListener {
     public static final String FRAGMENT_NAME="fragmentName";
     private ProgressDialog progressDialog;
+    MainActivity main = new MainActivity();
 
     @Override
     protected String getCallerName() {
@@ -72,7 +74,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
         mLogout.setOnNavigationItemClickListener(this);
         mHome.highlightItem(true);
         highlightNavigationItem(null);
-
+        main.setStatus(false);
         return view;
     }
 
@@ -111,6 +113,8 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
                 new LoginRequest(LoginInfo.userName, null, 1, null, null, null, null);
         getSpiceManager().execute(request, new LogoutRequestListener());
 
+
+        main.setStatus(true);
         /* TODO */
         // change status to offline
     }
