@@ -159,7 +159,7 @@ public class Util {
                     try {
                         alarmManager.cancel(pendingUpdateIntent);
                     } catch (Exception e) {
-                        Log.e("Appointment alarm", "AlarmManager update was not canceled. " + e.toString());
+                        Log.e("Appointment alarm", "AlarmManager update was not cancelled. " + e.toString());
                     }
 
                     alarmManager.set(AlarmManager.RTC_WAKEUP,

@@ -17,24 +17,26 @@ public class AppointmentAlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-       String doctorName = intent.getStringExtra("doctor_name");
-       String appointment_type = intent.getStringExtra("appointment_type");
-       int docId = intent.getIntExtra("docId", 0);
+        if(intent.getAction().equalsIgnoreCase("START_ALARM")) {
+            String doctorName = intent.getStringExtra("doctor_name");
+            String appointment_type = intent.getStringExtra("appointment_type");
+            int docId = intent.getIntExtra("docId", 0);
 
 
-        NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(context)
-                .setContentTitle(context.getString(R.string.apointment_with_dr) + doctorName)
-                .setContentText(context.getString(R.string.you_have_an)+
-                        appointment_type+" "+context.getString(R.string.apointment_with_dr)+doctorName)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setDefaults(Notification.DEFAULT_SOUND)
-                .setColor(Color.BLUE)
-                .setAutoCancel(true);
+            NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(context)
+                    .setContentTitle(context.getString(R.string.apointment_with_dr) + doctorName)
+                    .setContentText(context.getString(R.string.you_have_an) +
+                            appointment_type + " " + context.getString(R.string.apointment_with_dr) + doctorName)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setDefaults(Notification.DEFAULT_SOUND)
+                    .setColor(Color.BLUE)
+                    .setAutoCancel(true);
 
-        Notification notification = mNotifyBuilder.build();
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(docId, notification);
+            Notification notification = mNotifyBuilder.build();
+            notification.flags |= Notification.FLAG_AUTO_CANCEL;
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(docId, notification);
+        }
 
     }
 }

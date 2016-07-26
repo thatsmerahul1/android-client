@@ -152,7 +152,12 @@
         <receiver
             android:name=".utils.AppointmentAlarmReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="START_ALARM" >
+                </action>
+            </intent-filter>
+        </receiver>
         <receiver
             android:name=".gcm.HeartBeatReceiver"
             android:enabled="true" />
