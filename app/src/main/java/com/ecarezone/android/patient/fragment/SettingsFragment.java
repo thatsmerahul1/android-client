@@ -205,6 +205,9 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         FragmentManager fm = getFragmentManager();
         Bundle bun = new Bundle();
         bun.putString(Constants.TYPE, type);
+        bun.putString(Constants.COUNTRY, String.valueOf(mSpinnerCountry.getTag()));
+        bun.putString(Constants.LANGUAGE, String.valueOf(mSpinnerLanguage.getTag()));
+        bun.putBoolean("From", true);  //for distinguishing from registration or from settings page
         if (type.equalsIgnoreCase(Constants.COUNTRY)) {
             regFragment.setTargetFragment(this, COUNTRY_RESULT);
         } else {

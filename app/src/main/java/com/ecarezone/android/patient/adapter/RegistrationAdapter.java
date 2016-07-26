@@ -27,7 +27,7 @@ public class RegistrationAdapter extends ArrayAdapter<String> {
     private String mCountry;
     private boolean country;
 
-    public RegistrationAdapter(Context context, int resource, String[] items, String[] itemCodes, boolean country) {
+    public RegistrationAdapter(Context context, int resource, String[] items, String[] itemCodes, boolean country, String code) {
         super(context, resource, items);
         this.context = context;
         this.resource = resource;
@@ -37,11 +37,12 @@ public class RegistrationAdapter extends ArrayAdapter<String> {
 
         mLanguageArr = context.getResources().getStringArray(R.array.language_local_array);
         mCountryArr = context.getResources().getStringArray(R.array.country_code_array);
-
-        SharedPreferences langPreferences = context.getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
-        mLanguage = langPreferences.getString(Constants.LANGUAGE, "");
-        SharedPreferences countryPreferences = context.getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
-        mCountry = countryPreferences.getString(Constants.COUNTRY, "");
+        //for distinguishing from registration or from settings page
+        if(!country) {
+            mLanguage = code;
+        } else {
+            mCountry = code;
+        }
     }
 
     @Override

@@ -52,15 +52,13 @@ public class RegistrationDialogFragment extends DialogFragment implements View.O
             listview_registration = (ListView) v.findViewById(R.id.lisview_registration);
             String[] contries = getResources().getStringArray(R.array.country_array);
             String[] contryCodes = getResources().getStringArray(R.array.country_code_array);
-            adapter = new RegistrationAdapter(getActivity(), R.layout.country_spinner_item, contries, contryCodes, true);
-
-        } else {
+            adapter = new RegistrationAdapter(getActivity(), R.layout.country_spinner_item, contries, contryCodes, true, getArguments().getString(Constants.COUNTRY));
+          } else {
             title.setText(R.string.settings_language);
             listview_registration = (ListView) v.findViewById(R.id.lisview_registration);
             String[] languages = getResources().getStringArray(R.array.language_array);
             String[] languageCodes = getResources().getStringArray(R.array.language_local_array);
-            adapter = new RegistrationAdapter(getActivity(), R.layout.country_spinner_item, languages, languageCodes, false);
-
+            adapter = new RegistrationAdapter(getActivity(), R.layout.country_spinner_item, languages, languageCodes, false, getArguments().getString(Constants.LANGUAGE));
         }
         listview_registration.setAdapter(adapter);
         listview_registration.setOnItemClickListener(new AdapterView.OnItemClickListener() {

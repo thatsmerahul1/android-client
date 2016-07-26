@@ -493,7 +493,9 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                             }
                         }
                     }
-                    mycareDoctorAdapter.notifyDataSetChanged();
+                    if(mycareDoctorAdapter != null) {
+                        mycareDoctorAdapter.notifyDataSetChanged();
+                    }
                 }
             }
         }

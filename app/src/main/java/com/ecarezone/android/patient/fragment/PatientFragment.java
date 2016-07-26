@@ -601,7 +601,7 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
 
                 if (doctor != null) {
 
-                    appointmentPatientName.setText("Patient: " + doctor.name);
+                    appointmentPatientName.setText("Doctor: " + doctor.name);
                     appointmentPendingTime.setText(
                             sdf.format(new Date(Util.getTimeInLongFormat(appointmentResponse.dateTime.trim()))));
                     appointmentTypeOfCall.setText(WordUtils.capitalize(appointmentResponse.callType) + " call");
