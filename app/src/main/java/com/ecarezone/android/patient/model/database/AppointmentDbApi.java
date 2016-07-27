@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by 10603675 on 25-05-2016.
@@ -196,8 +197,9 @@ public class AppointmentDbApi {
             if (appointmentList != null) {
                 for (Appointment appointment : appointmentList) {
                     long appointmentTime = Util.getTimeInLongFormat(appointment.getTimeStamp());
+                    long appointmentEndTime = appointmentTime + 30 * 60 * 1000;
 
-                    if (startDate.getTime() < appointmentTime) {
+                    if (/*startDate.getTime() < appointmentTime && */startDate.getTime() < appointmentEndTime) {
                         appointment.setDateTimeInLong(appointmentTime);
                         retAppointmentList.add(appointment);
                     }
@@ -263,7 +265,34 @@ public class AppointmentDbApi {
         }
         return null;
     }
+    public List<Appointment> getAllPendingAppointments(Date currentTime) {
+        List<Appointment> appointmentList = null;
+        List<Appointment> retAppointmentList = new ArrayList<Appointment>();
+        try {
+            Dao<Appointment, Integer> appointmentDao = mDbHelper.getAppointmentDao();
+            QueryBuilder<Appointment, Integer> queryBuilder = appointmentDao.queryBuilder();
+            queryBuilder.where()
+                    .eq(DbContract.Appointments.COLUMN_NAME_IS_CONFIRMED, false);
+            queryBuilder.orderBy(DbContract.Appointments.COLUMN_NAME_APPOINTMENT_ID, true);
+            appointmentList = queryBuilder.query();
+            if (appointmentList != null) {
+                for (Appointment appointment : appointmentList) {
+                    long appointmentTime = Util.getTimeInLongFormat(appointment.getTimeStamp());
 
+                    if (currentTime.getTime() < appointmentTime) {
+                        appointment.setDateTimeInLong(appointmentTime);
+                        retAppointmentList.add(appointment);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Collections.sort(retAppointmentList);
+        return retAppointmentList;
+    }
     public List<Appointment> getAllAppointments() {
         try {
             Dao<Appointment, Integer> appointmentDao = mDbHelper.getAppointmentDao();

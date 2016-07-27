@@ -149,6 +149,7 @@ public class Util {
                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
                     Intent appointmentIntent = new Intent(context, AppointmentAlarmReceiver.class);
+                    appointmentIntent.setAction("START_ALARM");
                     appointmentIntent.putExtra("doctor_name", "");
                     appointmentIntent.putExtra("appointment_type", app.getCallType());
                     appointmentIntent.putExtra("docId", app.getDoctorId());

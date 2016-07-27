@@ -152,9 +152,9 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
     }
 
     private void populateAppointmentsFromDatabase() {
-
+        Date currentDate = new Date();
         AppointmentDbApi appointmentDbi = AppointmentDbApi.getInstance(getApplicationContext());
-        List<Appointment> appointmentList = appointmentDbi.getAllPendingAppointments();
+        List<Appointment> appointmentList = appointmentDbi.getAllPendingAppointments(currentDate);
         List<AppointmentResponse> appointmentResponse = Util.getAppointmentResponseList(appointmentList);
         if (appointmentResponse != null) {
             populatePendingAppointmentList(appointmentResponse);

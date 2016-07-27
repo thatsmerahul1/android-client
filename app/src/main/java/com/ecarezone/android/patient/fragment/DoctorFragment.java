@@ -279,28 +279,30 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         if (obj != null) {
             if (obj instanceof String) {
                 String tagValue = ((String) obj);
-                if ((tagValue).equalsIgnoreCase("make_appointment")) {
-                    bundle.putBoolean("isAppointmentAvailable", false);
-                    bundle.putBoolean("isTimeToCall", false);
-                } else if ((tagValue).equalsIgnoreCase("timeToCall")) {
-                    bundle.putBoolean("isAppointmentAvailable", true);
-                    bundle.putBoolean("isTimeToCall", true);
-                    if (typeOfCall == getResources().getInteger(R.integer.video_call_value)) {
-                        bundle.putString("callType", currentVideoAppointment.getCallType());
-                        bundle.putLong("dateTime", currentVideoAppointment.getDateTimeInLong());
-                    } else {
-                        bundle.putString("callType", currentVoipAppointment.getCallType());
-                        bundle.putLong("dateTime", currentVoipAppointment.getDateTimeInLong());
-                    }
-                } else if ((tagValue).equalsIgnoreCase("editAppointment")) {
-                    bundle.putBoolean("isAppointmentAvailable", true);
-                    bundle.putBoolean("isTimeToCall", false);
-                    if (typeOfCall == getResources().getInteger(R.integer.video_call_value)) {
-                        bundle.putString("callType", currentVideoAppointment.getCallType());
-                        bundle.putLong("dateTime", currentVideoAppointment.getDateTimeInLong());
-                    } else {
-                        bundle.putString("callType", currentVoipAppointment.getCallType());
-                        bundle.putLong("dateTime", currentVoipAppointment.getDateTimeInLong());
+                if(currentVideoAppointment != null || currentVoipAppointment != null) {
+                    if ((tagValue).equalsIgnoreCase("make_appointment")) {
+                        bundle.putBoolean("isAppointmentAvailable", false);
+                        bundle.putBoolean("isTimeToCall", false);
+                    } else if ((tagValue).equalsIgnoreCase("timeToCall")) {
+                        bundle.putBoolean("isAppointmentAvailable", true);
+                        bundle.putBoolean("isTimeToCall", true);
+                        if (typeOfCall == getResources().getInteger(R.integer.video_call_value)) {
+                            bundle.putString("callType", currentVideoAppointment.getCallType());
+                            bundle.putLong("dateTime", currentVideoAppointment.getDateTimeInLong());
+                        } else {
+                            bundle.putString("callType", currentVoipAppointment.getCallType());
+                            bundle.putLong("dateTime", currentVoipAppointment.getDateTimeInLong());
+                        }
+                    } else if ((tagValue).equalsIgnoreCase("editAppointment")) {
+                        bundle.putBoolean("isAppointmentAvailable", true);
+                        bundle.putBoolean("isTimeToCall", false);
+                        if (typeOfCall == getResources().getInteger(R.integer.video_call_value)) {
+                            bundle.putString("callType", currentVideoAppointment.getCallType());
+                            bundle.putLong("dateTime", currentVideoAppointment.getDateTimeInLong());
+                        } else {
+                            bundle.putString("callType", currentVoipAppointment.getCallType());
+                            bundle.putLong("dateTime", currentVoipAppointment.getDateTimeInLong());
+                        }
                     }
                 }
             }

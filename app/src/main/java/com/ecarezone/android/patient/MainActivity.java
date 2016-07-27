@@ -41,6 +41,7 @@ import com.ecarezone.android.patient.model.rest.GetAllAppointmentResponse;
 import com.ecarezone.android.patient.model.rest.ValidateAppointmentRequest;
 import com.ecarezone.android.patient.model.rest.base.BaseResponse;
 import com.ecarezone.android.patient.service.FetchAppointmentService;
+import com.ecarezone.android.patient.utils.AppointmentAlarmReceiver;
 import com.ecarezone.android.patient.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -178,7 +179,7 @@ public class MainActivity extends EcareZoneBaseActivity {
         initStatus();
         setStatusAlarm();
         Util.setAppointmentAlarm(getApplicationContext());
-    }
+     }
 
     private void initStatus() {
         PatientApplication doctorApplication = (PatientApplication) getApplicationContext();
@@ -363,6 +364,7 @@ public class MainActivity extends EcareZoneBaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        FetchAppointmentService.startActionFetchAppointment(getApplicationContext());
         Util.changeStatus(Constants.ONLINE, this);
     }
 
