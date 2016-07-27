@@ -152,7 +152,7 @@ public class Util {
                     appointmentIntent.putExtra("doctor_name", "");
                     appointmentIntent.putExtra("appointment_type", app.getCallType());
                     appointmentIntent.putExtra("docId", app.getDoctorId());
-                    PendingIntent pendingUpdateIntent = PendingIntent.getService(context, (int) app.getAppointmentId(),
+                    PendingIntent pendingUpdateIntent = PendingIntent.getBroadcast(context, (int) app.getAppointmentId(),
                             appointmentIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
                     // Cancel alarms
@@ -162,12 +162,18 @@ public class Util {
                         Log.e("Appointment alarm", "AlarmManager update was not cancelled. " + e.toString());
                     }
 
-                    alarmManager.set(AlarmManager.RTC_WAKEUP,
-                            Util.getTimeInLongFormat(app.getTimeStamp()), pendingUpdateIntent);
+                    if(android.os.Build.VERSION.SDK_INT > 18) {
+                        alarmManager.setWindow(AlarmManager.RTC_WAKEUP,
+                                Util.getTimeInLongFormat(app.getTimeStamp()), 1000L, pendingUpdateIntent);
+                    }
+                    else{
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,
+                                Util.getTimeInLongFormat(app.getTimeStamp()), pendingUpdateIntent);
+                    }
+
                 }
             }
         }
-
     }
 
     public static List<AppointmentResponse> getAppointmentResponseList(List<Appointment> appointmentList) {
