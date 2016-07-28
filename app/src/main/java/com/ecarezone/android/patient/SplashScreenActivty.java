@@ -1,20 +1,12 @@
 package com.ecarezone.android.patient;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.Window;
 
-//import com.crittercism.app.Crittercism;
 import com.ecarezone.android.patient.fragment.SplashScreenFragment;
-import com.ecarezone.android.patient.gcm.HeartBeatReceiver;
-import com.ecarezone.android.patient.utils.AppointmentAlarmReceiver;
 import com.ecarezone.android.patient.utils.SinchUtil;
+
+//import com.crittercism.app.Crittercism;
 
 
 public class SplashScreenActivty extends EcareZoneBaseActivity {

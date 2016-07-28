@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.ecarezone.android.patient.config.Constants;
@@ -16,7 +15,6 @@ import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.fragment.DoctorBioFragment;
 import com.ecarezone.android.patient.fragment.dialog.AddDoctorRequestDialog;
 import com.ecarezone.android.patient.model.Doctor;
-import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 import com.ecarezone.android.patient.model.rest.AddDoctorRequest;
 import com.ecarezone.android.patient.model.rest.AddDoctorResponse;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
@@ -66,23 +64,6 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
                         new Toolbar.OnMenuItemClickListener() {
                             @Override
                             public boolean onMenuItemClick(MenuItem item) {
-                                /*if (item.getItemId() == R.id.action_add) {
-                                    Log.i(TAG, "Menu = " + item.getTitle() + ", " + item.getItemId());
-                                    if(NetworkCheck.isNetworkAvailable(getBaseContext())) {
-                                        sendAddDoctorRequest();
-                                        DoctorProfileDbApi doctorProfileDbApi = DoctorProfileDbApi.getInstance(getBaseContext());
-                                        int id = doctorProfileDbApi.getProfileIdUsingEmail(((Doctor) bundle.getParcelable(Constants.DOCTOR_DETAIL)).emailId);
-                                        if (id == 0 || doctorId != id) {
-                                            doctorProfileDbApi.saveProfile(doctorId, ((Doctor) bundle.getParcelable(Constants.DOCTOR_DETAIL)));
-                                            doctorProfileDbApi.updatePendingReqProfile(String.valueOf(doctorId), true);
-                                        }else {
-                                            doctorProfileDbApi.updatePendingReqProfile(String.valueOf(doctorId), true);
-                                        }
-
-                                    } else {
-                                        Toast.makeText(getBaseContext(), "Please check your internet connection", Toast.LENGTH_LONG).show();
-                                    }
-                                }*/
                                 return true;
                             }
                         });
@@ -100,10 +81,7 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_add, menu);
         if(isDocAlreadyAddded){
-//            menu.findItem(R.id.action_add).setVisible(false);
-
         }
         return true;
     }
@@ -117,13 +95,6 @@ public class DoctorBioActivity extends EcareZoneBaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    public void setIsDoctorAlreadyAdded(boolean isDocAlreadyAddded) {
-//        this.isDocAlreadyAddded = isDocAlreadyAddded;
-//    }
-//    public static boolean getIsDoctorAlreadyAdded() {
-//        return isDocAlreadyAddded;
-//
-//    }
     @Override
     public void onNavigationChanged(int fragmentLayoutResId, Bundle args) {
         if (fragmentLayoutResId < 0) return;

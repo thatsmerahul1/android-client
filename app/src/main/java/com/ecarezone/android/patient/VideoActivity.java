@@ -14,7 +14,6 @@ import com.ecarezone.android.patient.fragment.VideoFragment;
 import com.ecarezone.android.patient.service.SinchService;
 import com.ecarezone.android.patient.utils.PermissionUtil;
 import com.ecarezone.android.patient.utils.SinchUtil;
-import com.ecarezone.android.patient.utils.Util;
 import com.sinch.android.rtc.calling.Call;
 
 import java.util.HashMap;

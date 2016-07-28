@@ -6,7 +6,6 @@ import com.ecarezone.android.patient.fragment.ForgetPasswordFragment;
 import com.ecarezone.android.patient.fragment.LoginFragment;
 import com.ecarezone.android.patient.fragment.RegistrationFragment;
 import com.ecarezone.android.patient.utils.SinchUtil;
-import com.ecarezone.android.patient.utils.Util;
 
 /**
  * Created by CHAO WEI on 5/10/2015.

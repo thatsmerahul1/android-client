@@ -7,7 +7,7 @@ import com.google.gson.annotations.Expose;
 import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 
 /**
- * Created by 20109804 on 6/15/2016.
+ * Created by Namitha on 6/15/2016.
  */
 public class ChangeStatusRequest extends RetrofitSpiceRequest<String, EcareZoneApi> {
 

@@ -493,17 +493,6 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                     String password = LoginInfo.hashedPassword;
                     doLogin(username, password);
 
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            if (!SinchUtil.getSinchServiceInterface().isStarted()) {
-//                                SinchUtil.getSinchServiceInterface().startClient(LoginInfo.userName);
-//                            }
-//                            clearFields();
-//                            invokeNavigationChanged(R.layout.frag_login, null);
-//
-//                        }
-//                    });
                 }
             }else {
                 getActivity().runOnUiThread(new Runnable() {
@@ -517,15 +506,4 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
             progressDialog.dismiss();
         }
     }
-
-    private void clearFields() {
-        mEditTextPassword.setText("");
-        mEditTextUsername.setText("");
-        mSpinnerCountry.setText("");
-        mSpinnerLanguage.setText("");
-        //English selected as a default language
-        mSpinnerLanguage.setText(R.string.language_english);
-        mSpinnerLanguage.setTag(getResources().getString(R.string.language_local_english));
-    }
-
 }

@@ -8,10 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ecarezone.android.patient.config.Constants;
-import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.fragment.UserProfileDetailsFragment;
-import com.ecarezone.android.patient.model.UserProfile;
-import com.ecarezone.android.patient.model.database.ProfileDbApi;
 import com.ecarezone.android.patient.utils.Util;
 
 /**

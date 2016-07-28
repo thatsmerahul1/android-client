@@ -1,14 +1,9 @@
 package com.ecarezone.android.patient;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutCompat;
-import android.view.Gravity;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ActionMenuView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.ecarezone.android.patient.config.Constants;

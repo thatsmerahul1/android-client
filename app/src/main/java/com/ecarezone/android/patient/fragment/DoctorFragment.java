@@ -110,9 +110,6 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.frag_doctor, container, false);
 
-//        VIDEO_CALL = getResources().getInteger(R.integer.video_call_value);
-//        VOIP_CALL = getResources().getInteger(R.integer.voip_call_value);
-
         appointmentDbApi = AppointmentDbApi.getInstance(getApplicationContext());
         doctorDetailData = getArguments();
         doctor = doctorDetailData.getParcelable(Constants.DOCTOR_DETAIL);
@@ -148,7 +145,6 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         buttonAppointment.setOnClickListener(this);
 
         if (!showAddDoctorOption) {
-//            addDoctorButton.setVisibility(View.GONE);
             addDoctorButton.setEnabled(false);
         }
 
@@ -222,7 +218,6 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                     bundle = getAppointmentBundle(v, getResources().getInteger(R.integer.video_call_value));
                     editAppointmentDialog.setArguments(bundle);
                     editAppointmentDialog.show(fragmentManager, "EditAppointmentDialogFragment");
-//                    callVideoButtonClicked();
                     break;
                 case R.id.btn_doctor_voice_id:
 
@@ -476,32 +471,6 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                     }
                 }
 
-//                if (currentAppointment != null && currentAppointment.isConfirmed()) {
-//                    isAppointmentPresent = true;
-//                    long convDateTime = Util.getTimeInLongFormat(currentAppointment.getTimeStamp());
-//
-//                    if (convDateTime <= currentDate.getTime()) {
-//                        if (currentAppointment.getCallType().equalsIgnoreCase("video")) {
-//                            doctorVideo.setCompoundDrawablesWithIntrinsicBounds(null,
-//                                    getResources().getDrawable(R.drawable.button_video_call_with_green_notification), null, null);
-//                            doctorVideo.setTag("timeToCall");
-//                        } else {
-//                            doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
-//                                    getResources().getDrawable(R.drawable.button_voip_normal_with_green_notification), null, null);
-//                            doctorVoice.setTag("timeToCall");
-//                        }
-//                    } else {
-//                        if (currentAppointment.getCallType().equalsIgnoreCase("video")) {
-//                            doctorVideo.setCompoundDrawablesWithIntrinsicBounds(null,
-//                                    getResources().getDrawable(R.drawable.button_video_call_with_notification), null, null);
-//                            doctorVideo.setTag("editAppointment");
-//                        } else {
-//                            doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
-//                                    getResources().getDrawable(R.drawable.button_voip_normal_with_notification), null, null);
-//                            doctorVoice.setTag("editAppointment");
-//                        }
-//                    }
-//                }
             } else {
                 doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
                         getResources().getDrawable(R.drawable.button_voip_normal), null, null);//.setBackgroundResource(R.drawable.button_voip_normal);

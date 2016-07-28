@@ -30,7 +30,6 @@ public class RegistrationDialogFragment extends DialogFragment implements View.O
     private String item;
     private String itemCode;
     private boolean isSelectionMade = false;
-    private boolean mCountry;
 
     @Nullable
     @Override
@@ -59,7 +58,12 @@ public class RegistrationDialogFragment extends DialogFragment implements View.O
             String[] languages = getResources().getStringArray(R.array.language_array);
             String[] languageCodes = getResources().getStringArray(R.array.language_local_array);
             adapter = new RegistrationAdapter(getActivity(), R.layout.country_spinner_item, languages, languageCodes, false, getArguments().getString(Constants.LANGUAGE));
+            if(languageCodes != null){
+                isSelectionMade = true;
+                textview_ok.setTextColor(getResources().getColor(R.color.ecarezone_green_dark));
+            }
         }
+
         listview_registration.setAdapter(adapter);
         listview_registration.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

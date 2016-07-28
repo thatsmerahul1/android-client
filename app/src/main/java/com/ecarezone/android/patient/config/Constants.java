@@ -35,7 +35,6 @@ public class Constants {
     public static String DOCTOR_LIST = "doctorList";
 
     public static String AVAILABLE = "available";
-    public static String BUSY = "busy";
     public static String OFFLINE_TEXT = "offline";
     public static String IDLE_TEXT = "idle";
 
@@ -72,5 +71,4 @@ public class Constants {
     public static final String UNREAD_NEWS_CATEGORY = "unread_news_category";
     public static final String NEWS_MESSAGE_CATEGORY_SET_KEY = "news_message_key_set";
     public static final String NEWS_CATEGORY_PREPEND_STRING = "news_";
-//    public static final String UNREAD_NEWS_COUNT = "unread_news_count";
 }

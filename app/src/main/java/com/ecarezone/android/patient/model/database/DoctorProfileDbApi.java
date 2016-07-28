@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by 20109804 on 5/18/2016.
+ * Created by Namitha on 5/18/2016.
  */
 public class DoctorProfileDbApi {
     private static DbHelper mDbHelper;

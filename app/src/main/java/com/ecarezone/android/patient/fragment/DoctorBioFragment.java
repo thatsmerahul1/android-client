@@ -94,7 +94,7 @@ public class DoctorBioFragment extends EcareZoneBaseFragment {
             });
         }
 
-        doctorBioNameView.setText("Dr. " + doctor.name);
+        doctorBioNameView.setText("Dr. " + WordUtils.capitalize(doctor.name));
 
         String imageUrl = doctor.avatarUrl;
 

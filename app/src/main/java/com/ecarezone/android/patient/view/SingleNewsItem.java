@@ -12,7 +12,7 @@ import com.ecarezone.android.patient.R;
 import com.squareup.picasso.Picasso;
 
 /**
- * Created by 20109804 on 6/16/2016.
+ * Created by Namitha on 6/16/2016.
  */
 public class SingleNewsItem extends EcareZoneBaseActivity {
 
