@@ -87,7 +87,7 @@ public class DoctorsAdapter extends BaseAdapter {
         Doctor doctor = doctorList.get(position);
 
         if(reqPending){
-            holder.doctorName.setText("Dr. " + doctor.name);
+            holder.doctorName.setText("Dr. " + WordUtils.capitalize(doctor.name));
             if(doctor.doctorCategory == null){
                 holder.doctorType.setText(WordUtils.capitalize(doctor.category));
             }
@@ -107,7 +107,7 @@ public class DoctorsAdapter extends BaseAdapter {
             notifyDataSetChanged();
 
         } else {
-            holder.doctorName.setText("Dr. " + doctor.name);
+            holder.doctorName.setText("Dr. " + WordUtils.capitalize(doctor.name));
             String imageUrl = doctor.avatarUrl;
 
             if (imageUrl != null && imageUrl.trim().length() > 8) {
