@@ -204,6 +204,11 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     }
 
     @Override
+    protected void invokeNavigationChanged(int layoutResId, Bundle bundle) {
+        super.invokeNavigationChanged(layoutResId, bundle);
+    }
+
+    @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.action_check) {
 
@@ -368,7 +373,9 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     }
 
     // read all the fields in the UI and save the profile
-    private void saveProfile() {
+    private void
+
+    saveProfile() {
         final UserProfile userProfile = new UserProfile();
         userProfile.name = ((EditText) view.findViewById(R.id.name)).getText().toString();
         userProfile.gender = ((EditText) view.findViewById(R.id.gender)).getText().toString();
@@ -416,11 +423,12 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             }
             if (uploadImageResponse != null) {
                 mUploadedImageUrl = uploadImageResponse.data.avatarUrl;
+                userProfile.avatarUrl = mUploadedImageUrl;
             }
 
             if (mUploadedImageUrl != null) {
                 // user changed the current image
-                userProfile.avatarUrl = mUploadedImageUrl;
+
             } else if (mProfile != null && mProfile.avatarUrl != null) {
                 // user not changed the current image
                 userProfile.avatarUrl = mProfile.avatarUrl;
@@ -473,7 +481,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 break;
             case R.id.dob:
                 DialogFragment newFragment = new DatePickerFragment();
-                String dateStr = ((EditText) view.findViewById(R.id.dob)).getText().toString();
+                 String dateStr = ((EditText) view.findViewById(R.id.dob)).getText().toString();
                 ((DatePickerFragment) newFragment).setDate(dateStr);
                 newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
                 break;
