@@ -19,6 +19,6 @@ public class BookAppointmentResponse implements Serializable {
     public String toString() {
         return data.id
                 + ":" + data.callType + ":" + data.dateTime + ":"
-                + data.message + ":" + data.patientId + ":" + data.doctorId;
+                + data.message + ":" + data.patientId + ":" + data.doctorId+ ":" + data.reScheduledBy;
     }
 }

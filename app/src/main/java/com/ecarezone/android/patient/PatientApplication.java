@@ -18,6 +18,7 @@ public class PatientApplication extends Application {
     private HashMap<String, Integer> nameValuePair = new HashMap<String, Integer>();
     private int lastAvailabilityStatus;
 
+
     final String getCallerName() {
         return PatientApplication.class.getSimpleName();
     }

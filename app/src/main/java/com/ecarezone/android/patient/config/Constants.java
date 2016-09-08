@@ -40,6 +40,8 @@ public class Constants {
 
     public static String EXTRA_EMAIL ="email";
     public static String EXTRA_NAME = "name";
+    public static String EXTRA_APPOINMENT_TYPE = "video";
+
 
     //Login Screen Constants
     public static final String USER_ID = "UserId";

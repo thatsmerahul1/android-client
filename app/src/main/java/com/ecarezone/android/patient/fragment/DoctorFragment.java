@@ -226,8 +226,11 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                                 ? getResources().getInteger(R.integer.video_call_value) :
                                 getResources().getInteger(R.integer.voip_call_value);
                     }
-
-                    bundle = getAppointmentBundle(v, getResources().getInteger(R.integer.voip_call_value));
+                    else{
+                        typeOfCall = getResources().getInteger(R.integer.voip_call_value);
+                    }
+                       // typeOfCall = getResources().getInteger(R.integer.voip_call_value);
+                    bundle = getAppointmentBundle(v, typeOfCall);
                     editAppointmentDialog =
                             EditAppointmentDialog.newInstance(mOnAppointmentOptionClicked,
                                     typeOfCall);
@@ -263,6 +266,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                     break;
             }
         } else {
+
             Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
         }
     }
@@ -302,6 +306,9 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                 }
             }
         }
+        else{
+            bundle.putInt("typeOfCall", typeOfCall);
+        }
         return bundle;
     }
 
@@ -312,6 +319,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             Intent videoScreen = new Intent(mActivity, VideoActivity.class);
             videoScreen.putExtra(Constants.EXTRA_NAME, doctor.name);
             videoScreen.putExtra(Constants.EXTRA_EMAIL, doctor.emailId);
+        //    videoScreen.putExtra(Constants.EXTRA_APPOINMENT_TYPE , "video");
             startActivity(videoScreen);
         }
     }
@@ -323,6 +331,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             Intent callScreen = new Intent(mActivity, CallActivity.class);
             callScreen.putExtra(Constants.EXTRA_NAME, doctor.name);
             callScreen.putExtra(Constants.EXTRA_EMAIL, doctor.emailId);
+           // callScreen.putExtra(Constants.EXTRA_APPOINMENT_TYPE , "voip");
             startActivity(callScreen);
         }
     }
@@ -667,7 +676,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             }
 
             if (baseResponse.status.code == HTTP_STATUS_OK &&
-                    baseResponse.status.message.startsWith("Appointment deleted successfully")) {
+                    baseResponse.status.message.equalsIgnoreCase("Appointment deleted successfully")) {
                 appointmentDbApi.deleteAppointment(appointmentIdToBeDeleted);
                 EcareZoneAlertDialog.showAlertDialog(getActivity(), getString(R.string.alert),
                         getString(R.string.appointment_deleted), getString(R.string.welcome_button_ok));

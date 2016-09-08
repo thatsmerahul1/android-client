@@ -139,6 +139,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
                         //Making the Login status false
                         editor.putBoolean(Constants.IS_LOGIN, false);
                         editor.commit();
+                        LoginInfo.isShown= false;
 
 
                         Intent intent = new Intent(activity.getApplicationContext(), RegistrationActivity.class);

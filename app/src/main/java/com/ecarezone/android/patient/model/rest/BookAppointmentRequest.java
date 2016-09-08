@@ -29,7 +29,7 @@ public class BookAppointmentRequest extends RetrofitSpiceRequest<BookAppointment
     public BookAppointmentRequest(String email, String password, String apiKey,
                                   String deviceUnique, String dateTime,
                                   String callType, long doctorId) {
-        super(BookAppointmentResponse.class, EcareZoneApi.class);
+            super(BookAppointmentResponse.class, EcareZoneApi.class);
         this.email = email;
         this.apiKey = apiKey;
         this.deviceUnique = deviceUnique;

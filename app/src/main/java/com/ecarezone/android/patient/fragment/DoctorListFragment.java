@@ -98,7 +98,13 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         IntentFilter intentFilter = new IntentFilter(Constants.BROADCAST_STATUS_CHANGED);
         intentFilter.addAction("send");
         lbm.registerReceiver(message, intentFilter);
-
+        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
+                getText(R.string.progress_dialog_loading).toString());
+        if(!NetworkCheck.isNetworkAvailable(getActivity()))
+        {
+            progressDialog.cancel();
+            Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+        }
 
         pullDBFromdevice();
     }
@@ -159,8 +165,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         reqPendingContainer = view.findViewById(R.id.mycare_doctors_container_);
         doctorsDivider = view.findViewById(R.id.doctors_divider);
         checkProgress = true;
-        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
-                getText(R.string.progress_dialog_loading).toString());
+
 
         return view;
     }
@@ -179,6 +184,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         DoctorProfileDbApi doctorProfileDbApi = DoctorProfileDbApi.getInstance(getActivity());
         ArrayList<Doctor> pendingList = doctorProfileDbApi.getPendingRequest(reqPending);
         if (pendingList != null) {
+            pendingdoctorList.clear();
             pendingdoctorList.addAll(pendingList);
 
             if (pendingDoctorAdapter == null) {
@@ -452,7 +458,6 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                 dst.transferFrom(src, 0, src.size());
                 src.close();
                 dst.close();
-
             }
         } catch (Exception e) {
             Log.e("", e.toString());

@@ -209,7 +209,7 @@ public class ProfileDbApi {
             return queryBuilder.where()
                     .eq(DbContract.Profiles.COLUMN_NAME_USER_ID, LoginInfo.userId)
                     .and()
-                    .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_NAME, mContext.getString(R.string.profile_mine))
+                    .eq(DbContract.Profiles.COLUMN_NAME_IS_MYPROFILE, true)
                     .queryForFirst();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -224,8 +224,8 @@ public class ProfileDbApi {
             UserProfile myProfile = queryBuilder
                     .where()
                     .eq(DbContract.Profiles.COLUMN_NAME_USER_ID, LoginInfo.userId)
-                    .and()
-                    .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_NAME, mContext.getString(R.string.profile_mine))
+            //        .and()
+            //        .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_NAME, mContext.getString(R.string.profile_mine))
                     .queryForFirst();
             if(myProfile!=null){
                 return myProfile.isComplete;

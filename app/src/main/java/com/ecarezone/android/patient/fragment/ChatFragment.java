@@ -2,8 +2,10 @@ package com.ecarezone.android.patient.fragment;
 
 import android.app.Activity;
 import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
@@ -66,6 +68,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
     private String deviceImagePath;
     Map<String, Integer> perms = new HashMap<>();
     String recipientName;
+    private BroadcastReceiver onDownloadFinishReceiver;
 
     @Override
     protected String getCallerName() {
@@ -75,14 +78,33 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        getApplicationContext().registerReceiver(onDownloadFinishReceiver = new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        chatAdapter.notifyDataSetChanged();
+                    }
+                } ,
+                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
         final View view = inflater.inflate(R.layout.frag_chat, container, false);
         getAllComponent(view);
         return view;
     }
 
+
+////////////////////////////////////////broadcast Receiver for updating list of chat////////////////////
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getApplicationContext().unregisterReceiver(onDownloadFinishReceiver);
+    }
+
     private void getAllComponent(View view) {
         recipientName = getArguments().getString(Constants.EXTRA_NAME);
-        chatAdapter = new ChatAdapter(getActivity(), recipientName);
+        recipient = getArguments().getString(Constants.EXTRA_EMAIL);
+
+        chatAdapter = new ChatAdapter(getActivity(), recipient);
         chatList = (RecyclerView) view.findViewById(R.id.chat_mesage_list);
         chatList.setAdapter(chatAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -108,7 +130,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         cameraBtn.setOnClickListener(this);
         getActivity().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        recipient = getArguments().getString(Constants.EXTRA_EMAIL);
+
         chatAdapter.getChatHistory(recipient);
         ((ChatActivity) getActivity()).getSupportActionBar()
                 .setTitle(recipientName);
@@ -120,7 +142,9 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         switch (viewId) {
             case R.id.chatCameraBtn:
                 if (PermissionUtil.isPermissionRequired()
-                        && PermissionUtil.getAllpermissionRequired(getActivity(), PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS).length > 0) {
+                        && PermissionUtil.getAllpermissionRequired(getActivity(),
+                        PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS).length > 0)
+                {
                     PermissionUtil.setAllPermission(getActivity(), PermissionUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS
                             , PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS);
                 } else {
@@ -144,7 +168,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
     }
 
     private void takePicture(){
-        deviceImagePath = ImageUtil.dispatchTakePictureIntent(getActivity(),true,recipientName);
+        deviceImagePath = ImageUtil.dispatchTakePictureIntent(getActivity(),true,recipient);
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(deviceImagePath);
         Uri contentUri = Uri.fromFile(f);
@@ -221,7 +245,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         if (message.getTextBody().contains(Constants.ENDPOINTURL)) {
             chat.setInComingImageUrl(message.getTextBody());
             if(NetworkCheck.isNetworkAvailable(getActivity())) {
-                downloadFile(chat.getInComingImageUrl(), message.getTimestamp());
+      //          ImageUtil.downloadFile(getApplicationContext(), chat.getInComingImageUrl(), message.getTimestamp() ,recipient);
             } else {
                 Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
             }
@@ -234,32 +258,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         return chat;
     }
 
-    public void downloadFile(String uri, Date fileName) {
-        File direct = new File(Environment.getExternalStorageDirectory()
-                + "/eCareZone"+ "/" + recipientName + "/incoming");
 
-        if (!direct.exists()) {
-            direct.mkdirs();
-        }
-
-        DownloadManager mgr = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
-
-        Uri downloadUri = Uri.parse(uri);
-        DownloadManager.Request request = new DownloadManager.Request(
-                downloadUri);
-
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy_HH-mm-ss");
-        String todayDate = dateFormat.format(fileName);
-
-        request.setAllowedNetworkTypes(
-                DownloadManager.Request.NETWORK_WIFI
-                        | DownloadManager.Request.NETWORK_MOBILE)
-                .setDestinationInExternalPublicDir("/eCareZone" + "/" + recipientName + "/incoming", todayDate + ".jpg");
-
-        mgr.enqueue(request);
-
-    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         File file = new File(deviceImagePath);

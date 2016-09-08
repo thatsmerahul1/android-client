@@ -64,6 +64,7 @@ public class NewsCategoriesFragment extends EcareZoneBaseFragment implements Gri
             GetNewsRequest getNewsRequest = new GetNewsRequest();
             getSpiceManager().execute(getNewsRequest, "news", DurationInMillis.ONE_MINUTE, new NewsRequestListener());
         } else {
+            mProgressDialog.dismiss();
             Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
         }
     }

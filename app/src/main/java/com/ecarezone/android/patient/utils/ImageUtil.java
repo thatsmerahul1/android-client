@@ -1,6 +1,8 @@
 package com.ecarezone.android.patient.utils;
 
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -223,6 +225,32 @@ public class ImageUtil {
             e.printStackTrace();
         }
         return file;
+    }
+
+    public static void  downloadFile(Context context ,String uri, Date fileName , String recipient) {
+        File direct = new File(Environment.getExternalStorageDirectory()
+                + "/eCareZone"+ "/" + recipient + "/incoming");
+
+        if (!direct.exists()) {
+            direct.mkdirs();
+        }
+
+        DownloadManager mgr = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+
+        Uri downloadUri = Uri.parse(uri);
+        DownloadManager.Request request = new DownloadManager.Request(
+                downloadUri);
+
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy_HH-mm-ss");
+        String todayDate = dateFormat.format(fileName);
+
+        request.setAllowedNetworkTypes(
+                DownloadManager.Request.NETWORK_WIFI
+                        | DownloadManager.Request.NETWORK_MOBILE)
+                .setDestinationInExternalPublicDir("/eCareZone" + "/" + recipient + "/incoming", todayDate + ".jpg");
+        long downloadId =  mgr.enqueue(request);
+
     }
 
 

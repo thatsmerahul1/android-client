@@ -162,11 +162,12 @@ public class NewsListFragment extends EcareZoneBaseFragment implements AdapterVi
             int position = 0;
             for(NewsCategory newsCategory : newsList) {
                 ArrayList<News> newsArr = (ArrayList<News>) newsCategory.newsAbstractList;
-
-                if (newsCategory.newsCategory.equalsIgnoreCase(categoryName)) {
-                    // initialize relevant news list
-                    mNews = newsArr;
-                    break;
+                if(newsCategory.newsCategory!= null && categoryName != null) {
+                    if (newsCategory.newsCategory.equalsIgnoreCase(categoryName)) {
+                        // initialize relevant news list
+                        mNews = newsArr;
+                        break;
+                    }
                 }
             }
             initList();

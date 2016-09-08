@@ -29,7 +29,7 @@ import java.util.Locale;
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
- * <p/>
+ * <p>
  * class helps in getting all the approved appointments and populate the database.
  * Specially needed when the user may login using multiple devices.
  */
@@ -71,7 +71,11 @@ public class FetchAppointmentService extends IntentService {
             final String action = intent.getAction();
             if (ACTION_FETCH_APPOINTMENTS.equals(action)) {
 //                handlePendingAppointment();
-                handleActionFetchAppointments();
+                try {
+                    handleActionFetchAppointments();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }
@@ -156,7 +160,7 @@ public class FetchAppointmentService extends IntentService {
 //                        if (appointmentDbApi.isAppointmentPresent(appointment.getAppointmentId())) {
 //                            appointmentDbApi.updateAppointment(appointment.getAppointmentId(), appointment);
 //                        } else {
-                            appointmentDbApi.saveAppointment(appointment);
+                        appointmentDbApi.saveAppointment(appointment);
 //                        }
                     }
                     validateAppointment();

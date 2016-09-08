@@ -19,5 +19,7 @@ public class AppointmentResponse {
     public String doctorId;
     @Expose
     public String message;
+    @Expose
+    public String reScheduledBy;
 
 }

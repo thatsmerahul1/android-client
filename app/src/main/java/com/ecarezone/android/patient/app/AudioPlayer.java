@@ -6,6 +6,7 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.media.MediaPlayer;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.util.Log;
@@ -28,7 +29,7 @@ public class AudioPlayer {
 
     private AudioTrack mProgressTone;
     private AudioManager audioManager;
-    float VOLUME = 5.0f;
+    float VOLUME = 1.0f;
     private final static int SAMPLE_RATE = 16000;
 
     public AudioPlayer(Context context) {
@@ -37,16 +38,19 @@ public class AudioPlayer {
     }
 
     public void playRingtone() {
-        AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+
 
         // Honour silent mode
         switch (audioManager.getRingerMode()) {
             case AudioManager.RINGER_MODE_NORMAL:
                 mPlayer = new MediaPlayer();
-                mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                mPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
+                int currVolume = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
+
+                Log.e(LOG_TAG, "currVolume::" + currVolume);
+                int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
                 Log.e(LOG_TAG, "maxVolume::" + maxVolume);
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, AudioManager.FLAG_PLAY_SOUND);
+                audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, maxVolume, AudioManager.FLAG_PLAY_SOUND);
                 Uri ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
                 Log.e(LOG_TAG, "ringtone::" + ringtone.getPath());
                 try {
@@ -62,7 +66,9 @@ public class AudioPlayer {
                 mPlayer.start();
                 break;
         }
-    }
+
+        }
+
 
     public void stopRingtone() {
         if (mPlayer != null) {

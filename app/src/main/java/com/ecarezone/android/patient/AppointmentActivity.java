@@ -20,6 +20,7 @@ public class AppointmentActivity extends EcareZoneBaseActivity {
     private Toolbar mToolBar = null;
     private ActionBar mActionBar;
     private long doctorId;
+    private int typeOfCall;
     private Appointment currentAppointment;
 
     @Override
@@ -33,6 +34,7 @@ public class AppointmentActivity extends EcareZoneBaseActivity {
 
         if (fragmentLayoutResId == R.layout.frag_appointment) {
             args.putLong("doctorId", doctorId);
+            args.putInt("typeOfCall", typeOfCall);
             args.putSerializable("currentAppointment", currentAppointment);
             changeFragment(R.id.screen_container, new AppointmentFragment(),
                     AppointmentFragment.class.getSimpleName(), args);
@@ -45,6 +47,7 @@ public class AppointmentActivity extends EcareZoneBaseActivity {
         setContentView(R.layout.act_appointment);
         Bundle data = getIntent().getExtras();
         doctorId = getIntent().getLongExtra("doctorId", -1);
+        this.typeOfCall = getIntent().getIntExtra("typeOfCall", -1);
 
         Object obj = getIntent().getSerializableExtra("currentAppointment");
         if(obj != null) {

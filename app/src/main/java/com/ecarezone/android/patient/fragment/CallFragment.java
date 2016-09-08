@@ -130,17 +130,19 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
             }
 
         }
-        String imageUrl = tempProfiles.avatarUrl;
-        if (imageUrl != null && imageUrl.trim().length() > 8) {
-            Picasso.with(mActivity)
-                    .load(imageUrl).resize(dp, dp)
-                    .centerCrop().placeholder(R.drawable.news_other)
-                    .error(R.drawable.news_other)
-                    .into(doctorAvatar);
-
+        if (tempProfiles != null) {
+            String imageUrl = tempProfiles.avatarUrl;
+            if (imageUrl != null && imageUrl.trim().length() > 8) {
+                Picasso.with(mActivity)
+                        .load(imageUrl).resize(dp, dp)
+                        .centerCrop().placeholder(R.drawable.news_other)
+                        .error(R.drawable.news_other)
+                        .into(doctorAvatar);
+                topPanel.setText(tempProfiles.name);
+            }
         }
         endcallButton.setOnClickListener(this);
-        topPanel.setText(tempProfiles.name);
+
         topPanel.setVisibility(View.GONE);
         bootomPanel.setVisibility(View.GONE);
         doctorAvatar.setVisibility(View.GONE);

@@ -29,6 +29,7 @@ import com.ecarezone.android.patient.model.rest.BookAppointmentRequest;
 import com.ecarezone.android.patient.model.rest.BookAppointmentResponse;
 import com.ecarezone.android.patient.model.rest.LoginRequest;
 import com.ecarezone.android.patient.model.rest.LoginResponse;
+import com.ecarezone.android.patient.model.rest.RescheduleAppointmentRequest;
 import com.ecarezone.android.patient.model.rest.base.BaseResponse;
 import com.ecarezone.android.patient.utils.PasswordUtil;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
@@ -58,13 +59,16 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
     private TextView txtAppointmentYear;
 
     private int selectedDate, selectedMonth, selectedYear, selectedTimeHr, selectedTimeMin;
+    private int selectedDateUpdated, selectedMonthUpdated, selectedYearUpdated, selectedTimeHrUpdated, selectedTimeMinUpdated;
     private long doctorId;
+    private int typeOfCall;
 
     private TextView txtErrorMsg;
     private ProgressDialog progressDialog;
     private AppointmentFragment appointmentFragment;
 
     private Appointment mExistingAppointment;
+    private boolean  appointmentExist = false;
 
     @Override
     protected String getCallerName() {
@@ -76,11 +80,15 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
         super.onAttach(activity);
         mActivity = activity;
         doctorId = getArguments().getLong("doctorId", -1);
+        typeOfCall = getArguments().getInt("typeOfCall", -1);
         Object obj = getArguments().getSerializable("currentAppointment");
         if(obj != null) {
             this.mExistingAppointment = (Appointment)obj;
+            appointmentExist= true;
         }
         appointmentFragment = this;
+
+
     }
 
     @Override
@@ -91,6 +99,7 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
 
         ((AppointmentActivity) getActivity()).getSupportActionBar()
                 .setTitle(getResources().getText(R.string.doctor_appointment_header));
+        Util.setAppointmentAlarm(getApplicationContext());
         return view;
     }
 
@@ -105,12 +114,11 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
         radioVoip = (RadioButton) view.findViewById(R.id.radioVoip);
         btnAppointment = (Button) view.findViewById(R.id.button_appointment);
 
-        int typeOfCall = getArguments().getInt("typeOfCall", 0);
         if(getResources().getInteger(R.integer.video_call_value) == typeOfCall){
             radioVideo.setChecked(true);
         }
         else{
-            radioVideo.setChecked(true);
+            radioVoip.setChecked(true);
         }
 
         radioVideo.setOnClickListener(this);
@@ -144,6 +152,10 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
         selectedDate = mcurrentDate.get(Calendar.DATE);
         selectedMonth = mcurrentDate.get(Calendar.MONTH);
         selectedYear = mcurrentDate.get(Calendar.YEAR);
+        selectedDateUpdated = selectedDate;
+        selectedMonthUpdated=selectedMonth;
+        selectedYearUpdated = selectedYear;
+
 
         String dayStr = String.valueOf(selectedDate);
 
@@ -166,6 +178,8 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
 
         selectedTimeHr = mcurrentDate.get(Calendar.HOUR_OF_DAY);
         selectedTimeMin = mcurrentDate.get(Calendar.MINUTE);
+        selectedTimeHrUpdated =selectedTimeHr;
+        selectedTimeMinUpdated = selectedTimeMin;
 
         String timeStr = formattedTime(mcurrentDate);
         txtAppointmentTime.setText(timeStr);
@@ -216,14 +230,29 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
                     txtErrorMsg.setText(R.string.appointment_cannot_be_set);
                     return;
                 }
+                if(appointmentExist)
+                {
 
-                BookAppointmentRequest request =
-                        new BookAppointmentRequest(LoginInfo.userName, LoginInfo.hashedPassword, Constants.API_KEY, Constants.deviceUnique,
-                                selectedYear + "-" + (selectedMonth+1) + "-" + selectedDate + " " + selectedTimeHr + ":" + selectedTimeMin,
-                                radioVideo.isChecked() ? "video" : "voice", doctorId);
-                final BaseResponse response = new BaseResponse();
-                progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Processing........");
-                getSpiceManager().execute(request, new BookAppointmentRequestListener());
+                    RescheduleAppointmentRequest request =
+                            new RescheduleAppointmentRequest(LoginInfo.userName, LoginInfo.hashedPassword, Constants.API_KEY, Constants.deviceUnique,
+                                    selectedYear + "-" + (selectedMonth+1) + "-" + selectedDate + " " + selectedTimeHr + ":" + selectedTimeMin,
+                                    selectedYearUpdated + "-" + (selectedMonthUpdated+1) + "-" + selectedDateUpdated + " " + selectedTimeHrUpdated + ":" + selectedTimeMinUpdated,
+                                    radioVideo.isChecked() ? "video" : "voice", doctorId);
+                    //  final BookAppointmentRequest response = new BaseResponse();
+                    progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Processing........");
+                    getSpiceManager().execute(request, new BookAppointmentRequestListener());
+                }
+                else
+                {
+                    BookAppointmentRequest request =
+                            new BookAppointmentRequest(LoginInfo.userName, LoginInfo.hashedPassword, Constants.API_KEY, Constants.deviceUnique,
+                                    selectedYearUpdated + "-" + (selectedMonthUpdated+1) + "-" + selectedDateUpdated + " " + selectedTimeHrUpdated + ":" + selectedTimeMinUpdated,
+                                    radioVideo.isChecked() ? "video" : "voice", doctorId);
+            //        final BaseResponse response = new BaseResponse();
+                    progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Processing........");
+                    getSpiceManager().execute(request, new BookAppointmentRequestListener());
+                }
+
 
                 break;
             case R.id.appointment_time:
@@ -234,8 +263,8 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
                 mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        selectedTimeHr = selectedHour;
-                        selectedTimeMin = selectedMinute;
+                        selectedTimeHrUpdated = selectedHour;
+                        selectedTimeMinUpdated = selectedMinute;
 
                         Calendar mcurrentDate = Calendar.getInstance();
                         mcurrentDate.set(Calendar.HOUR_OF_DAY, selectedHour);
@@ -291,9 +320,9 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
 
                 txtAppointmentYear.setText(String.valueOf(yearSel));
 
-                selectedDate = dayOfMonth;
-                selectedMonth = monthOfYear;
-                selectedYear = yearSel;
+                selectedDateUpdated = dayOfMonth;
+                selectedMonthUpdated = monthOfYear;
+                selectedYearUpdated = yearSel;
                 txtErrorMsg.setText("");
             }
         }, year, month, day);
@@ -347,18 +376,33 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
                 Appointment appointment = new Appointment();
                 appointment.setAppointmentId(baseResponse.data.id);
                 appointment.setCallType(baseResponse.data.callType);
-                appointment.setDoctorId(String.valueOf(doctorId));
-//                appointment.setTimeStamp(calendar.getTimeInMillis());
                 appointment.setTimeStamp(baseResponse.data.dateTime);
                 appointment.setpatientId(String.valueOf(LoginInfo.userId));
-
                 AppointmentDbApi appointmentDbApi = AppointmentDbApi.getInstance(getActivity());
-                boolean isInserted = appointmentDbApi.saveAppointment(appointment);
-                if (isInserted) {
-                    mActivity.finish();
-                    mActivity.overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
-                } else {
+                if(appointmentExist)
+                {
+                    boolean isUpdated = appointmentDbApi.updateAppointment(baseResponse.data.id ,appointment);
+                    if (isUpdated) {
+                        Toast.makeText(getApplicationContext(),"Updated",Toast.LENGTH_SHORT).show();
+                        mActivity.finish();
+                        mActivity.overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+                    } else {
 
+                    }
+                }
+                else {
+                    appointment.setDoctorId(String.valueOf(doctorId));
+//                appointment.setTimeStamp(calendar.getTimeInMillis());
+
+
+
+                    boolean isInserted = appointmentDbApi.saveAppointment(appointment);
+                    if (isInserted) {
+                        mActivity.finish();
+                        mActivity.overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+                    } else {
+
+                    }
                 }
             }
         }

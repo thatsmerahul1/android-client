@@ -165,7 +165,9 @@ public class MainActivity extends EcareZoneBaseActivity {
 
         initStatus();
         setStatusAlarm();
-        Util.setAppointmentAlarm(getApplicationContext());
+     //  Util.setAppointmentAlarm(getApplicationContext());
+
+
      }
 
     private void initStatus() {

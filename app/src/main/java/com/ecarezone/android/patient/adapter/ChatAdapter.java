@@ -16,7 +16,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.ecarezone.android.patient.NetworkCheck;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.model.Chat;
@@ -176,7 +178,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
                 holder.mChartImage.setImageBitmap(bitmap);
             } else {
-                Picasso.with(mContext)
+                String  imgPath1 = mMessages.get(position).getChatUserId();
+                if(NetworkCheck.isNetworkAvailable(mContext)) {
+                    ImageUtil.downloadFile(
+                            mContext.getApplicationContext(), chat.getInComingImageUrl(),
+                            chat.getTimeStamp(), imgPath1);
+                }else {
+                    Toast.makeText(mContext, "Please check your internet connection", Toast.LENGTH_LONG).show();
+                }
+
+              /*  Picasso.with(mContext)
                         .load(chat.getInComingImageUrl())
                         .resize(200,200)
                         .into(new Target() {
@@ -195,14 +206,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                             public void onPrepareLoad(Drawable placeHolderDrawable) {
                                 holder.mProgressBar.setVisibility(View.VISIBLE);
                             }
-                        });
+                        });*/
+
+
 
             }
-            final String finalImagePath = imagePath;
+            holder.mChartImage.setTag(imagePath);
             holder.mChartImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    String finalImagePath = (String) v.getTag();
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_VIEW);
                     intent.setDataAndType(Uri.parse("file://" + finalImagePath), "image/*");
@@ -243,6 +256,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         @Override
         protected void onPostExecute(UploadImageResponse uploadImageResponse) {
             SinchUtil.getSinchServiceInterface().sendMessage(chat.getChatUserId(), uploadImageResponse.data.avatarUrl);
+            holder.mChartImage.setImageBitmap(ImageUtil.createScaledBitmap(chat.getDeviceImagePath(), 200, 200));
+            holder.mProgressBar.setVisibility(View.GONE);
         }
     }
 
@@ -265,6 +280,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         @Override
         protected void onPostExecute(File file) {
             chat.setDiscImageFile(file);
+
             Picasso.with(mContext)
                     .load(file)
                     .resize(200,200)

@@ -18,6 +18,7 @@ import com.ecarezone.android.patient.model.rest.LoginRequest;
 import com.ecarezone.android.patient.model.rest.LoginResponse;
 import com.ecarezone.android.patient.model.rest.PendingAppointmentResponse;
 import com.ecarezone.android.patient.model.rest.Repo;
+import com.ecarezone.android.patient.model.rest.RescheduleAppointmentRequest;
 import com.ecarezone.android.patient.model.rest.SearchDoctorsRequest;
 import com.ecarezone.android.patient.model.rest.SearchDoctorsResponse;
 import com.ecarezone.android.patient.model.rest.SettingsRequest;
@@ -92,8 +93,8 @@ public interface EcareZoneApi {
     @POST("/users/{userId}/profiles/{profileId}")
     BaseResponse deleteProfile(@Path("userId") Long userId, @Path("profileId") Long profileId, @Body DeleteProfileRequest request);
 
-    @GET("/users/{userId}/news")
-    GetNewsResponse getNews(@Path("userId") Long userId);
+    @GET("/users/news")
+    GetNewsResponse getNews();
 
     @Multipart
     @POST("/users/{userId}/profilespic")
@@ -115,6 +116,9 @@ public interface EcareZoneApi {
 
     @POST("/deleteappointment/{appointmentId}")
     BaseResponse deleteAppointment(@Path("appointmentId") long appointmentId, @Body DeleteAppointmentRequest request);
+
+    @PUT("/rescheduleappointment/users/{userId}/doctors/{doctorId}")
+    BookAppointmentResponse rescheduleAppointment(@Path("userId") long userId ,@Path("doctorId") long doctorId, @Body RescheduleAppointmentRequest request);
 
 //    @POST("/changeStatus")
 //    BaseResponse changeStatus(@Body ChangeStatusRequest request);

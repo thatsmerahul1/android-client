@@ -55,23 +55,25 @@ public class HeartbeatService extends IntentService {
             patientApplication = (PatientApplication) getApplicationContext();
 
 
-            if (patientApplication.getNameValuePair().containsKey(Constants.STATUS_CHANGE)) {
-                int state;
+            if(patientApplication.getNameValuePair() != null) {
+                if (patientApplication.getNameValuePair().containsKey(Constants.STATUS_CHANGE)) {
+                    int state;
 //                if ( patientApplication.getNameValuePair().get(Constants.STATUS_CHANGE)) {
 //                    status = Constants.IDLE;
 //                } else {
 //                    status = Constants.ONLINE;
 //                }
 
-                if (patientApplication.getLastAvailabilityStatus() != patientApplication.getNameValuePair().get(Constants.STATUS_CHANGE)) {
-                    ChangeStatusRequest changeStatusService = new ChangeStatusRequest(patientApplication.getNameValuePair().get(Constants.STATUS_CHANGE));
-                    changeStatusService.startHttpRequest();
+                    if (patientApplication.getLastAvailabilityStatus() != patientApplication.getNameValuePair().get(Constants.STATUS_CHANGE)) {
+                        ChangeStatusRequest changeStatusService = new ChangeStatusRequest(patientApplication.getNameValuePair().get(Constants.STATUS_CHANGE));
+                        changeStatusService.startHttpRequest();
+                    }
+                } else {
+                    patientApplication.getNameValuePair().put(Constants.STATUS_CHANGE, patientApplication.getNameValuePair().get(Constants.STATUS_CHANGE));
+                    status = Constants.ONLINE;
                 }
-            } else {
-                patientApplication.getNameValuePair().put(Constants.STATUS_CHANGE, patientApplication.getNameValuePair().get(Constants.STATUS_CHANGE));
-                status = Constants.ONLINE;
-            }
 
+            }
 
             Log.i("HeartbeatService", "status updated");
         }
@@ -79,9 +81,6 @@ public class HeartbeatService extends IntentService {
 
 
     private class ChangeStatusRequest {
-
-// {"email":"uapatient1@gmail.com", "password":"wkkdl/bt34SeumhQNMNlzQ==",
-// "name":"name", "role": "1","status":"0","deviceUnique":"b5d4c425-a305-4363-8d6a-f3fb65635abf"}
 
         private String requestBody;
 
@@ -91,11 +90,24 @@ public class HeartbeatService extends IntentService {
             int profileId = profileDbApi.getProfileIdUsingEmail(LoginInfo.userName);
             UserProfile userProfile = profileDbApi.getProfile(LoginInfo.userId.toString(), String.valueOf(profileId));
 
+            String profileName = null;
+            if(userProfile == null){
+                profileName = "";
+            }
+            else{
+                if(userProfile.profileName == null){
+                    profileName = "";
+                }
+                else{
+                    profileName = userProfile.profileName;
+                }
+            }
+
             JSONObject jsonObj = new JSONObject();
             try {
                 jsonObj.put("email", LoginInfo.userName);
                 jsonObj.put("password", LoginInfo.hashedPassword);
-                jsonObj.put("name", userProfile.profileName);
+                jsonObj.put("name", profileName);
                 jsonObj.put("role", Constants.USER_ROLE);
                 jsonObj.put("status", status);
                 jsonObj.put("deviceUnique", Constants.deviceUnique);

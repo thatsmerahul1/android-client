@@ -56,6 +56,7 @@ import com.squareup.picasso.Picasso;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.text.WordUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -88,6 +89,7 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
     TextView docCategory;
     Doctor doctor;
     ImageView image;
+
     /*Empty fragment*/
     public PatientFragment() {
     }
@@ -110,7 +112,7 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
 
         LinearLayout chatAlertLayout = (LinearLayout) view.findViewById(R.id.chatAlertLayout);
         chatAlertLayout.setOnClickListener(this);
-
+        Util.setAppointmentAlarm(getApplicationContext());
         LinearLayout recommendedDoctorLayout = (LinearLayout) view.findViewById(R.id.recommendedDoctorLayout);
         //TODO hide or show this recommended doctor layout based on data.
         //recommendedDoctorLayout.setVisibility(View.GONE);
@@ -138,13 +140,13 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(message,
                 intentFilter);
 
-        populateAppointmentsFromDatabase();
+//        populateAppointmentsFromDatabase();
         //to get recommanded doctor in home page
         UserTable user = new UserTable(getActivity());
         User userdata = user.getUserData(String.valueOf(LoginInfo.userId));
         if (NetworkCheck.isNetworkAvailable(getActivity())) {
-             GetDoctorRequest request = new GetDoctorRequest(userdata.recommandedDoctorId);
-             getSpiceManager().execute(request, new RecommendedDoctor());
+            GetDoctorRequest request = new GetDoctorRequest(userdata.recommandedDoctorId);
+            getSpiceManager().execute(request, new RecommendedDoctor());
         } else {
             Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
         }
@@ -238,7 +240,7 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
         SharedPreferences sharedPreferences =
                 getApplicationContext().getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         Set<String> categorySet = sharedPreferences.getStringSet(Constants.NEWS_MESSAGE_CATEGORY_SET_KEY, null);
-        if(categorySet != null) {
+        if (categorySet != null) {
             int totalUnreadNewsCount = 0;
             for (String key : categorySet) {
 
@@ -258,7 +260,10 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
     public void onResume() {
         super.onResume();
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(Constants.ECARE_ZONE);
-        new ProfileFinishedAsyncTask().execute();
+        if (!LoginInfo.isShown) {
+            new ProfileFinishedAsyncTask().execute();
+            LoginInfo.isShown = true;
+        }
         SinchUtil.setChatHistoryChangeListner(this);
     }
 
@@ -316,6 +321,9 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
                             .putExtra(ProfileDetailsActivity.IS_NEW_PROFILE, false)
                             .putExtra(ProfileDetailsActivity.PROFILE_ID, profileId), UserProfileFragment.VIEW_PROFILE_REQUEST_CODE);
                 }
+            case R.id.button_welcome_not_now:
+                mProfileFinishReminderLayout.setVisibility(View.GONE);
+
                 break;
         }
     }
@@ -346,7 +354,7 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
                                 .error(R.drawable.news_other)
                                 .into(image);
                     }
-                 }
+                }
             }
         }
     }
@@ -380,6 +388,8 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
                 mProfileFinishReminderLayout.setVisibility(View.GONE);
             } else {
                 mProfileFinishReminderLayout.setVisibility(View.VISIBLE);
+                Button button_welcome_not_now = (Button) mProfileFinishReminderLayout.findViewById(R.id.button_welcome_not_now);
+                button_welcome_not_now.setOnClickListener(PatientFragment.this);
                 Button button_finish_profile_ok = (Button) mProfileFinishReminderLayout.findViewById(R.id.button_finish_profile_ok);
                 button_finish_profile_ok.setOnClickListener(PatientFragment.this);
             }
@@ -563,7 +573,10 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
 
                 AppointmentResponse appointmentResponse = appointmentIterator.next();
 
-                if (appointmentResponse.patientId == null) {
+//                if (appointmentResponse.patientId == null) {
+//                    continue;
+//                }
+                if (appointmentResponse.reScheduledBy == null || !appointmentResponse.reScheduledBy.equalsIgnoreCase("doctor")) {
                     continue;
                 }
 

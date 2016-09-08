@@ -21,6 +21,7 @@ import com.ecarezone.android.patient.config.LoginInfo;
 import com.ecarezone.android.patient.fragment.dialog.AddDoctorRequestDialog;
 import com.ecarezone.android.patient.model.Doctor;
 import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
+import com.ecarezone.android.patient.model.database.ProfileDbApi;
 import com.ecarezone.android.patient.model.rest.AddDoctorRequest;
 import com.ecarezone.android.patient.model.rest.AddDoctorResponse;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
@@ -79,14 +80,14 @@ public class DoctorBioFragment extends EcareZoneBaseFragment {
                 public void onClick(View v) {
                     if(NetworkCheck.isNetworkAvailable(getActivity())) {
                         sendAddDoctorRequest();
-                        DoctorProfileDbApi doctorProfileDbApi = DoctorProfileDbApi.getInstance(getActivity());
-                        doctorProfileDbApi.saveProfile(doctor.doctorId, doctor);
-                        doctorProfileDbApi.updatePendingReqProfile(String.valueOf(doctor.doctorId), true);
-                        if(doctor.category != null ) {
-                            doctorProfileDbApi.updateCategory(String.valueOf(doctor.doctorId), doctor.category);
-                        } else if(doctor.doctorCategory !=null ){
-                            doctorProfileDbApi.updateCategory(String.valueOf(doctor.doctorId), doctor.category);
-                        }
+//                        DoctorProfileDbApi doctorProfileDbApi = DoctorProfileDbApi.getInstance(getActivity());
+//                        doctorProfileDbApi.saveProfile(doctor.doctorId, doctor);
+//                        doctorProfileDbApi.updatePendingReqProfile(String.valueOf(doctor.doctorId), true);
+//                        if(doctor.category != null ) {
+//                            doctorProfileDbApi.updateCategory(String.valueOf(doctor.doctorId), doctor.category);
+//                        } else if(doctor.doctorCategory !=null ){
+//                            doctorProfileDbApi.updateCategory(String.valueOf(doctor.doctorId), doctor.category);
+//                        }
                     } else {
                         Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
                     }
@@ -115,16 +116,31 @@ public class DoctorBioFragment extends EcareZoneBaseFragment {
 
     private void sendAddDoctorRequest() {
         Log.d(TAG, "SendAddDoctorRequest");
-        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Adding Doctor......");
-        AddDoctorRequest request =
-                new AddDoctorRequest(doctor.doctorId, doctor.name, LoginInfo.userName, LoginInfo.hashedPassword, Constants.API_KEY, Constants.deviceUnique);
-        getSpiceManager().execute(request, new AddDoctorTaskRequestListener());
-    }
+
+        ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
+        if (profileDbApi != null) {
+            boolean hasProfiles = profileDbApi.hasProfile(LoginInfo.userId.toString());
+
+            if(hasProfiles) {
+                progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Adding Doctor......");
+                AddDoctorRequest request =
+                        new AddDoctorRequest(doctor.doctorId, doctor.name, LoginInfo.userName, LoginInfo.hashedPassword, Constants.API_KEY, Constants.deviceUnique);
+                getSpiceManager().execute(request, new AddDoctorTaskRequestListener());
+            }
+            else
+            {
+
+                Toast.makeText(getActivity(),getResources().getString(R.string.add_profile) , Toast.LENGTH_LONG).show();
+            }
+            }
+        }
+
 
     public final class AddDoctorTaskRequestListener implements RequestListener<AddDoctorResponse> {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
+
             progressDialog.dismiss();
         }
 
@@ -140,6 +156,17 @@ public class DoctorBioFragment extends EcareZoneBaseFragment {
                 addDoctorRequestDialog.setArguments(bndl);
                 FragmentManager fragmentManager = getActivity().getFragmentManager();
                 addDoctorRequestDialog.show(fragmentManager, "AddDoctorRequestSuccessFragment");
+
+                //add doctor
+                DoctorProfileDbApi doctorProfileDbApi = DoctorProfileDbApi.getInstance(getActivity());
+                doctorProfileDbApi.saveProfile(doctor.doctorId, doctor);
+                doctorProfileDbApi.updatePendingReqProfile(String.valueOf(doctor.doctorId), true);
+                if(doctor.category != null ) {
+                    doctorProfileDbApi.updateCategory(String.valueOf(doctor.doctorId), doctor.category);
+                } else if(doctor.doctorCategory !=null ){
+                    doctorProfileDbApi.updateCategory(String.valueOf(doctor.doctorId), doctor.category);
+                }
+
             } else {
                 Toast.makeText(getActivity(), addDoctorResponse.status.message, Toast.LENGTH_LONG).show();
             }

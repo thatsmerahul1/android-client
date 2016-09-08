@@ -268,6 +268,7 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
                 LoginInfo.hashedPassword = hashedPassword;
                 LoginInfo.role = String.valueOf(1);
                 LoginInfo.recommandedDoctorId = data.recommandedDoctorId;
+                LoginInfo.isShown = false;
 
 
                 if (activity != null) {

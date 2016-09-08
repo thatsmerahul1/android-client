@@ -244,4 +244,8 @@
     <string name="language">Language:</string>
 
 
+    <!--Doctor Bio Fragment-->
+    <string name="add_profile">Please add a profile </string>
+
+
 </resources>

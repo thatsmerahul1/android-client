@@ -9,4 +9,6 @@ public class LoginInfo {
     public static String role;
     public static Long userId;
     public static int recommandedDoctorId;
+    public static boolean isShown = true;
+
 }
