@@ -121,6 +121,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
         validateAppointment();
         updateChatCount();
+      //  isAppointmentPresent();
         return view;
     }
 
@@ -348,6 +349,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         Intent intent = new Intent(mActivity.getApplicationContext(), AppointmentActivity.class);
         intent.putExtra("doctorId", doctor.doctorId);
         intent.putExtra("typeOfCall", typeOfCall);
+    //    isAppointmentPresent();
         if (isEdit) {
             if (typeOfCall == getResources().getInteger(R.integer.video_call_value)) {
                 intent.putExtra("currentAppointment", currentVideoAppointment);
@@ -442,15 +444,43 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
         boolean isAppointmentPresent = false;
         Date currentDate = new Date();
-        List<Appointment> allAppointmentsList = appointmentDbApi.getAllAppointments();
+       // List<Appointment> allAppointmentsList = appointmentDbApi.getAllAppointments();
         List<Appointment> appointmentsList = appointmentDbApi.getAppointmentHistory(doctor.doctorId, LoginInfo.userId, currentDate);
-        if (appointmentsList != null) {
+        if (appointmentsList == null) {
 
-            if (appointmentsList.size() > 0) {
-
+            doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
+                    getResources().getDrawable(R.drawable.button_voip_normal), null, null);//.setBackgroundResource(R.drawable.button_voip_normal);
+            doctorVoice.setTag("make_appointment");
+            doctorVideo.setCompoundDrawablesWithIntrinsicBounds(null,
+                    getResources().getDrawable(R.drawable.button_video_call_normal), null, null);
+            doctorVideo.setTag("make_appointment");}
+        else
+        {
+            if (appointmentsList.size() == 0)
+            {
+                doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
+                        getResources().getDrawable(R.drawable.button_voip_normal), null, null);//.setBackgroundResource(R.drawable.button_voip_normal);
+                doctorVoice.setTag("make_appointment");
+                doctorVideo.setCompoundDrawablesWithIntrinsicBounds(null,
+                        getResources().getDrawable(R.drawable.button_video_call_normal), null, null);
+                doctorVideo.setTag("make_appointment");
+            }
+            else
+            {
                 currentVideoAppointment = getConfirmedAppointment(appointmentsList, "video");
                 currentVoipAppointment = getConfirmedAppointment(appointmentsList, "voice");
-
+                if(currentVideoAppointment == null)
+                {
+                    doctorVideo.setCompoundDrawablesWithIntrinsicBounds(null,
+                            getResources().getDrawable(R.drawable.button_video_call_normal), null, null);
+                    doctorVideo.setTag("make_appointment");
+                }
+                if(currentVoipAppointment == null)
+                {
+                    doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
+                            getResources().getDrawable(R.drawable.button_voip_normal), null, null);//.setBackgroundResource(R.drawable.button_voip_normal);
+                    doctorVoice.setTag("make_appointment");
+                }
                 if (currentVideoAppointment != null && currentVideoAppointment.isConfirmed()) {
                     isAppointmentPresent = true;
                     long convDateTime = Util.getTimeInLongFormat(currentVideoAppointment.getTimeStamp());
@@ -479,23 +509,10 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                         doctorVoice.setTag("editAppointment");
                     }
                 }
-
-            } else {
-                doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
-                        getResources().getDrawable(R.drawable.button_voip_normal), null, null);//.setBackgroundResource(R.drawable.button_voip_normal);
-                doctorVoice.setTag("make_appointment");
-                doctorVideo.setCompoundDrawablesWithIntrinsicBounds(null,
-                        getResources().getDrawable(R.drawable.button_video_call_normal), null, null);
-                doctorVideo.setTag("make_appointment");
             }
-        } else {
-            doctorVoice.setCompoundDrawablesWithIntrinsicBounds(null,
-                    getResources().getDrawable(R.drawable.button_voip_normal), null, null);//.setBackgroundResource(R.drawable.button_voip_normal);
-            doctorVoice.setTag("make_appointment");
-            doctorVideo.setCompoundDrawablesWithIntrinsicBounds(null,
-                    getResources().getDrawable(R.drawable.button_video_call_normal), null, null);
-            doctorVideo.setTag("make_appointment");
         }
+
+
         return isAppointmentPresent;
     }
 
@@ -635,7 +652,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         Cancel Appointment
      */
     private void cancelAppointment(int typeOfCall) {
-        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Adding Doctor......");
+        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Cancel Appointment......");
 
         Appointment currentAppointment;
         if (typeOfCall == getResources().getInteger(R.integer.video_call_value)) {
@@ -675,12 +692,12 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                 progressDialog.dismiss();
             }
 
-            if (baseResponse.status.code == HTTP_STATUS_OK &&
-                    baseResponse.status.message.equalsIgnoreCase("Appointment deleted successfully")) {
+            if (baseResponse.status.code.equals(HTTP_STATUS_OK )) {
                 appointmentDbApi.deleteAppointment(appointmentIdToBeDeleted);
                 EcareZoneAlertDialog.showAlertDialog(getActivity(), getString(R.string.alert),
                         getString(R.string.appointment_deleted), getString(R.string.welcome_button_ok));
                 try {
+
                     isAppointmentPresent();
                 } catch (Exception ex) {
                     ex.printStackTrace();

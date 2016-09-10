@@ -220,11 +220,11 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
 //               date in YYYY-MM-DD format
 
                 Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.YEAR, selectedYear);
-                calendar.set(Calendar.MONTH, selectedMonth);
-                calendar.set(Calendar.DATE, selectedDate);
-                calendar.set(Calendar.HOUR_OF_DAY, selectedTimeHr);
-                calendar.set(Calendar.MINUTE, selectedTimeMin);
+                calendar.set(Calendar.YEAR, selectedYearUpdated);
+                calendar.set(Calendar.MONTH, selectedMonthUpdated);
+                calendar.set(Calendar.DATE, selectedDateUpdated);
+                calendar.set(Calendar.HOUR_OF_DAY, selectedTimeHrUpdated);
+                calendar.set(Calendar.MINUTE, selectedTimeMinUpdated);
 
                 if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
                     txtErrorMsg.setText(R.string.appointment_cannot_be_set);
@@ -386,6 +386,8 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
                         Toast.makeText(getApplicationContext(),"Updated",Toast.LENGTH_SHORT).show();
                         mActivity.finish();
                         mActivity.overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+                        ///new line////
+                       boolean updated =  appointmentDbApi.updateAppointment(appointment.getAppointmentId(),appointment);
                     } else {
 
                     }

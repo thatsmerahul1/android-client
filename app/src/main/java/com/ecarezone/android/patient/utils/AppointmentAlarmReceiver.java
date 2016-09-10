@@ -2,6 +2,7 @@ package com.ecarezone.android.patient.utils;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.ecarezone.android.patient.DoctorActivity;
 import com.ecarezone.android.patient.R;
 import com.ecarezone.android.patient.model.database.AppointmentDbApi;
 
@@ -25,14 +27,19 @@ public class AppointmentAlarmReceiver extends BroadcastReceiver {
             String appointment_type = intent.getStringExtra("appointment_type");
             int docId = intent.getIntExtra("docId", 0);
 
+            PendingIntent contentIntent =
+                    PendingIntent.getActivity(context, 0, new Intent(context, DoctorActivity.class), 0);
+
             NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(context)
                     .setContentTitle(WordUtils.capitalize(context.getString(R.string.appointment)))
+                    .setContentText("With " + doctorName)
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setDefaults(Notification.DEFAULT_SOUND)
                     .setColor(Color.BLUE)
                     .setAutoCancel(true)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(appointment_type + " " + context.getString(R.string.apointment_with_dr) + doctorName));
 
+            mNotifyBuilder.setContentIntent(contentIntent);
             Notification notification = mNotifyBuilder.build();
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
