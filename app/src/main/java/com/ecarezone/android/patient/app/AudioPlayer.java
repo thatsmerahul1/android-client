@@ -10,6 +10,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 
 import com.ecarezone.android.patient.R;
 
@@ -29,7 +30,7 @@ public class AudioPlayer {
 
     private AudioTrack mProgressTone;
     private AudioManager audioManager;
-    float VOLUME = 1.0f;
+        float VOLUME = 1.0f;
     private final static int SAMPLE_RATE = 16000;
 
     public AudioPlayer(Context context) {
@@ -41,33 +42,35 @@ public class AudioPlayer {
 
 
         // Honour silent mode
-        switch (audioManager.getRingerMode()) {
-            case AudioManager.RINGER_MODE_NORMAL:
-                mPlayer = new MediaPlayer();
-                mPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
-                int currVolume = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
 
-                Log.e(LOG_TAG, "currVolume::" + currVolume);
-                int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
-                Log.e(LOG_TAG, "maxVolume::" + maxVolume);
-                audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, maxVolume, AudioManager.FLAG_PLAY_SOUND);
-                Uri ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-                Log.e(LOG_TAG, "ringtone::" + ringtone.getPath());
-                try {
-                    mPlayer.setDataSource(mContext, ringtone);
-                    mPlayer.prepare();
-                } catch (IOException e) {
-                    Log.e(LOG_TAG, "Could not setup media player for ringtone");
-                    mPlayer = null;
-                    return;
-                }
-                mPlayer.setLooping(true);
-                mPlayer.setVolume(VOLUME, VOLUME);
-                mPlayer.start();
-                break;
-        }
+        AudioManager audioManager = (AudioManager)mContext.getSystemService(mContext.AUDIO_SERVICE);
+        mPlayer = new MediaPlayer();
+        mPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
+        int currVolume = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
 
+        Log.e("Volume", "currVolume::" + currVolume);
+        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
+        Log.e("Volume", "maxVolume::" + maxVolume);
+        audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, maxVolume, AudioManager.FLAG_PLAY_SOUND);
+        Uri ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+        Log.e("Volume", "ringtone::" + ringtone.getPath());
+        try {
+           mPlayer.setDataSource(mContext, ringtone);
+            mPlayer.prepare();
+        } catch (IOException e) {
+            Log.e("Volume", "Could not setup media player for ringtone");
+            mPlayer = null;
+            return;
         }
+        mPlayer.setLooping(true);
+        mPlayer.setVolume(VOLUME, VOLUME);
+        mPlayer.start();
+        int Vol = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
+
+        Log.e("Volume", Vol + "");
+    }
+
+
 
 
     public void stopRingtone() {

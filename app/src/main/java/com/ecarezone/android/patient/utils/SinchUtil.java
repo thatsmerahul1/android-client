@@ -1,6 +1,8 @@
 package com.ecarezone.android.patient.utils;
 
 import android.content.Context;
+import android.media.AudioManager;
+import android.util.Log;
 
 import com.ecarezone.android.patient.app.AudioPlayer;
 import com.ecarezone.android.patient.config.Constants;
@@ -35,6 +37,9 @@ public class SinchUtil {
 
     public static void setSinchAudioPlayer(Context context) {
         audioplayer = new AudioPlayer(context);
+        AudioManager audioManager = (AudioManager)context.getSystemService(context.AUDIO_SERVICE);
+        int Vol = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
+        Log.e("Volume1", Vol + "");
     }
 
     public static void setChatHistoryChangeListner(onChatHistoryChangeListner listner) {

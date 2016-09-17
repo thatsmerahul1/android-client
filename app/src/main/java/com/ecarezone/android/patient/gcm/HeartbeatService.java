@@ -127,6 +127,7 @@ public class HeartbeatService extends IntentService {
 
             if(requestBody != null) {
                 //Post Data
+                Log.d("Http Post Request:", requestBody);
                 HttpEntity entity = new ByteArrayEntity(requestBody.getBytes());
                 httpPost.setEntity(entity);
             }

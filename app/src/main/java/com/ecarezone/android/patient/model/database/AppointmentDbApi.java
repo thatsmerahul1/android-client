@@ -2,6 +2,7 @@ package com.ecarezone.android.patient.model.database;
 
 import android.app.UiAutomation;
 import android.content.Context;
+import android.util.Log;
 
 import com.ecarezone.android.patient.model.Appointment;
 import com.ecarezone.android.patient.model.Chat;
@@ -56,40 +57,6 @@ public class AppointmentDbApi {
         return false;
     }
 
-    /* retrieve the AppointmentHistory of a particular user */
-    public List<Appointment> getAppointmentHistory(String patientId) {
-        try {
-            Dao<Appointment, Integer> chatDao = mDbHelper.getAppointmentDao();
-            QueryBuilder<Appointment, Integer> queryBuilder = chatDao.queryBuilder();
-            return queryBuilder.where().eq(DbContract.Appointments.COLUMN_NAME_PATIENT_ID, patientId).query();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /* update read status of user Chat history */
-    public boolean updateAppointment(String patientId, String callType, String doctorId, long dateTime,
-                                     String appointmentId) {
-        try {
-            Dao<Appointment, Integer> appointmentDao = mDbHelper.getAppointmentDao();
-            UpdateBuilder<Appointment, Integer> updateBuilder = appointmentDao.updateBuilder();
-            updateBuilder.where()
-                    .eq(DbContract.Appointments.COLUMN_NAME_APPOINTMENT_ID, appointmentId);
-
-            updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_PATIENT_ID, patientId);
-            updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_CALL_TYPE, callType);
-            updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_DOCTOR_ID, doctorId);
-            updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_DATE_TIME, dateTime);
-
-            updateBuilder.update();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     public boolean updateAppointment(long appointmentId, Appointment appointment) {
         try {
             Dao<Appointment, Integer> appointmentDao = mDbHelper.getAppointmentDao();
@@ -113,6 +80,9 @@ public class AppointmentDbApi {
     public boolean updateAppointmentStatus(long appointmentId, boolean isConfirmed) {
 
         try {
+            if(appointmentId == 146){
+                Log.i("isConfirmed","isConfirmed");
+            }
             Dao<Appointment, Integer> appointmentDao = mDbHelper.getAppointmentDao();
             UpdateBuilder<Appointment, Integer> updateBuilder = appointmentDao.updateBuilder();
             updateBuilder.where()
@@ -127,56 +97,6 @@ public class AppointmentDbApi {
             e.printStackTrace();
         }
         return false;
-
-    }
-
-    public boolean updateOrInsertAppointment(Appointment appointment) {
-
-        long appointmentId = appointment.getAppointmentId();
-        List<Appointment> appointmentList = getAppointment(appointmentId);
-        if (appointmentList == null || appointmentList.size() == 0) {
-//            Appointment does not exist..
-            saveAppointment(appointment);
-        } else {
-//            Update the existing appointment...
-            try {
-                Dao<Appointment, Integer> appointmentDao = mDbHelper.getAppointmentDao();
-                UpdateBuilder<Appointment, Integer> updateBuilder = appointmentDao.updateBuilder();
-                updateBuilder.where()
-                        .eq(DbContract.Appointments.COLUMN_NAME_APPOINTMENT_ID, appointmentId);
-
-                updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_DATE_TIME, appointment.getTimeStamp());
-                updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_CALL_TYPE, appointment.getCallType());
-                updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_DOCTOR_ID, appointment.getDoctorId());
-                updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_PATIENT_ID, appointment.getpatientId());
-                updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_IS_CONFIRMED, appointment.isConfirmed());
-                int isUpdated = updateBuilder.update();
-                if (isUpdated > 0) {
-                    return true;
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-
-    public List<Appointment> getAppointment(long appointmentId) {
-
-        List<Appointment> appointmentList = null;
-
-        try {
-            Dao<Appointment, Integer> appointmentDao = mDbHelper.getAppointmentDao();
-            QueryBuilder<Appointment, Integer> queryBuilder = appointmentDao.queryBuilder();
-            queryBuilder.where()
-                    .gt(DbContract.Appointments.COLUMN_NAME_APPOINTMENT_ID, appointmentId);
-
-            appointmentList = queryBuilder.query();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return appointmentList;
 
     }
 
@@ -357,7 +277,7 @@ public class AppointmentDbApi {
                     .eq(DbContract.Appointments.COLUMN_NAME_APPOINTMENT_ID, appointmentId);
 
             List<Appointment> appointmentList = queryBuilder.query();
-            return appointmentList.size() > 0 ? true : false;
+            return appointmentList.size()>0? true : false;
         } catch (SQLException e) {
             e.printStackTrace();
         }

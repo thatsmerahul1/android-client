@@ -47,6 +47,7 @@ import com.ecarezone.android.patient.model.rest.GetDoctorResponse;
 import com.ecarezone.android.patient.model.rest.PendingAppointmentRequest;
 import com.ecarezone.android.patient.model.rest.PendingAppointmentResponse;
 import com.ecarezone.android.patient.model.rest.base.BaseResponse;
+import com.ecarezone.android.patient.service.FetchAppointmentService;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
 import com.ecarezone.android.patient.utils.SinchUtil;
 import com.ecarezone.android.patient.utils.Util;
@@ -264,6 +265,7 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
             new ProfileFinishedAsyncTask().execute();
             LoginInfo.isShown = true;
         }
+        FetchAppointmentService.startActionFetchAppointment(getApplicationContext());
         SinchUtil.setChatHistoryChangeListner(this);
     }
 
@@ -529,9 +531,9 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
                     while (appointmentIterator.hasNext()) {
 
                         AppointmentResponse appointmentResponse = appointmentIterator.next();
-                        if (appointmentResponse.patientId != null) {
+                      //  if (appointmentResponse.patientId != null) {
 
-                            if (!appointmentDbi.isAppointmentPresent(appointmentResponse.id)) {
+                            if (appointmentDbi.isAppointmentPresent(appointmentResponse.id)) {
 
                                 Appointment appointment = new Appointment();
                                 appointment.setConfirmed(false);
@@ -543,7 +545,7 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
 
                                 appointmentDbi.saveAppointment(appointment);
                             }
-                        }
+                        //}
                     }
                     populatePendingAppointmentList(response.data);
 
@@ -565,6 +567,7 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
             ListIterator<AppointmentResponse> appointmentIterator = data.listIterator();
             int position = 0;
 
+            updateAppointmentReminders();
             if (data.size() > 0) {
                 mPendingAppointmentLayout.setVisibility(View.VISIBLE);
             }
@@ -573,9 +576,6 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
 
                 AppointmentResponse appointmentResponse = appointmentIterator.next();
 
-//                if (appointmentResponse.patientId == null) {
-//                    continue;
-//                }
                 if (appointmentResponse.reScheduledBy == null || !appointmentResponse.reScheduledBy.equalsIgnoreCase("doctor")) {
                     continue;
                 }

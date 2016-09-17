@@ -574,7 +574,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                         if (docId > -1) {
 
                             if (doctor.doctorId == docId) {
-                                  doctor.status = statusArr[2];
+                                String stat = statusArr[2];
+                                  doctor.status = stat.trim();
                                   setDoctorStatus();
                             }
                         }

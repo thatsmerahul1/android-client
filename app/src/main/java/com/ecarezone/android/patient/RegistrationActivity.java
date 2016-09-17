@@ -1,11 +1,19 @@
 package com.ecarezone.android.patient;
 
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
 import com.ecarezone.android.patient.fragment.ForgetPasswordFragment;
 import com.ecarezone.android.patient.fragment.LoginFragment;
 import com.ecarezone.android.patient.fragment.RegistrationFragment;
 import com.ecarezone.android.patient.utils.SinchUtil;
+
+import java.io.IOException;
 
 /**
  * Created by CHAO WEI on 5/10/2015.
@@ -78,4 +86,6 @@ public class RegistrationActivity extends EcareZoneBaseActivity {
     protected void onStop() {
         super.onStop();
      }
+
+
 }

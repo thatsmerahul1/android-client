@@ -314,42 +314,6 @@ public class MainActivity extends EcareZoneBaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    /********************
-     * FETCH ALL APPOINTMENTS
-     **********************/
-    private void getAllAppointments() {
-
-        GetAllAppointmentRequest request = new GetAllAppointmentRequest(LoginInfo.userId);
-        getSpiceManager().execute(request, new GetAllAppointmentRequestListener());
-
-    }
-
-    private class GetAllAppointmentRequestListener implements RequestListener<GetAllAppointmentResponse> {
-
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-
-        }
-
-        @Override
-        public void onRequestSuccess(GetAllAppointmentResponse baseResponse) {
-
-            if (baseResponse != null) {
-                if (baseResponse.status != null) {
-                    if (baseResponse.status.code == 200 &&
-                            baseResponse.status.message.equalsIgnoreCase("Retrieval of Appointments Done")) {
-                        int appointmentSize = baseResponse.data.size();
-                        AppointmentDbApi appointmentDbApi = AppointmentDbApi.getInstance(getApplicationContext());
-                        for (Appointment appointment : baseResponse.data) {
-//                            appointmentDbApi.updateOrInsertAppointment(appointment);
-                            appointmentDbApi.saveAppointment(appointment);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     @Override
     protected void onStart() {
         super.onStart();

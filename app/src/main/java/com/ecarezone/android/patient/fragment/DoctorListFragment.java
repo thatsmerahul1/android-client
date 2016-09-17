@@ -39,6 +39,7 @@ import com.ecarezone.android.patient.model.Doctor;
 import com.ecarezone.android.patient.model.database.DoctorProfileDbApi;
 import com.ecarezone.android.patient.model.rest.SearchDoctorsRequest;
 import com.ecarezone.android.patient.model.rest.SearchDoctorsResponse;
+import com.ecarezone.android.patient.service.FetchAppointmentService;
 import com.ecarezone.android.patient.utils.ProgressDialogUtil;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -177,6 +178,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
         if (NetworkCheck.isNetworkAvailable(getActivity())) {
             populateMyCareDoctorList();
             populateRecommendedDoctorList();
+            FetchAppointmentService.startActionFetchAppointment(getApplicationContext());
         } else {
             Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
         }
@@ -491,7 +493,7 @@ public class DoctorListFragment extends EcareZoneBaseFragment {
                             if(doctorList != null) {
                                 for (Doctor doctorItem : doctorList) {
                                     if (doctorItem.doctorId == docId) {
-                                        doctorItem.status = statusArr[2];
+                                        doctorItem.status = statusArr[2].trim();
                                         break;
                                     }
                                 }

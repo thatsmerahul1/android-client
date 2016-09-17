@@ -51,6 +51,7 @@ public class CallActivity extends EcareZoneBaseActivity {
         mCallId = getIntent().getStringExtra(SinchService.CALL_ID);
         SinchUtil.setSinchAudioPlayer(this);
         setVolumeControlStream(AudioManager.STREAM_RING);
+      //  setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
         if (mCallId == null) {
             if (PermissionUtil.isPermissionRequired()
                     && PermissionUtil.getAllpermissionRequired(this, PermissionUtil.SINCH_PERMISSIONS).length > 0) {
@@ -93,6 +94,10 @@ public class CallActivity extends EcareZoneBaseActivity {
 
     private void establishIncomingCall(String callId) {
         SinchUtil.getSinchAudioPlayer().playRingtone();
+        AudioManager audioManager = (AudioManager)this.getSystemService(this.AUDIO_SERVICE);
+        int Vol = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
+
+        Log.e("Volume2", Vol + "");
     }
 
     @Override

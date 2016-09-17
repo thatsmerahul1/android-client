@@ -3,6 +3,10 @@ package com.ecarezone.android.patient.fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -34,6 +38,7 @@ import com.ecarezone.android.patient.utils.ProgressDialogUtil;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -67,6 +72,7 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
     private TextView language = null;
     private TextView email = null;
 
+
     @Override
     protected String getCallerName() {
         return SettingsFragment.class.getSimpleName();
@@ -84,19 +90,19 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         mButtonRegister.setOnClickListener(this);
         mButtonRegister.setVisibility(View.GONE);
 
-        arrow_down_for_country = (ImageView)view.findViewById(R.id.arrow_down);
-        arrow_down_for_language = (ImageView)view.findViewById(R.id.arrow_down2);
+        arrow_down_for_country = (ImageView) view.findViewById(R.id.arrow_down);
+        arrow_down_for_language = (ImageView) view.findViewById(R.id.arrow_down2);
         arrow_down_for_country.setImageResource(R.drawable.black_arrow);
         arrow_down_for_language.setImageResource(R.drawable.black_arrow);
-        arrow_right_for_username = (ImageView)view.findViewById(R.id.arrow_right);
-        arrow_right_for_password = (ImageView)view.findViewById(R.id.arrow_right_for_password);
+        arrow_right_for_username = (ImageView) view.findViewById(R.id.arrow_right);
+        arrow_right_for_password = (ImageView) view.findViewById(R.id.arrow_right_for_password);
         arrow_right_for_username.setVisibility(View.VISIBLE);
         arrow_right_for_password.setVisibility(View.VISIBLE);
 
-        email = (TextView)view.findViewById(R.id.email);
-        password = (TextView)view.findViewById(R.id.password);
-        country = (TextView)view.findViewById(R.id.country);
-        language = (TextView)view.findViewById(R.id.language);
+        email = (TextView) view.findViewById(R.id.email);
+        password = (TextView) view.findViewById(R.id.password);
+        country = (TextView) view.findViewById(R.id.country);
+        language = (TextView) view.findViewById(R.id.language);
 
         //enabling the textview
         email.setVisibility(View.VISIBLE);
@@ -127,8 +133,8 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         mTextViewAbout = (TextView) view.findViewById(R.id.textview_registration_about);
         mTextViewAbout.setVisibility(View.VISIBLE);
         mTextViewAbout.setOnClickListener(this);
-        ecare_account = (TextView)view.findViewById(R.id.ecare_account);
-        ecare_account_email = (TextView)view.findViewById(R.id.ecare_account_email);
+        ecare_account = (TextView) view.findViewById(R.id.ecare_account);
+        ecare_account_email = (TextView) view.findViewById(R.id.ecare_account_email);
         ecare_account.setVisibility(View.VISIBLE);
         ecare_account_email.setVisibility(View.VISIBLE);
         ecare_account_email.setOnClickListener(new View.OnClickListener() {
@@ -188,14 +194,13 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         } else if (viewId == R.id.spinner_language) {
             createRegestrationDialog(Constants.LANGUAGE);
         } else if (viewId == R.id.textview_registration_about) {
-            if(NetworkCheck.isNetworkAvailable(getActivity())){
+            if (NetworkCheck.isNetworkAvailable(getActivity())) {
                 getActivity().startActivity(new Intent(getActivity(), AboutEcareZoneActivity.class));
             } else {
                 Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
             }
-        } else if(viewId == R.id.edit_text_registration_password)
-        {
-            Log.d("Naga","Updating Password ");
+        } else if (viewId == R.id.edit_text_registration_password) {
+            Log.d("Naga", "Updating Password ");
             getActivity().startActivity(new Intent(getActivity(), UpdatePasswordActivity.class));
         }
     }
@@ -263,7 +268,7 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
             final String username = mEditTextUsername.getEditableText().toString();
             final String password = mEditTextPassword.getEditableText().toString();
 
-            if(NetworkCheck.isNetworkAvailable(getActivity())) {
+            if (NetworkCheck.isNetworkAvailable(getActivity())) {
                 doSettingsUpdate(username, password, (String) mSpinnerCountry.getTag(), (String) mSpinnerLanguage.getTag());
             } else {
                 Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
@@ -296,7 +301,7 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
             //updating the latest user data in to usertable
             userTable = new UserTable(getActivity());
             userTable.updateUserData(user.userId, user.email, mEditTextPassword.getEditableText().toString(), user.language
-                    , Integer.toString(1), user.country,user.recommandedDoctorId );
+                    , Integer.toString(1), user.country, user.recommandedDoctorId);
             if (loginResponse.status.code == 200) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
